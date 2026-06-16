@@ -30,7 +30,8 @@
     "cleanup": "bash ./scripts/internal/cleanup.sh",
     "setup": "bash ./scripts/internal/setup.sh",
     "audit": "bash ./scripts/bin/deps/scan.sh --audit",
-    "audit:fix": "bash ./scripts/bin/deps/scan.sh --pin-unstable"
+    "audit:fix": "bash ./scripts/bin/deps/scan.sh --pin-unstable",
+    "pin": "bash ./scripts/bin/package-manager/pin.sh -pm yarn --package-json --volta --docs -v"
   },
   "dependencies": {
     "yaml": "^2.9.0"
@@ -48,7 +49,7 @@
   },
   "volta": {
     "node": "24.14.1",
-    "yarn": "4.14.1"
+    "yarn": "4.17.0"
   },
-  "packageManager": "yarn@4.14.1"
+  "packageManager": "yarn@4.17.0"
 }
