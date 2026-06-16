@@ -28,7 +28,12 @@
     "scripts:perms": "find ./scripts -type f -name \"*.sh\" -exec chmod +x {} +",
     "scripts:perms:track": "find ./scripts -type f -name \"*.sh\" -exec git update-index --chmod=+x {} +",
     "cleanup": "bash ./scripts/internal/cleanup.sh",
-    "setup": "bash ./scripts/internal/setup.sh"
+    "setup": "bash ./scripts/internal/setup.sh",
+    "audit": "bash ./scripts/bin/deps/scan.sh --audit",
+    "audit:fix": "bash ./scripts/bin/deps/scan.sh --pin-unstable"
+  },
+  "dependencies": {
+    "yaml": "^2.9.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.0.2",

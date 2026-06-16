@@ -236,6 +236,7 @@ __metadata:
     lint-staged: "npm:^17.0.7"
     prettier: "npm:^3.8.4"
     prettier-plugin-sh: "npm:^0.18.1"
+    yaml: "npm:^2.9.0"
   languageName: unknown
   linkType: soft
 
