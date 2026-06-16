@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # This is an internal script. Do not run it directly.
-# Relies on variables from the parent script: INTERNAL_DIR, DEPENDABOT_FILE, PACKAGE_INFO
+# Relies on variables from the parent script: DEPS_INTERNAL_DIR, DEPENDABOT_FILE, PACKAGE_INFO
 
-source "$INTERNAL_DIR/search-unstable.sh"
+source "$DEPS_INTERNAL_DIR/search-unstable.sh"
 
 log -c "⏳" -m "Updating $DEPENDABOT_FILE..." -in
 

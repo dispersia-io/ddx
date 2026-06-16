@@ -44,7 +44,7 @@ fi
 TOTAL=$(echo "$PACKAGE_INFO" | wc -l | tr -d ' ')
 log -cl -w -m "Found potentially unstable packages: $TOTAL"
 
-if [ "$SILENT_MODE" = false ]; then
+if ((!SILENT_MODE)); then
   echo ""
   echo "📦 Packages list:"
   echo "$PACKAGE_INFO" | while read -r pkg ver; do

@@ -5,46 +5,26 @@
 # NOTE: This script is designed strictly for internal use and coordination
 # between other scripts; it is not intended for standalone execution.
 #
-# Flags:
-#   --task       : [Optional] Dispatches the command to the 'run_task' executor.
-#   --subtask    : [Optional] Dispatches the command to the 'run_subtask' executor.
+# Subcommands:
+#   task       : [Optional] Dispatches the command to the 'run_task' executor.
+#   subtask    : [Optional] Dispatches the command to the 'run_subtask' executor.
 #
 # Usage:
-# execute [--task | --subtask] [flags...] "<command>"
+# execute [task | subtask] [options...]
 
 TASKS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BIN_DIR="$TASKS_DIR/.."
 
 source "$TASKS_DIR/task.sh"
 source "$TASKS_DIR/subtask.sh"
-source "$BIN_DIR/utils/log.sh"
 
 execute() {
-  local is_task=false
-  local is_subtask=false
-  local delegated_args=()
+  local target="$1"
+  shift
 
-  for arg in "$@"; do
-    case "$arg" in
-      --task) is_task=true ;;
-      --subtask) is_subtask=true ;;
-      *) delegated_args+=("$arg") ;;
-    esac
-  done
-
-  if [ "$is_task" = true ] && [ "$is_subtask" = true ]; then
-    log -e -c "gray" -m "Error: Flags --task and --subtask cannot be used simultaneously."
-    exit 1
-  fi
-
-  local last_idx=$((${#delegated_args[@]} - 1))
-  local command="${delegated_args[$last_idx]}"
-
-  if [ "$is_task" = true ]; then
-    run_task "${delegated_args[@]}"
-  elif [ "$is_subtask" = true ]; then
-    run_subtask "${delegated_args[@]}"
-  else
-    eval "$command"
-  fi
+  case "$target" in
+    task) run_task "$@" ;;
+    subtask) run_subtask "$@" ;;
+    *) eval "$target" "$@" ;;
+  esac
 }

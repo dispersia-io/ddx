@@ -6,14 +6,14 @@
 # between other scripts; it is not intended for standalone execution.
 #
 # Flags:
-#   --cmd, -c               : [Required] Command string to execute
-#   --icon, -i              : [Optional] Icon for the task
-#   --subject, -s           : [Optional] Subject of the action
-#   --template, -t          : [Optional] Predefined action template (Mode 1)
-#   --name, -n              : [Optional] Custom name for the task (Mode 2 & 3)
-#   --success-msg, -sm      : [Optional] Custom success text (Mode 2 & 3)
-#   --error-msg, -em        : [Optional] Custom error text (Mode 2 & 3)
-#   --level, -l             : [Optional] Logging indentation level (defaults to 2)
+#   --cmd, -c             : [Required] Command string to execute
+#   --icon, -i            : [Optional] Icon for the task
+#   --subject, -s         : [Optional] Subject of the action
+#   --template, -t        : [Optional] Predefined action template (Mode 1)
+#   --name, -n            : [Optional] Custom name for the task (Mode 2 & 3)
+#   --success-msg, -sm    : [Optional] Custom success text (Mode 2 & 3)
+#   --error-msg, -em      : [Optional] Custom error text (Mode 2 & 3)
+#   --level, -l           : [Optional] Logging indentation level (defaults to 2)
 #
 # Available Templates (--template):
 #   install, update, pin, build, generate, verify, remove,
@@ -36,72 +36,27 @@
 
 TASKS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BIN_DIR="$TASKS_DIR/.."
+UTILS_DIR="$BIN_DIR/utils"
 
-source "$BIN_DIR/utils/log.sh"
+source "$UTILS_DIR/log.sh"
+source "$UTILS_DIR/options.sh"
 
 run_subtask() {
-  local icon=""
-  local command=""
-  local subject=""
-  local template=""
-  local name=""
-  local success_msg=""
-  local error_msg=""
-  local level="2"
-
+  local command name subject template icon success_msg error_msg level
   local pending_msg=""
 
-  while [[ $# -gt 0 ]]; do
-    case "$1" in
-      --icon | -i)
-        icon="${2:-}"
-        [[ $# -ge 2 ]] && shift 2 || shift 1
-        ;;
-      --subject | -s)
-        subject="${2:-}"
-        [[ $# -ge 2 ]] && shift 2 || shift 1
-        ;;
-      --template | -t)
-        template="${2:-}"
-        [[ $# -ge 2 ]] && shift 2 || shift 1
-        ;;
-      --cmd | -c)
-        command="${2:-}"
-        [[ $# -ge 2 ]] && shift 2 || shift 1
-        ;;
-      --name | -n)
-        name="${2:-}"
-        [[ $# -ge 2 ]] && shift 2 || shift 1
-        ;;
-      --success-msg | -sm)
-        success_msg="${2:-}"
-        [[ $# -ge 2 ]] && shift 2 || shift 1
-        ;;
-      --error-msg | -em)
-        error_msg="${2:-}"
-        [[ $# -ge 2 ]] && shift 2 || shift 1
-        ;;
-      --level | -l)
-        level="${2:-2}"
-        [[ $# -ge 2 ]] && shift 2 || shift 1
-        ;;
-      --subtask) shift 1 ;;
-      *)
-        log -cl -e -l 2 -c "gray" -m "Error: Unknown argument '$1' passed to run_subtask"
-        exit 1
-        ;;
-    esac
-  done
+  local OPTIONS_CONFIG="
+    command      | --cmd         | -c   | required | string | 
+    name         | --name        | -n   | optional | string | 
+    subject      | --subject     | -s   | optional | string | 
+    template     | --template    | -t   | optional | string | 
+    icon         | --icon        | -i   | optional | string | 
+    success_msg  | --success-msg | -sm  | optional | string | 
+    error_msg    | --error-msg   | -em  | optional | string | 
+    level        | --level       | -l   | optional | int    | 2
+  "
 
-  if [[ ! "$level" =~ ^[1-9][0-9]*$ ]]; then
-    log -cl -e -l 2 -c "gray" -m "Error: --level must be a positive integer greater than or equal to 1"
-    exit 1
-  fi
-
-  if [[ -z "$command" ]]; then
-    log -cl -e -l "$level" -c "gray" -m "Error: run_subtask requires at least --cmd"
-    exit 1
-  fi
+  eval "$(parse_options "$OPTIONS_CONFIG" "return 1")"
 
   if [[ -n "$template" ]]; then
     if [[ -z "$subject" ]]; then
@@ -109,43 +64,43 @@ run_subtask() {
       exit 1
     fi
 
-    local tpl_data=""
+    local template_data=""
 
-    # Format: "Pending Action|Success Action|Failed Action"
+    # Format: "Pending message|Success message|Failed message"
     case "$template" in
       # Dependencies & Environment
-      install) tpl_data="Installing|Installed|Failed to install" ;;
-      update) tpl_data="Updating|Updated|Failed to update" ;;
-      pin) tpl_data="Pinning|Pinned|Failed to pin" ;;
+      install) template_data="Installing|Installed|Failed to install" ;;
+      update) template_data="Updating|Updated|Failed to update" ;;
+      pin) template_data="Pinning|Pinned|Failed to pin" ;;
       # Artifacts
-      build) tpl_data="Building|Built|Failed to build" ;;
-      generate) tpl_data="Generating|Generated|Failed to generate" ;;
-      publish) tpl_data="Publishing|Published|Failed to publish" ;;
+      build) template_data="Building|Built|Failed to build" ;;
+      generate) template_data="Generating|Generated|Failed to generate" ;;
+      publish) template_data="Publishing|Published|Failed to publish" ;;
       # Validation
-      verify) tpl_data="Verifying|Verified|Failed to verify" ;;
-      test) tpl_data="Testing|Tested|Failed to test" ;;
-      lint) tpl_data="Linting|Linted|Failed to lint" ;;
-      format) tpl_data="Formatting|Formatted|Failed to format" ;;
+      verify) template_data="Verifying|Verified|Failed to verify" ;;
+      test) template_data="Testing|Tested|Failed to test" ;;
+      lint) template_data="Linting|Linted|Failed to lint" ;;
+      format) template_data="Formatting|Formatted|Failed to format" ;;
       # Process & Deploy
-      start) tpl_data="Starting|Started|Failed to start" ;;
-      stop) tpl_data="Stopping|Stopped|Failed to stop" ;;
-      restart) tpl_data="Restarting|Restarted|Failed to restart" ;;
-      deploy) tpl_data="Deploying|Deployed|Failed to deploy" ;;
+      start) template_data="Starting|Started|Failed to start" ;;
+      stop) template_data="Stopping|Stopped|Failed to stop" ;;
+      restart) template_data="Restarting|Restarted|Failed to restart" ;;
+      deploy) template_data="Deploying|Deployed|Failed to deploy" ;;
       # Data & Network
-      sync) tpl_data="Syncing|Synced|Failed to sync" ;;
-      download) tpl_data="Downloading|Downloaded|Failed to download" ;;
-      upload) tpl_data="Uploading|Uploaded|Failed to upload" ;;
+      sync) template_data="Syncing|Synced|Failed to sync" ;;
+      download) template_data="Downloading|Downloaded|Failed to download" ;;
+      upload) template_data="Uploading|Uploaded|Failed to upload" ;;
       # Cleanup
-      remove) tpl_data="Removing|Removed|Failed to remove" ;;
-      delete) tpl_data="Deleting|Deleted|Failed to delete" ;;
-      cleanup) tpl_data="Cleaning up|Cleaned up|Failed to cleanup" ;;
+      remove) template_data="Removing|Removed|Failed to remove" ;;
+      delete) template_data="Deleting|Deleted|Failed to delete" ;;
+      cleanup) template_data="Cleaning up|Cleaned up|Failed to cleanup" ;;
       *)
         log -cl -e -l "$level" -c "gray" -m "Error: Unknown subtask template '$template'"
         exit 1
         ;;
     esac
 
-    IFS='|' read -r name success_msg error_msg <<< "$tpl_data"
+    IFS='|' read -r name success_msg error_msg <<< "$template_data"
 
     pending_msg="$name: $subject"
     success_msg="$success_msg: $subject"

@@ -16,67 +16,41 @@
 # bash scripts/bin/deps/scan.sh [--audit] [--pin-unstable] [--silent] [--package-manager yarn|npm|pnpm]
 
 DEPS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DEPS_INTERNAL_DIR="$DEPS_DIR/_internal"
 BIN_DIR="$DEPS_DIR/.."
-INTERNAL_DIR="$DEPS_DIR/_internal"
 
 source "$BIN_DIR/utils/log.sh"
+source "$BIN_DIR/utils/options.sh"
 
 cd "$DEPS_DIR/../../.." || exit 1
 
-RUN_AUDIT=false
-PIN_UNSTABLE=false
-SILENT_MODE=false
-EMIT_META=false
-PACKAGE_MANAGER=""
+OPTIONS_CONFIG="
+  RUN_AUDIT       | --audit           | -a   | optional | flag   |
+  PIN_UNSTABLE    | --pin-unstable    | -pu  | optional | flag   |
+  SILENT_MODE     | --silent          | -s   | optional | flag   |
+  EMIT_META       | --meta            | -m   | optional | flag   |
+  PACKAGE_MANAGER | --package-manager | -pm  | optional | string |
+"
 
-while [[ "$#" -gt 0 ]]; do
-  case $1 in
-    --audit | -a)
-      RUN_AUDIT=true
-      shift 1
-      ;;
-    --pin-unstable | -pu)
-      PIN_UNSTABLE=true
-      shift 1
-      ;;
-    --silent | -s)
-      SILENT_MODE=true
-      shift 1
-      ;;
-    --meta | -m)
-      EMIT_META=true
-      shift 1
-      ;;
-    --package-manager | -pm)
-      if [[ -z "$2" || "$2" == -* ]]; then
-        log -e -c "gray" -m "Error: Option '$1' requires an argument (yarn, npm, pnpm)."
-        exit 1
-      fi
-      PACKAGE_MANAGER="$2"
-      shift 2
-      ;;
-    *)
-      shift 1
-      ;;
-  esac
-done
+eval "$(parse_options "$OPTIONS_CONFIG")"
 
 emit_meta() {
-  if [ "$EMIT_META" = true ]; then
+  if ((EMIT_META)); then
     echo "$1"
   fi
 }
 
-source "$INTERNAL_DIR/init-env.sh"
+source "$DEPS_INTERNAL_DIR/detect-package-manager.sh"
+source "$DEPS_INTERNAL_DIR/detect-dependabot-file.sh"
 
-if [ "$RUN_AUDIT" = true ]; then
-  source "$INTERNAL_DIR/audit.sh"
+if ((RUN_AUDIT)); then
+  source "$DEPS_INTERNAL_DIR/audit.sh"
 fi
 
-if [ "$PIN_UNSTABLE" = true ]; then
-  source "$INTERNAL_DIR/pin-unstable.sh"
+if ((PIN_UNSTABLE)); then
+  source "$DEPS_INTERNAL_DIR/pin-unstable.sh"
 else
-  if [ "$SILENT_MODE" = false ] && [ -n "$DEPENDABOT_FILE" ]; then
+  if ((!SILENT_MODE)) && [ -n "$DEPENDABOT_FILE" ]; then
     log -i -ic "💡" -m "Run with --pin-unstable to automatically block minor updates for these packages."
   fi
 fi

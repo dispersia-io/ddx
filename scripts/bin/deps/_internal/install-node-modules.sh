@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # This is an internal script. Do not run it directly.
-# Relies on variables from the parent script: EXEC_FLAG, PACKAGE_MANAGER
+# Relies on variables from the parent script: PACKAGE_MANAGER
 
-execute "${EXEC_FLAG[@]}" \
+execute subtask \
   --icon "📦" \
   --subject "node modules" \
   --template "install" \

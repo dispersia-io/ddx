@@ -15,62 +15,24 @@
 
 TASKS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BIN_DIR="$TASKS_DIR/.."
+UTILS_DIR="$BIN_DIR/utils"
 
-source "$BIN_DIR/utils/log.sh"
+source "$UTILS_DIR/log.sh"
+source "$UTILS_DIR/options.sh"
 
 run_task() {
-  local icon=""
-  local task_name=""
-  local success_msg=""
-  local error_msg=""
-  local command=""
-  local level="1"
+  local task_name icon success_msg error_msg command level
 
-  while [[ $# -gt 0 ]]; do
-    case "$1" in
-      --icon | -i)
-        icon="${2:-}"
-        [[ $# -ge 2 ]] && shift 2 || shift 1
-        ;;
-      --name | -n)
-        task_name="${2:-}"
-        [[ $# -ge 2 ]] && shift 2 || shift 1
-        ;;
-      --success-msg | -sm)
-        success_msg="${2:-}"
-        [[ $# -ge 2 ]] && shift 2 || shift 1
-        ;;
-      --error-msg | -em)
-        error_msg="${2:-}"
-        [[ $# -ge 2 ]] && shift 2 || shift 1
-        ;;
-      --cmd | -c)
-        command="${2:-}"
-        [[ $# -ge 2 ]] && shift 2 || shift 1
-        ;;
-      --level | -l)
-        level="${2:-1}"
-        [[ $# -ge 2 ]] && shift 2 || shift 1
-        ;;
-      --task)
-        shift 1
-        ;;
-      *)
-        log -w -l "$level" -c "gray" -m "Warning: Unknown argument passed to run_task: $1"
-        return 1
-        ;;
-    esac
-  done
+  local OPTIONS_CONFIG="
+    task_name    | --name        | -n   | required | string | 
+    command      | --cmd         | -c   | required | string | 
+    icon         | --icon        | -i   | optional | string | 
+    success_msg  | --success-msg | -sm  | optional | string | 
+    error_msg    | --error-msg   | -em  | optional | string | 
+    level        | --level       | -l   | optional | int    | 1
+  "
 
-  if [[ ! "$level" =~ ^[1-9][0-9]*$ ]]; then
-    log -e -l 1 -c "gray" -m "Error: --level must be a positive integer greater than or equal to 1"
-    return 1
-  fi
-
-  if [[ -z "$task_name" || -z "$command" ]]; then
-    log -e -l "$level" -c "gray" -m "Error: run_task strictly requires --name and --cmd flags"
-    return 1
-  fi
+  eval "$(parse_options "$OPTIONS_CONFIG" "return 1")"
 
   success_msg="${success_msg:-Task '$task_name' completed successfully.}"
   error_msg="${error_msg:-Task '$task_name' encountered an error.}"

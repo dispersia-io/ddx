@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # This is an internal script. Do not run it directly.
-# Relies on variables from the parent script: EXEC_FLAG, PACKAGE_MANAGER_RUNNER
+# Relies on variables from the parent script: PACKAGE_MANAGER_RUNNER
 
 HUSKY_VERSION_STR=$(node -p "const p=require('./package.json'); p.devDependencies?.husky || p.dependencies?.husky || ''" 2> /dev/null)
 
@@ -18,7 +18,7 @@ if [ -n "$HUSKY_VERSION_STR" ]; then
     HUSKY_CMD="$PACKAGE_MANAGER_RUNNER husky install && chmod +x ./.husky/*"
   fi
 
-  execute "${EXEC_FLAG[@]}" \
+  execute subtask \
     --icon "🐶" \
     --subject "Husky" \
     --template "install" \
