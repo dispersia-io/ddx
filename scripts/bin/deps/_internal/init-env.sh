@@ -1,4 +1,7 @@
-# Internal script: environment and package manager detection
+#!/bin/bash
+
+# This is an internal script. Do not run it directly.
+# Relies on variables from the parent script: PACKAGE_MANAGER
 
 if [[ -z "$PACKAGE_MANAGER" ]]; then
   if [ -f "pnpm-lock.yaml" ]; then

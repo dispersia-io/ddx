@@ -1,4 +1,7 @@
-# Internal script: secure audit execution
+#!/bin/bash
+
+# This is an internal script. Do not run it directly.
+# Relies on variables from the parent script: PACKAGE_MANAGER, SILENT_MODE, AUDIT_CMD
 
 log -ic "🛡️ " -m "Running $PACKAGE_MANAGER audit...\n"
 

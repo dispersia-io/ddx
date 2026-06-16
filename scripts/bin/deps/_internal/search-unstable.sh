@@ -1,4 +1,7 @@
-# Internal script: parsing lockfiles for 0.x.x versions
+#!/bin/bash
+
+# This is an internal script. Do not run it directly.
+# Relies on variables from the parent script: LOCKFILE, PACKAGE_MANAGER, SILENT_MODE
 
 if [ ! -f "$LOCKFILE" ]; then
   log -cl -e -m "Error: File $LOCKFILE not found in the project root!\n"

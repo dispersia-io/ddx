@@ -48,8 +48,12 @@ while [[ "$#" -gt 0 ]]; do
       shift 1
       ;;
     --package-manager | -pm)
-      PACKAGE_MANAGER="${2:-}"
-      [[ $# -ge 2 ]] && shift 2 || shift 1
+      if [[ -z "$2" || "$2" == -* ]]; then
+        log -e -c "gray" -m "Error: Flag '$1' requires an argument (yarn, npm, pnpm)."
+        exit 1
+      fi
+      PACKAGE_MANAGER="$2"
+      shift 2
       ;;
     *)
       shift 1

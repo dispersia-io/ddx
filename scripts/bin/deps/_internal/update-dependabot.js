@@ -1,3 +1,8 @@
+/**
+ * This is an internal script. Do not run it directly.
+ * Relies on variables from the parent script: DEPENDABOT_FILE, PACKAGES_ENV
+ */
+
 const fs = require('fs');
 const yaml = require('yaml');
 

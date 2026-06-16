@@ -1,4 +1,7 @@
-# Internal script: pinning unstable packages in dependabot config
+#!/bin/bash
+
+# This is an internal script. Do not run it directly.
+# Relies on variables from the parent script: INTERNAL_DIR, DEPENDABOT_FILE, PACKAGE_INFO
 
 source "$INTERNAL_DIR/search-unstable.sh"
 
