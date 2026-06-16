@@ -6,17 +6,17 @@
 # between other scripts; it is not intended for standalone execution.
 #
 # Flags:
-#   --msg, -m               : (Required) Message text to display
-#   --level, -l             : (Optional) Indentation level: 1 (none), 2 (3 spaces), 3 (6 spaces)
-#   --icon, -ic             : (Optional) Overrides the default icon for the message
-#   --color, -c             : (Optional) Overrides the color (green, red, yellow, blue, gray)
-#   --success, -s           : (Optional) Sets type to SUCCESS (Green, ✅)
-#   --warn, -w              : (Optional) Sets type to WARNING (Yellow, ⚠️)
-#   --error, -e             : (Optional) Sets type to ERROR (Red, ❌)
-#   --info, -i              : (Optional) Sets type to INFO (Gray, ℹ️)
-#   --clear, -cl            : (Optional) Clears the current line before printing (\r\033[K)
-#   --inline, -in           : (Optional) Prints the message without a trailing newline
-#   --silent, -sl           : (Optional) Suppresses all output
+#   --msg, -m               : [Required] Message text to display
+#   --level, -l             : [Optional] Indentation level: 1 (none), 2 (3 spaces), 3 (6 spaces)
+#   --icon, -ic             : [Optional] Overrides the default icon for the message
+#   --color, -c             : [Optional] Overrides the color (green, red, yellow, blue, gray)
+#   --success, -s           : [Optional] Sets type to SUCCESS (Green, ✅)
+#   --warn, -w              : [Optional] Sets type to WARNING (Yellow, ⚠️)
+#   --error, -e             : [Optional] Sets type to ERROR (Red, ❌)
+#   --info, -i              : [Optional] Sets type to INFO (Gray, ℹ️)
+#   --clear, -cl            : [Optional] Clears the current line before printing (\r\033[K)
+#   --inline, -in           : [Optional] Prints the message without a trailing newline
+#   --silent, -sl           : [Optional] Suppresses all output
 #
 # Usage Variants:
 #

@@ -5,15 +5,13 @@
 # NOTE: This script is designed strictly for internal use and coordination
 # between other scripts; it is not intended for standalone execution.
 #
-# Required flags:
-#   --name, -n            : Name of the task
-#   --cmd, -c             : Command string to execute
-#
-# Optional flags:
-#   --icon, -i            : Icon for the task
-#   --success-msg, -sm    : Message to display on success (defaults to generic message)
-#   --error-msg, -em      : Message to display on error (defaults to generic message)
-#   --level, -l           : Logging indentation level (defaults to 1)
+# Flags:
+#   --name, -n            : [Required] Name of the task
+#   --cmd, -c             : [Required] Command string to execute
+#   --icon, -i            : [Optional] Icon for the task
+#   --success-msg, -sm    : [Optional] Message to display on success (defaults to generic message)
+#   --error-msg, -em      : [Optional] Message to display on error (defaults to generic message)
+#   --level, -l           : [Optional] Logging indentation level (defaults to 1)
 
 TASKS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BIN_DIR="$TASKS_DIR/.."

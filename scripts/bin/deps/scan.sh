@@ -5,12 +5,12 @@
 # Can optionally run an audit and automatically configure Dependabot
 # to ignore minor version updates for these specific packages.
 #
-# Flags:
-#   --audit, -a                      : Run security audit before scanning.
-#   --pin-unstable, -pu              : Automatically write ignore rules to Dependabot config.
-#   --silent, -s                     : Suppress standard output logs (useful for CI/CD).
-#   --meta, -m                       : Emit state markers (__UPDATED__, __SKIPPED__) for automation workflows.
-#   --package-manager, -pm <name>    : Specifies the package manager (yarn, npm, pnpm). Default: auto-detect OR yarn.
+# Options:
+#   --audit, -a                      : [Optional] Run security audit before scanning.
+#   --pin-unstable, -pu              : [Optional] Automatically write ignore rules to Dependabot config.
+#   --silent, -s                     : [Optional] Suppress standard output logs (useful for CI/CD).
+#   --meta, -m                       : [Optional] Emit state markers (__UPDATED__, __SKIPPED__) for automation workflows.
+#   --package-manager, -pm <name>    : [Optional] Specifies the package manager (yarn, npm, pnpm). Default: auto-detect OR yarn.
 #
 # Usage:
 # bash scripts/bin/deps/scan.sh [--audit] [--pin-unstable] [--silent] [--package-manager yarn|npm|pnpm]
@@ -49,7 +49,7 @@ while [[ "$#" -gt 0 ]]; do
       ;;
     --package-manager | -pm)
       if [[ -z "$2" || "$2" == -* ]]; then
-        log -e -c "gray" -m "Error: Flag '$1' requires an argument (yarn, npm, pnpm)."
+        log -e -c "gray" -m "Error: Option '$1' requires an argument (yarn, npm, pnpm)."
         exit 1
       fi
       PACKAGE_MANAGER="$2"

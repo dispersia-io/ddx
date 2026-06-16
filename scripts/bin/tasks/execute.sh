@@ -6,8 +6,8 @@
 # between other scripts; it is not intended for standalone execution.
 #
 # Flags:
-#   --task       : Dispatches the command to the 'run_task' executor.
-#   --subtask    : Dispatches the command to the 'run_subtask' executor.
+#   --task       : [Optional] Dispatches the command to the 'run_task' executor.
+#   --subtask    : [Optional] Dispatches the command to the 'run_subtask' executor.
 #
 # Usage:
 # execute [--task | --subtask] [flags...] "<command>"

@@ -6,14 +6,14 @@
 # between other scripts; it is not intended for standalone execution.
 #
 # Flags:
-#   --cmd, -c               : (Required) Command string to execute
-#   --icon, -i              : (Optional) Icon for the task
-#   --subject, -s           : (Optional) Subject of the action
-#   --template, -t          : (Optional) Predefined action template (Mode 1)
-#   --name, -n              : (Optional) Custom name for the task (Mode 2 & 3)
-#   --success-msg, -sm      : (Optional) Custom success text (Mode 2 & 3)
-#   --error-msg, -em        : (Optional) Custom error text (Mode 2 & 3)
-#   --level, -l             : (Optional) Logging indentation level (defaults to 2)
+#   --cmd, -c               : [Required] Command string to execute
+#   --icon, -i              : [Optional] Icon for the task
+#   --subject, -s           : [Optional] Subject of the action
+#   --template, -t          : [Optional] Predefined action template (Mode 1)
+#   --name, -n              : [Optional] Custom name for the task (Mode 2 & 3)
+#   --success-msg, -sm      : [Optional] Custom success text (Mode 2 & 3)
+#   --error-msg, -em        : [Optional] Custom error text (Mode 2 & 3)
+#   --level, -l             : [Optional] Logging indentation level (defaults to 2)
 #
 # Available Templates (--template):
 #   install, update, pin, build, generate, verify, remove,

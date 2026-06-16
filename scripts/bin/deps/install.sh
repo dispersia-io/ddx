@@ -2,9 +2,9 @@
 
 # Installs all dependencies and sets up git hooks.
 #
-# Flags:
-#   --subtask                        : Formats the output for nested execution within a larger task.
-#   --package-manager, -pm <name>    : Specifies the package manager (yarn, npm, pnpm). Default is yarn.
+# Options:
+#   --subtask                        : [Optional] Formats the output for nested execution within a larger task.
+#   --package-manager, -pm <name>    : [Optional] Specifies the package manager (yarn, npm, pnpm). Default is yarn.
 #
 # Usage:
 # bash scripts/bin/deps/install.sh [--subtask] [--package-manager yarn|npm|pnpm]
@@ -21,7 +21,7 @@ PACKAGE_MANAGER="yarn"
 while [[ "$#" -gt 0 ]]; do
   case "$1" in
     --task)
-      log -e -c "gray" -m "Error: The deps/install.sh script does not support the --task flag."
+      log -e -c "gray" -m "Error: The deps/install.sh script does not support the --task option."
       exit 1
       ;;
     --subtask)
@@ -30,7 +30,7 @@ while [[ "$#" -gt 0 ]]; do
       ;;
     --package-manager | -pm)
       if [[ -z "$2" || "$2" == -* ]]; then
-        log -e -c "gray" -m "Error: Flag '$1' requires an argument (yarn, npm, pnpm)."
+        log -e -c "gray" -m "Error: Option '$1' requires an argument (yarn, npm, pnpm)."
         exit 1
       fi
       PACKAGE_MANAGER="$2"
@@ -43,7 +43,7 @@ while [[ "$#" -gt 0 ]]; do
 done
 
 if [[ "$PACKAGE_MANAGER" != "yarn" && "$PACKAGE_MANAGER" != "npm" && "$PACKAGE_MANAGER" != "pnpm" ]]; then
-  log -e -c "gray" -m "Error: Unsupported package manager '$PACKAGE_MANAGER'. Supported options: yarn, npm, pnpm."
+  log -e -c "gray" -m "Error: Unsupported package manager '$PACKAGE_MANAGER'. Supported arguments: yarn, npm, pnpm."
   exit 1
 fi
 
