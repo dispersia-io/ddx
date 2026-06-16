@@ -1,0 +1,49 @@
+{
+  "name": "@dispersiajs/dx",
+  "version": "1.0.0-canary.0",
+  "description": "Internal developer experience (DX) infrastructure and automation toolset for Dispersia projects",
+  "license": "MIT",
+  "author": "Oleg Putseiko <oleg.putseiko@gmail.com> (https://github.com/oleg-putseiko)",
+  "keywords": [
+    "dx",
+    "bash",
+    "automation",
+    "scripts",
+    "ci-cd",
+    "dispersia"
+  ],
+  "homepage": "https://github.com/dispersia-io/dx#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dispersia-io/dx.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dispersia-io/dx/issues"
+  },
+  "type": "commonjs",
+  "files": [
+    "scripts/**/*"
+  ],
+  "scripts": {
+    "scripts:perms": "find ./scripts -type f -name \"*.sh\" -exec chmod +x {} +",
+    "scripts:perms:track": "find ./scripts -type f -name \"*.sh\" -exec git update-index --chmod=+x {} +",
+    "cleanup": "bash ./scripts/cleanup.sh",
+    "setup": "bash ./scripts/setup.sh"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^21.0.2",
+    "@commitlint/config-conventional": "^21.0.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.7",
+    "prettier": "^3.8.4",
+    "prettier-plugin-sh": "^0.18.1"
+  },
+  "engines": {
+    "node": "^20.9.0 || >=21.1.0"
+  },
+  "volta": {
+    "node": "24.14.1",
+    "yarn": "4.14.1"
+  },
+  "packageManager": "yarn@4.14.1"
+}
