@@ -22,13 +22,13 @@
   },
   "type": "commonjs",
   "files": [
-    "scripts/**/*"
+    "scripts/bin/**/*"
   ],
   "scripts": {
     "scripts:perms": "find ./scripts -type f -name \"*.sh\" -exec chmod +x {} +",
     "scripts:perms:track": "find ./scripts -type f -name \"*.sh\" -exec git update-index --chmod=+x {} +",
-    "cleanup": "bash ./scripts/cleanup.sh",
-    "setup": "bash ./scripts/setup.sh"
+    "cleanup": "bash ./scripts/internal/cleanup.sh",
+    "setup": "bash ./scripts/internal/setup.sh"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.0.2",
