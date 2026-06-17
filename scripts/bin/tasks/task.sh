@@ -11,7 +11,7 @@
 #   --icon, -i            : [Optional] Icon for the task
 #   --success-msg, -sm    : [Optional] Message to display on success (defaults to generic message)
 #   --error-msg, -em      : [Optional] Message to display on error (defaults to generic message)
-#   --level, -l           : [Optional] Logging indentation level (defaults to 1)
+#   --log-level, -ll      : [Optional] Logging indentation level (defaults to 1)
 #   --silent, -sl         : [Optional] Suppresses all logs (0/1 or false/true)
 
 TASKS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -22,7 +22,7 @@ source "$UTILS_DIR/log.sh"
 source "$UTILS_DIR/options.sh"
 
 run_task() {
-  local task_name icon success_msg error_msg command level silent
+  local task_name icon success_msg error_msg command log_level silent
 
   local OPTIONS_CONFIG="
     task_name   | --name        | -n   | required | string | 
@@ -30,7 +30,7 @@ run_task() {
     icon        | --icon        | -i   | optional | string | 
     success_msg | --success-msg | -sm  | optional | string | 
     error_msg   | --error-msg   | -em  | optional | string | 
-    level       | --level       | -l   | optional | int    | 1
+    log_level   | --log-level   | -ll  | optional | int    | 1
     silent_mode | --silent      | -sl  | optional | string | false
   "
 
@@ -42,21 +42,21 @@ run_task() {
   local silent=$(echo "$silent_mode" | tr '[:upper:]' '[:lower:]')
 
   if [[ -n "$icon" ]]; then
-    log -l "$level" -ic "$icon" -m "$task_name\n" -sl "$silent_mode"
+    -ic "$icon" -m "$task_name\n" log -ll "$log_level" -sl "$silent_mode"
   else
-    log -l "$level" -m "$task_name\n" -sl "$silent_mode"
+    log -m "$task_name\n" -ll "$log_level" -sl "$silent_mode"
   fi
 
   if eval "$command"; then
     if [[ "$silent" != "1" && "$silent" != "true" ]]; then
       echo ""
-      log -s -l "$level" -ic "✨" -m "$success_msg"
+      log -s -ic "✨" -m "$success_msg" -ll "$log_level"
     fi
     return 0
   else
     if [[ "$silent" != "1" && "$silent" != "true" ]]; then
       echo ""
-      log -e -l "$level" -m "$error_msg"
+      log -e -m "$error_msg" -ll "$log_level"
     fi
     return 1
   fi

@@ -13,7 +13,7 @@
 #   --name, -n            : [Optional] Custom name for the task (Mode 2 & 3)
 #   --success-msg, -sm    : [Optional] Custom success text (Mode 2 & 3)
 #   --error-msg, -em      : [Optional] Custom error text (Mode 2 & 3)
-#   --level, -l           : [Optional] Logging indentation level (defaults to 2)
+#   --log-level, -ll      : [Optional] Logging indentation level (defaults to 2)
 #   --silent, -sl         : [Optional] Suppresses all logs (0/1 or false/true)
 #
 # Available Templates (--template):
@@ -43,7 +43,7 @@ source "$UTILS_DIR/log.sh"
 source "$UTILS_DIR/options.sh"
 
 run_subtask() {
-  local command name subject template icon success_msg error_msg level silent
+  local command name subject template icon success_msg error_msg log_level silent
   local pending_msg=""
 
   local OPTIONS_CONFIG="
@@ -54,7 +54,7 @@ run_subtask() {
     icon         | --icon        | -i   | optional | string | 
     success_msg  | --success-msg | -sm  | optional | string | 
     error_msg    | --error-msg   | -em  | optional | string | 
-    level        | --level       | -l   | optional | int    | 2
+    log_level    | --log-level   | -ll  | optional | int    | 2
     silent       | --silent      | -sl  | optional | string | false
   "
 
@@ -62,7 +62,7 @@ run_subtask() {
 
   if [[ -n "$template" ]]; then
     if [[ -z "$subject" ]]; then
-      log -cl -e -l "$level" -c "gray" -m "Error: Template mode requires --subject" -sl "$silent"
+      log -cl -e -c "gray" -m "Error: Template mode requires --subject" -ll "$log_level" -sl "$silent"
       exit 1
     fi
 
@@ -97,7 +97,7 @@ run_subtask() {
       delete) template_data="Deleting|Deleted|Failed to delete" ;;
       cleanup) template_data="Cleaning up|Cleaned up|Failed to cleanup" ;;
       *)
-        log -cl -e -l "$level" -c "gray" -m "Error: Unknown subtask template '$template'" -sl "$silent"
+        log -cl -e -c "gray" -m "Error: Unknown subtask template '$template'" -ll "$log_level" -sl "$silent"
         exit 1
         ;;
     esac
@@ -120,7 +120,7 @@ run_subtask() {
       pending_msg="$name"
     fi
   else
-    log -cl -e -l "$level" -c "gray" -m "Error: Invalid flag combination. Provide either --template AND --subject, OR custom --name." -sl "$silent"
+    log -cl -e -c "gray" -m "Error: Invalid flag combination. Provide either --template AND --subject, OR custom --name." -ll "$log_level" -sl "$silent"
     exit 1
   fi
 
@@ -129,12 +129,12 @@ run_subtask() {
     icon_args=("-ic" "$icon")
   fi
 
-  log -l "$level" "${icon_args[@]}" -m "$pending_msg..." -in -sl "$silent"
+  log "${icon_args[@]}" -m "$pending_msg..." -in -ll "$log_level" -sl "$silent"
 
   if OUT=$(eval "$command" 2>&1); then
-    log -cl -s -l "$level" "${icon_args[@]}" -m "$success_msg" -sl "$silent"
+    log -cl -s "${icon_args[@]}" -m "$success_msg" -ll "$log_level" -sl "$silent"
   else
-    log -cl -e -l "$level" "${icon_args[@]}" -m "$error_msg" -sl "$silent"
+    log -cl -e "${icon_args[@]}" -m "$error_msg" -ll "$log_level" -sl "$silent"
 
     local silent=$(echo "$SILENT_MODE" | tr '[:upper:]' '[:lower:]')
     if [[ "$silent" != "1" && "$silent" != "true" ]]; then

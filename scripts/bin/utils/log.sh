@@ -6,17 +6,17 @@
 # between other scripts; it is not intended for standalone execution.
 #
 # Options:
-#   --msg, -m        : [Required] Message text to display
-#   --level, -l      : [Optional] Indentation level: 1 (none), 2 (3 spaces), 3 (6 spaces)
-#   --icon, -ic      : [Optional] Overrides the default icon for the message
-#   --color, -c      : [Optional] Overrides the color (green, red, yellow, blue, gray)
-#   --success, -s    : [Optional] Sets type to SUCCESS (Green, ✅)
-#   --warn, -w       : [Optional] Sets type to WARNING (Yellow, ⚠️)
-#   --error, -e      : [Optional] Sets type to ERROR (Red, ❌)
-#   --info, -i       : [Optional] Sets type to INFO (Gray, ℹ️)
-#   --clear, -cl     : [Optional] Clears the current line before printing (\r\033[K)
-#   --inline, -in    : [Optional] Prints the message without a trailing newline
-#   --silent, -sl    : [Optional] Suppresses all output. Accepts 1/0 or true/false.
+#   --msg, -m           : [Required] Message text to display
+#   --log-level, -ll    : [Optional] Indentation level: 1 (none), 2 (3 spaces), 3 (6 spaces)
+#   --icon, -ic         : [Optional] Overrides the default icon for the message
+#   --color, -c         : [Optional] Overrides the color (green, red, yellow, blue, gray)
+#   --success, -s       : [Optional] Sets type to SUCCESS (Green, ✅)
+#   --warn, -w          : [Optional] Sets type to WARNING (Yellow, ⚠️)
+#   --error, -e         : [Optional] Sets type to ERROR (Red, ❌)
+#   --info, -i          : [Optional] Sets type to INFO (Gray, ℹ️)
+#   --clear, -cl        : [Optional] Clears the current line before printing (\r\033[K)
+#   --inline, -in       : [Optional] Prints the message without a trailing newline
+#   --silent, -sl       : [Optional] Suppresses all output. Accepts 1/0 or true/false.
 #
 # Usage Variants:
 #
@@ -28,7 +28,7 @@
 #    Next log: log --clear --success --msg "Data processed"
 #
 # 3. Indented Error:
-#    Example: log -e -l 2 -c "gray" -m "Failed to locate configuration file"
+#    Example: log -e -c "gray" -m "Failed to locate configuration file" -ll 2
 
 UTILS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -36,20 +36,20 @@ source "$UTILS_DIR/colors.sh"
 source "$UTILS_DIR/options.sh"
 
 log() {
-  local msg level icon color_name is_success is_warn is_error is_info clear_line is_inline silent
+  local msg log_level icon color_name is_success is_warn is_error is_info clear_line is_inline silent
 
   local OPTIONS_CONFIG="
-    msg         | --msg      | -m   | required | string | 
-    level       | --level    | -l   | optional | int    | 1
-    icon        | --icon     | -ic  | optional | string | 
-    color_name  | --color    | -c   | optional | string | 
-    is_success  | --success  | -s   | optional | flag   | 
-    is_warn     | --warn     | -w   | optional | flag   | 
-    is_error    | --error    | -e   | optional | flag   | 
-    is_info     | --info     | -i   | optional | flag   | 
-    clear_line  | --clear    | -cl  | optional | flag   | 
-    is_inline   | --inline   | -in  | optional | flag   | 
-    silent_mode | --silent   | -sl  | optional | string | false
+    msg         | --msg       | -m   | required | string | 
+    log_level   | --log-level | -ll  | optional | int    | 1
+    icon        | --icon      | -ic  | optional | string | 
+    color_name  | --color     | -c   | optional | string | 
+    is_success  | --success   | -s   | optional | flag   | 
+    is_warn     | --warn      | -w   | optional | flag   | 
+    is_error    | --error     | -e   | optional | flag   | 
+    is_info     | --info      | -i   | optional | flag   | 
+    clear_line  | --clear     | -cl  | optional | flag   | 
+    is_inline   | --inline    | -in  | optional | flag   | 
+    silent_mode | --silent    | -sl  | optional | string | false
   "
 
   eval "$(parse_options "$OPTIONS_CONFIG" "return 0")"
@@ -88,8 +88,8 @@ log() {
   local final_icon="${icon:-$type_icon}"
 
   local indent=""
-  if [[ "$level" =~ ^[1-9][0-9]*$ ]]; then
-    indent=$(printf '%*s' "$(((level - 1) * 3))" "")
+  if [[ "$log_level" =~ ^[1-9][0-9]*$ ]]; then
+    indent=$(printf '%*s' "$(((log_level - 1) * 3))" "")
   fi
 
   local start=""
