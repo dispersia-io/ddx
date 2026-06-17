@@ -1,6 +1,6 @@
 /**
  * This is an internal script. Do not run it directly.
- * Relies on variables from the parent script: DEPENDABOT_FILE, PACKAGES_ENV
+ * Relies on variables from the parent script: DEPENDABOT_FILE, PACKAGES_ENV, IS_SILENT
  */
 
 const fs = require('fs');
@@ -8,14 +8,20 @@ const yaml = require('yaml');
 
 try {
   const yamlPath = process.env.DEPENDABOT_FILE;
-  const isSilent = process.env.SILENT_MODE === '1' || process.env.SILENT_MODE === 'true';
+  const isSilent = (() => {
+    const value = process.env.IS_SILENT ?? '';
+
+    if (/^(1|true|y(es)?|on|enabled?)$/iu.test(value)) return true;
+    if (/^(0|false|no?|off|disabled?)?$/iu.test(value)) return false;
+    throw new Error(`Unrecognized flag value '${value}'. Expected boolean-like value.`);
+  })();
 
   if (!yamlPath) throw new Error('DEPENDABOT_FILE is not defined');
 
   const yamlContent = fs.readFileSync(yamlPath, 'utf8');
   const yamlDoc = yamlContent.trim() ? yaml.parseDocument(yamlContent) : new yaml.Document();
 
-  const unstablePackagesEnv = process.env.PACKAGES_ENV || '';
+  const unstablePackagesEnv = process.env.PACKAGES_ENV ?? '';
   const unstablePackages = [...new Set(unstablePackagesEnv.split(/\s+/).filter(Boolean))];
 
   let isChanged = false;

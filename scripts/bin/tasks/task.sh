@@ -6,32 +6,36 @@
 # between other scripts; it is not intended for standalone execution.
 #
 # Options:
-#   --name, -n            : [Required] Name of the task
-#   --cmd, -c             : [Required] Command string to execute
-#   --icon, -i            : [Optional] Icon for the task
-#   --success-msg, -sm    : [Optional] Message to display on success (defaults to generic message)
-#   --error-msg, -em      : [Optional] Message to display on error (defaults to generic message)
-#   --log-level, -ll      : [Optional] Logging indentation level (defaults to 1)
-#   --silent, -sl         : [Optional] Suppresses all logs (0/1 or false/true)
+#   --name, -n             : [Required] Name of the task
+#   --cmd, -c              : [Required] Command string to execute
+#   --icon, -i             : [Optional] Icon for the task
+#   --success-msg, -sm     : [Optional] Message to display on success (defaults to generic message)
+#   --error-msg, -em       : [Optional] Message to display on error (defaults to generic message)
+#   --log-level, -ll       : [Optional] Logging indentation level (defaults to 1)
+#   --silent-mode, -slm    : [Optional] Suppresses all logs (boolean-like value)
+
+[[ -n "$__IS_TASKS_TASK_SH_INCLUDED" ]] && return 0
+__IS_TASKS_TASK_SH_INCLUDED=1
 
 TASKS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BIN_DIR="$TASKS_DIR/.."
 UTILS_DIR="$BIN_DIR/utils"
 
 source "$UTILS_DIR/log.sh"
+source "$UTILS_DIR/flags.sh"
 source "$UTILS_DIR/options.sh"
 
 run_task() {
-  local task_name icon success_msg error_msg command log_level silent
+  local task_name icon success_msg error_msg command log_level silent_mode
 
   local OPTIONS_CONFIG="
-    task_name   | --name        | -n   | required | string | 
-    command     | --cmd         | -c   | required | string | 
-    icon        | --icon        | -i   | optional | string | 
-    success_msg | --success-msg | -sm  | optional | string | 
-    error_msg   | --error-msg   | -em  | optional | string | 
-    log_level   | --log-level   | -ll  | optional | int    | 1
-    silent_mode | --silent      | -sl  | optional | string | false
+    task_name   | --name        | -n    | required | string     | 
+    command     | --cmd         | -c    | required | string     | 
+    icon        | --icon        | -i    | optional | string     | 
+    success_msg | --success-msg | -sm   | optional | string     | 
+    error_msg   | --error-msg   | -em   | optional | string     | 
+    log_level   | --log-level   | -ll   | optional | int        | 1
+    silent_mode | --silent-mode | -slm  | optional | flag_value | disabled
   "
 
   eval "$(parse_options "$OPTIONS_CONFIG" "return 1")"
@@ -39,22 +43,20 @@ run_task() {
   success_msg="${success_msg:-Task '$task_name' completed successfully.}"
   error_msg="${error_msg:-Task '$task_name' encountered an error.}"
 
-  local silent=$(echo "$silent_mode" | tr '[:upper:]' '[:lower:]')
-
   if [[ -n "$icon" ]]; then
-    -ic "$icon" -m "$task_name\n" log -ll "$log_level" -sl "$silent_mode"
+    -ic "$icon" -m "$task_name\n" log -ll "$log_level" -slm "$silent_mode"
   else
-    log -m "$task_name\n" -ll "$log_level" -sl "$silent_mode"
+    log -m "$task_name\n" -ll "$log_level" -slm "$silent_mode"
   fi
 
   if eval "$command"; then
-    if [[ "$silent" != "1" && "$silent" != "true" ]]; then
+    if ! is_flag_on "$silent_mode"; then
       echo ""
       log -s -ic "✨" -m "$success_msg" -ll "$log_level"
     fi
     return 0
   else
-    if [[ "$silent" != "1" && "$silent" != "true" ]]; then
+    if ! is_flag_on "$silent_mode"; then
       echo ""
       log -e -m "$error_msg" -ll "$log_level"
     fi

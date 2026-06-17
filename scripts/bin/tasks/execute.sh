@@ -12,6 +12,9 @@
 # Usage:
 # execute [task | subtask] [options...]
 
+[[ -n "$__IS_TASKS_EXECUTE_SH_INCLUDED" ]] && return 0
+__IS_TASKS_EXECUTE_SH_INCLUDED=1
+
 TASKS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BIN_DIR="$TASKS_DIR/.."
 

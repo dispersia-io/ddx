@@ -6,15 +6,15 @@
 # between other scripts; it is not intended for standalone execution.
 #
 # Options:
-#   --cmd, -c             : [Required] Command string to execute
-#   --icon, -i            : [Optional] Icon for the task
-#   --subject, -s         : [Optional] Subject of the action
-#   --template, -t        : [Optional] Predefined action template (Mode 1)
-#   --name, -n            : [Optional] Custom name for the task (Mode 2 & 3)
-#   --success-msg, -sm    : [Optional] Custom success text (Mode 2 & 3)
-#   --error-msg, -em      : [Optional] Custom error text (Mode 2 & 3)
-#   --log-level, -ll      : [Optional] Logging indentation level (defaults to 2)
-#   --silent, -sl         : [Optional] Suppresses all logs (0/1 or false/true)
+#   --cmd, -c              : [Required] Command string to execute
+#   --icon, -i             : [Optional] Icon for the task
+#   --subject, -s          : [Optional] Subject of the action
+#   --template, -t         : [Optional] Predefined action template (Mode 1)
+#   --name, -n             : [Optional] Custom name for the task (Mode 2 & 3)
+#   --success-msg, -sm     : [Optional] Custom success text (Mode 2 & 3)
+#   --error-msg, -em       : [Optional] Custom error text (Mode 2 & 3)
+#   --log-level, -ll       : [Optional] Logging indentation level (defaults to 2)
+#   --silent-mode, -slm    : [Optional] Suppresses all logs (boolean-like value)
 #
 # Available Templates (--template):
 #   install, update, pin, build, generate, verify, remove,
@@ -35,34 +35,38 @@
 #    Requires: --subject, --name, --cmd
 #    Example: run_subtask -s "Cache files" -n "Cleaning" -c "rm -rf"
 
+[[ -n "$__IS_TASKS_SUBTASK_SH_INCLUDED" ]] && return 0
+__IS_TASKS_SUBTASK_SH_INCLUDED=1
+
 TASKS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BIN_DIR="$TASKS_DIR/.."
 UTILS_DIR="$BIN_DIR/utils"
 
 source "$UTILS_DIR/log.sh"
+source "$UTILS_DIR/flags.sh"
 source "$UTILS_DIR/options.sh"
 
 run_subtask() {
-  local command name subject template icon success_msg error_msg log_level silent
+  local command name subject template icon success_msg error_msg log_level silent_mode
   local pending_msg=""
 
   local OPTIONS_CONFIG="
-    command      | --cmd         | -c   | required | string | 
-    name         | --name        | -n   | optional | string | 
-    subject      | --subject     | -s   | optional | string | 
-    template     | --template    | -t   | optional | string | 
-    icon         | --icon        | -i   | optional | string | 
-    success_msg  | --success-msg | -sm  | optional | string | 
-    error_msg    | --error-msg   | -em  | optional | string | 
-    log_level    | --log-level   | -ll  | optional | int    | 2
-    silent       | --silent      | -sl  | optional | string | false
+    command     | --cmd         | -c    | required | string     | 
+    name        | --name        | -n    | optional | string     | 
+    subject     | --subject     | -s    | optional | string     | 
+    template    | --template    | -t    | optional | string     | 
+    icon        | --icon        | -i    | optional | string     | 
+    success_msg | --success-msg | -sm   | optional | string     | 
+    error_msg   | --error-msg   | -em   | optional | string     | 
+    log_level   | --log-level   | -ll   | optional | int        | 2
+    silent_mode | --silent-mode | -slm  | optional | flag_value | disabled
   "
 
   eval "$(parse_options "$OPTIONS_CONFIG" "return 1")"
 
   if [[ -n "$template" ]]; then
     if [[ -z "$subject" ]]; then
-      log -cl -e -c "gray" -m "Error: Template mode requires --subject" -ll "$log_level" -sl "$silent"
+      log -cl -e -c "gray" -m "Error: Template mode requires --subject" -ll "$log_level" -slm "$silent_mode"
       exit 1
     fi
 
@@ -97,7 +101,7 @@ run_subtask() {
       delete) template_data="Deleting|Deleted|Failed to delete" ;;
       cleanup) template_data="Cleaning up|Cleaned up|Failed to cleanup" ;;
       *)
-        log -cl -e -c "gray" -m "Error: Unknown subtask template '$template'" -ll "$log_level" -sl "$silent"
+        log -cl -e -c "gray" -m "Error: Unknown subtask template '$template'" -ll "$log_level" -slm "$silent_mode"
         exit 1
         ;;
     esac
@@ -120,7 +124,7 @@ run_subtask() {
       pending_msg="$name"
     fi
   else
-    log -cl -e -c "gray" -m "Error: Invalid flag combination. Provide either --template AND --subject, OR custom --name." -ll "$log_level" -sl "$silent"
+    log -cl -e -c "gray" -m "Error: Invalid flag combination. Provide either --template AND --subject, OR custom --name." -ll "$log_level" -slm "$silent_mode"
     exit 1
   fi
 
@@ -129,15 +133,14 @@ run_subtask() {
     icon_args=("-ic" "$icon")
   fi
 
-  log "${icon_args[@]}" -m "$pending_msg..." -in -ll "$log_level" -sl "$silent"
+  log "${icon_args[@]}" -m "$pending_msg..." -in -ll "$log_level" -slm "$silent_mode"
 
   if OUT=$(eval "$command" 2>&1); then
-    log -cl -s "${icon_args[@]}" -m "$success_msg" -ll "$log_level" -sl "$silent"
+    log -cl -s "${icon_args[@]}" -m "$success_msg" -ll "$log_level" -slm "$silent_mode"
   else
-    log -cl -e "${icon_args[@]}" -m "$error_msg" -ll "$log_level" -sl "$silent"
+    log -cl -e "${icon_args[@]}" -m "$error_msg" -ll "$log_level" -slm "$silent_mode"
 
-    local silent=$(echo "$SILENT_MODE" | tr '[:upper:]' '[:lower:]')
-    if [[ "$silent" != "1" && "$silent" != "true" ]]; then
+    if ! is_flag_on "$silent_mode"; then
       printf "\n%s\n\n" "$OUT"
     fi
     exit 1

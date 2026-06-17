@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # This is an internal script. Do not run it directly.
-# Relies on variables from the parent script: PACKAGE_MANAGER_RUNNER, ROOT_DIR
+# Relies on variables from the parent script: PACKAGE_MANAGER_RUNNER, ROOT_DIR, IS_SILENT
 
 HUSKY_VERSION_STR=$(node -p "
   try {
@@ -28,5 +28,5 @@ if [ -n "$HUSKY_VERSION_STR" ]; then
     --subject "Husky" \
     --template "install" \
     --cmd "$HUSKY_CMD" \
-    --silent "$SILENT_MODE"
+    --silent-mode "$IS_SILENT"
 fi

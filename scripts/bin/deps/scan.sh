@@ -13,7 +13,7 @@
 #   --package-manager, -pm <name>    : [Optional] Specifies the package manager (yarn, npm, pnpm). Default: auto-detect OR yarn.
 #
 # Usage:
-# bash scripts/bin/deps/scan.sh [--audit] [--pin-unstable] [--silent] [--package-manager yarn|npm|pnpm]
+# bash scripts/bin/deps/scan.sh [--package-manager yarn|npm|pnpm] [--audit] [--pin-unstable] [--silent]
 
 DEPS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DEPS_INTERNAL_DIR="$DEPS_DIR/_internal"
@@ -22,12 +22,13 @@ BIN_DIR="$DEPS_DIR/.."
 export ROOT_DIR="$(pwd)"
 
 source "$BIN_DIR/utils/log.sh"
+source "$BIN_DIR/utils/flags.sh"
 source "$BIN_DIR/utils/options.sh"
 
 OPTIONS_CONFIG="
   RUN_AUDIT       | --audit           | -a   | optional | flag   |
   PIN_UNSTABLE    | --pin-unstable    | -pu  | optional | flag   |
-  SILENT_MODE     | --silent          | -sl  | optional | flag   |
+  IS_SILENT       | --silent          | -sl  | optional | flag   |
   EMIT_META       | --meta            | -m   | optional | flag   |
   PACKAGE_MANAGER | --package-manager | -pm  | optional | string |
 "
@@ -50,5 +51,5 @@ fi
 if ((PIN_UNSTABLE)); then
   source "$DEPS_INTERNAL_DIR/pin-unstable.sh"
 elif [ -n "$DEPENDABOT_FILE" ]; then
-  log -i -ic "💡" -m "Run with --pin-unstable to automatically block minor updates for these packages." -sl "$SILENT_MODE"
+  log -i -ic "💡" -m "Run with --pin-unstable to automatically block minor updates for these packages." -slm "$IS_SILENT"
 fi

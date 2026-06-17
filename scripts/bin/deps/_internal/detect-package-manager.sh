@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # This is an internal script. Do not run it directly.
-# Relies on variables from the parent script: PACKAGE_MANAGER, SILENT_MODE, ROOT_DIR
+# Relies on variables from the parent script: PACKAGE_MANAGER, ROOT_DIR, IS_SILENT
 
 if [[ -z "$PACKAGE_MANAGER" ]]; then
   if [ -f "$ROOT_DIR/pnpm-lock.yaml" ]; then
@@ -30,7 +30,7 @@ case "$PACKAGE_MANAGER" in
     PACKAGE_MANAGER_AUDIT_CMD="pnpm audit"
     ;;
   *)
-    log -cl -e -m "Error: Unsupported package manager '$PACKAGE_MANAGER'. Supported options: yarn, npm, pnpm." -sl "$SILENT_MODE"
+    log -cl -e -m "Error: Unsupported package manager '$PACKAGE_MANAGER'. Supported options: yarn, npm, pnpm." -slm "$IS_SILENT"
     exit 1
     ;;
 esac

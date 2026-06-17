@@ -1,16 +1,16 @@
 #!/bin/bash
 
 # This is an internal script. Do not run it directly.
-# Relies on variables from the parent script: LOCKFILE, PACKAGE_MANAGER, SILENT_MODE, ROOT_DIR
+# Relies on variables from the parent script: LOCKFILE, PACKAGE_MANAGER, ROOT_DIR, IS_SILENT
 
 LOCKFILE_PATH="$ROOT_DIR/$LOCKFILE"
 
 if [ ! -f "$LOCKFILE_PATH" ]; then
-  log -cl -e -m "Error: File $LOCKFILE not found in the project root ($ROOT_DIR)!\n" -sl "$SILENT_MODE"
+  log -cl -e -m "Error: File $LOCKFILE not found in the project root ($ROOT_DIR)!\n" -slm "$IS_SILENT"
   exit 1
 fi
 
-log -ic "⏳" -m "Searching $LOCKFILE for 0.x.x packages..." -in -sl "$SILENT_MODE"
+log -ic "⏳" -m "Searching $LOCKFILE for 0.x.x packages..." -in -slm "$IS_SILENT"
 
 if [ "$PACKAGE_MANAGER" = "npm" ]; then
   PACKAGE_INFO=$(node -e "
@@ -38,15 +38,14 @@ else
 fi
 
 if [ -z "$PACKAGE_INFO" ]; then
-  log -cl -s -m "No packages with 0.x.x version found." -sl "$SILENT_MODE"
+  log -cl -s -m "No packages with 0.x.x version found." -slm "$IS_SILENT"
   emit_meta "__SKIPPED__"
   exit 0
 fi
 
 TOTAL=$(echo "$PACKAGE_INFO" | grep -v '^$' | wc -l | tr -d ' ')
 
-silent=$(echo "$SILENT_MODE" | tr '[:upper:]' '[:lower:]')
-if [[ "$silent" != "1" && "$silent" != "true" ]]; then
+if ! is_flag_on "$IS_SILENT"; then
   log -cl -w -m "Found potentially unstable packages: $TOTAL"
   echo ""
   echo "📦 Packages list:"
