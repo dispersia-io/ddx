@@ -20,10 +20,11 @@
 # Usage:
 #   bash ./scripts/bin/package-manager/pin.sh -pm yarn -v 4.13.0 --package-json --dockerfile
 
-ROOT_DIR="$(pwd)"
 PM_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PM_INTERNAL_DIR="$PM_DIR/_internal"
 BIN_DIR="$PM_DIR/.."
+
+export ROOT_DIR="$(pwd)"
 
 source "$BIN_DIR/utils/log.sh"
 source "$BIN_DIR/utils/options.sh"
@@ -64,7 +65,7 @@ fi
 
 VOLTA_PIN_CMD="cd \"${ROOT_DIR}\" && volta pin ${PACKAGE_MANAGER}@${NEW_VERSION}"
 
-export ROOT_DIR NEW_VERSION PACKAGE_MANAGER WORKSPACES
+export NEW_VERSION PACKAGE_MANAGER WORKSPACES
 
 UPDATE_DOCKER_CMD="node \"$PM_INTERNAL_DIR/update-dockerfile.js\""
 UPDATE_PKG_CMD="node \"$PM_INTERNAL_DIR/update-package-json.js\""

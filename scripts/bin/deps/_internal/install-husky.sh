@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # This is an internal script. Do not run it directly.
-# Relies on variables from the parent script: PACKAGE_MANAGER_RUNNER, USER_ROOT_DIR
+# Relies on variables from the parent script: PACKAGE_MANAGER_RUNNER, ROOT_DIR
 
 HUSKY_VERSION_STR=$(node -p "
   try {
-    const p = require('${USER_ROOT_DIR}/package.json');
+    const p = require('${ROOT_DIR}/package.json');
     p.devDependencies?.husky || p.dependencies?.husky || '';
   } catch {}
 " 2> /dev/null)
@@ -20,7 +20,7 @@ if [ -n "$HUSKY_VERSION_STR" ]; then
   if [[ "$HUSKY_MAJOR_VERSION" =~ ^[0-9]+$ ]] && [ "$HUSKY_MAJOR_VERSION" -ge 9 ]; then
     HUSKY_CMD="CI=1 $PACKAGE_MANAGER_RUNNER husky"
   else
-    HUSKY_CMD="CI=1 $PACKAGE_MANAGER_RUNNER husky install && chmod +x \"$USER_ROOT_DIR/.husky/\"*"
+    HUSKY_CMD="CI=1 $PACKAGE_MANAGER_RUNNER husky install && chmod +x \"$ROOT_DIR/.husky/\"*"
   fi
 
   execute subtask \

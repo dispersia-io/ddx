@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # This is an internal script. Do not run it directly.
-# Relies on variables from the parent script: LOCKFILE, PACKAGE_MANAGER, SILENT_MODE, USER_ROOT_DIR
+# Relies on variables from the parent script: LOCKFILE, PACKAGE_MANAGER, SILENT_MODE, ROOT_DIR
 
-LOCKFILE_PATH="$USER_ROOT_DIR/$LOCKFILE"
+LOCKFILE_PATH="$ROOT_DIR/$LOCKFILE"
 
 if [ ! -f "$LOCKFILE_PATH" ]; then
-  log -cl -e -m "Error: File $LOCKFILE not found in the project root ($USER_ROOT_DIR)!\n" -sl "$SILENT_MODE"
+  log -cl -e -m "Error: File $LOCKFILE not found in the project root ($ROOT_DIR)!\n" -sl "$SILENT_MODE"
   exit 1
 fi
 
