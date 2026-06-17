@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # This is an internal script. Do not run it directly.
-# Relies on variables from the parent script: PACKAGE_MANAGER, SILENT_MODE
+# Relies on variables from the parent script: PACKAGE_MANAGER, SILENT_MODE, USER_ROOT_DIR
 
 if [[ -z "$PACKAGE_MANAGER" ]]; then
-  if [ -f "pnpm-lock.yaml" ]; then
+  if [ -f "$USER_ROOT_DIR/pnpm-lock.yaml" ]; then
     PACKAGE_MANAGER="pnpm"
-  elif [ -f "package-lock.json" ]; then
+  elif [ -f "$USER_ROOT_DIR/package-lock.json" ]; then
     PACKAGE_MANAGER="npm"
   else
     PACKAGE_MANAGER="yarn"

@@ -10,7 +10,7 @@ log -c "⏳" -m "Updating $DEPENDABOT_FILE..." -in
 PACKAGES_ONLY=$(echo "$PACKAGE_INFO" | awk '{print $1}')
 export PACKAGES_ENV="$PACKAGES_ONLY"
 
-NODE_RESULT=$(DEPENDABOT_FILE="$DEPENDABOT_FILE" node ./scripts/bin/deps/_internal/update-dependabot.js 2>&1)
+NODE_RESULT=$(DEPENDABOT_FILE="$DEPENDABOT_FILE" node "$DEPS_INTERNAL_DIR/update-dependabot.js" 2>&1)
 
 if [ $? -eq 0 ]; then
   if [[ "$NODE_RESULT" == *"UPDATED"* ]]; then

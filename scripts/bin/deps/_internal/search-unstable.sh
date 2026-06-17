@@ -1,10 +1,12 @@
 #!/bin/bash
 
 # This is an internal script. Do not run it directly.
-# Relies on variables from the parent script: LOCKFILE, PACKAGE_MANAGER, SILENT_MODE
+# Relies on variables from the parent script: LOCKFILE, PACKAGE_MANAGER, SILENT_MODE, USER_ROOT_DIR
 
-if [ ! -f "$LOCKFILE" ]; then
-  log -cl -e -m "Error: File $LOCKFILE not found in the project root!\n"
+LOCKFILE_PATH="$USER_ROOT_DIR/$LOCKFILE"
+
+if [ ! -f "$LOCKFILE_PATH" ]; then
+  log -cl -e -m "Error: File $LOCKFILE not found in the project root ($USER_ROOT_DIR)!\n"
   exit 1
 fi
 
@@ -14,7 +16,7 @@ if [ "$PACKAGE_MANAGER" = "npm" ]; then
   PACKAGE_INFO=$(node -e "
     const fs = require('fs');
     try {
-      const lock = JSON.parse(fs.readFileSync('$LOCKFILE', 'utf8'));
+      const lock = JSON.parse(fs.readFileSync('$LOCKFILE_PATH', 'utf8'));
       const pkgs = lock.packages || lock.dependencies || {};
       const res = new Set();
       Object.keys(pkgs).forEach(k => {
@@ -28,11 +30,11 @@ if [ "$PACKAGE_MANAGER" = "npm" ]; then
     } catch(e) {}
   " | sort -u)
 elif [ "$PACKAGE_MANAGER" = "pnpm" ]; then
-  PACKAGE_INFO=$(grep -Eo '(@?[a-zA-Z0-9_\.\-]+)@0\.[0-9]+\.[0-9]+' "$LOCKFILE" | sed -E 's/@(0\.[0-9]+\.[0-9]+)$/ \1/' | sort -u)
+  PACKAGE_INFO=$(grep -Eo '(@?[a-zA-Z0-9_\.\-]+)@0\.[0-9]+\.[0-9]+' "$LOCKFILE_PATH" | sed -E 's/@(0\.[0-9]+\.[0-9]+)$/ \1/' | sort -u)
 else
   PACKAGE_INFO=$(awk '/^[^[:space:]]/ {pkg=$0} /^[[:space:]]*version: "?0\./ {
     ver=$2; gsub(/["\r]/, "", ver); print pkg "===" ver
-  }' "$LOCKFILE" | sed -E 's/^"?(@?[^@:,]+)@.*===([^ ]+)/\1 \2/' | sort -u)
+  }' "$LOCKFILE_PATH" | sed -E 's/^"?(@?[^@:,]+)@.*===([^ ]+)/\1 \2/' | sort -u)
 fi
 
 if [ -z "$PACKAGE_INFO" ]; then

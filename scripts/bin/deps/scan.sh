@@ -19,10 +19,10 @@ DEPS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DEPS_INTERNAL_DIR="$DEPS_DIR/_internal"
 BIN_DIR="$DEPS_DIR/.."
 
+export USER_ROOT_DIR="$(pwd)"
+
 source "$BIN_DIR/utils/log.sh"
 source "$BIN_DIR/utils/options.sh"
-
-cd "$DEPS_DIR/../../.." || exit 1
 
 OPTIONS_CONFIG="
   RUN_AUDIT       | --audit           | -a   | optional | flag   |
