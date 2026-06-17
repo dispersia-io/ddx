@@ -14,9 +14,9 @@
 #
 # Usage Example:
 #   OPTIONS_CONFIG="
-#     TASK_NAME | --name  | -n | required | string |
-#     RETRIES   | --retry | -r | optional | int    | 3
-#     SILENT    | --quiet | -q | optional | flag   |
+#     TASK_NAME | --name   | -n  | required | string |
+#     RETRIES   | --retry  | -r  | optional | int    | 3
+#     SILENT    | --silent | -sl | optional | flag   |
 #   "
 #
 #   # For global script scope (uses 'exit 1' on error):

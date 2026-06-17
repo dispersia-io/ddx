@@ -29,8 +29,8 @@
     "scripts:perms:track": "find ./scripts -type f -name \"*.sh\" -exec git update-index --chmod=+x {} +",
     "cleanup": "bash ./scripts/internal/cleanup.sh",
     "setup": "bash ./scripts/internal/setup.sh",
-    "audit": "bash ./scripts/bin/deps/scan.sh --audit",
-    "audit:fix": "bash ./scripts/bin/deps/scan.sh --pin-unstable",
+    "deps:scan": "bash ./scripts/bin/deps/scan.sh --audit",
+    "deps:scan:fix": "bash ./scripts/bin/deps/scan.sh --pin-unstable",
     "pin": "bash ./scripts/bin/package-manager/pin.sh -pm yarn --package-json --volta --docs -v"
   },
   "dependencies": {

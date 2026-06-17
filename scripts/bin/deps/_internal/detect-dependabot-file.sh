@@ -10,8 +10,6 @@ if [ -f "$USER_ROOT_DIR/.github/dependabot.yml" ]; then
 elif [ -f "$USER_ROOT_DIR/.github/dependabot.yaml" ]; then
   DEPENDABOT_FILE="$USER_ROOT_DIR/.github/dependabot.yaml"
 elif ((PIN_UNSTABLE)); then
-  if ((!SILENT_MODE)); then
-    log -cl -e -m "Error: Dependabot configuration not found."
-  fi
+  log -cl -e -m "Error: Dependabot configuration not found." -sl "$SILENT_MODE"
   exit 1
 fi

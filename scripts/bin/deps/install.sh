@@ -4,7 +4,7 @@
 #
 # Options:
 #   --package-manager, -pm <name>    : [Optional] Specifies the package manager (yarn, npm, pnpm). Default is yarn.
-#   --silent, -s                     : [Optional] Suppress standard output logs.
+#   --silent, -sl                    : [Optional] Suppress standard output logs.
 #
 # Usage:
 # bash scripts/bin/deps/install.sh [--silent] [--package-manager yarn|npm|pnpm]
@@ -21,7 +21,7 @@ source "$BIN_DIR/tasks/execute.sh"
 
 OPTIONS_CONFIG="
   PACKAGE_MANAGER | --package-manager | -pm | optional | string |
-  SILENT_MODE     | --silent          | -s  | optional | flag   |
+  SILENT_MODE     | --silent          | -sl | optional | flag   |
 "
 
 eval "$(parse_options "$OPTIONS_CONFIG")"

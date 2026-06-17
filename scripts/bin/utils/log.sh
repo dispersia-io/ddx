@@ -5,18 +5,18 @@
 # NOTE: This script is designed strictly for internal use and coordination
 # between other scripts; it is not intended for standalone execution.
 #
-# Flags:
-#   --msg, -m               : [Required] Message text to display
-#   --level, -l             : [Optional] Indentation level: 1 (none), 2 (3 spaces), 3 (6 spaces)
-#   --icon, -ic             : [Optional] Overrides the default icon for the message
-#   --color, -c             : [Optional] Overrides the color (green, red, yellow, blue, gray)
-#   --success, -s           : [Optional] Sets type to SUCCESS (Green, ✅)
-#   --warn, -w              : [Optional] Sets type to WARNING (Yellow, ⚠️)
-#   --error, -e             : [Optional] Sets type to ERROR (Red, ❌)
-#   --info, -i              : [Optional] Sets type to INFO (Gray, ℹ️)
-#   --clear, -cl            : [Optional] Clears the current line before printing (\r\033[K)
-#   --inline, -in           : [Optional] Prints the message without a trailing newline
-#   --silent, -sl           : [Optional] Suppresses all output
+# Options:
+#   --msg, -m        : [Required] Message text to display
+#   --level, -l      : [Optional] Indentation level: 1 (none), 2 (3 spaces), 3 (6 spaces)
+#   --icon, -ic      : [Optional] Overrides the default icon for the message
+#   --color, -c      : [Optional] Overrides the color (green, red, yellow, blue, gray)
+#   --success, -s    : [Optional] Sets type to SUCCESS (Green, ✅)
+#   --warn, -w       : [Optional] Sets type to WARNING (Yellow, ⚠️)
+#   --error, -e      : [Optional] Sets type to ERROR (Red, ❌)
+#   --info, -i       : [Optional] Sets type to INFO (Gray, ℹ️)
+#   --clear, -cl     : [Optional] Clears the current line before printing (\r\033[K)
+#   --inline, -in    : [Optional] Prints the message without a trailing newline
+#   --silent, -sl    : [Optional] Suppresses all output. Accepts 1/0 or true/false.
 #
 # Usage Variants:
 #
@@ -32,85 +32,48 @@
 
 UTILS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-if [ -f "$UTILS_DIR/colors.sh" ]; then
-  source "$UTILS_DIR/colors.sh"
-else
-  GREEN='\033[0;32m'
-  RED='\033[0;31m'
-  YELLOW='\033[1;33m'
-  BLUE='\033[0;34m'
-  GRAY='\033[0;90m'
-  NC='\033[0m'
-fi
+source "$UTILS_DIR/colors.sh"
+source "$UTILS_DIR/options.sh"
 
 log() {
-  local msg=""
-  local level=1
-  local icon=""
-  local color_name=""
-  local clear_line=false
-  local is_inline=false
-  local is_silent=false
+  local msg level icon color_name is_success is_warn is_error is_info clear_line is_inline silent
+
+  local OPTIONS_CONFIG="
+    msg         | --msg      | -m   | required | string | 
+    level       | --level    | -l   | optional | int    | 1
+    icon        | --icon     | -ic  | optional | string | 
+    color_name  | --color    | -c   | optional | string | 
+    is_success  | --success  | -s   | optional | flag   | 
+    is_warn     | --warn     | -w   | optional | flag   | 
+    is_error    | --error    | -e   | optional | flag   | 
+    is_info     | --info     | -i   | optional | flag   | 
+    clear_line  | --clear    | -cl  | optional | flag   | 
+    is_inline   | --inline   | -in  | optional | flag   | 
+    silent_mode | --silent   | -sl  | optional | string | false
+  "
+
+  eval "$(parse_options "$OPTIONS_CONFIG" "return 0")"
+
+  local silent=$(echo "$SILENT_MODE" | tr '[:upper:]' '[:lower:]')
+  if [[ "$silent" == "1" || "$silent" == "true" ]]; then
+    return 0
+  fi
 
   local type_icon=""
   local type_color=""
 
-  while [[ $# -gt 0 ]]; do
-    case "$1" in
-      --msg | -m)
-        msg="${2:-}"
-        [[ $# -ge 2 ]] && shift 2 || shift 1
-        ;;
-      --level | -l)
-        level="${2:-1}"
-        [[ $# -ge 2 ]] && shift 2 || shift 1
-        ;;
-      --icon | -ic)
-        icon="${2:-}"
-        [[ $# -ge 2 ]] && shift 2 || shift 1
-        ;;
-      --color | -c)
-        color_name="${2:-}"
-        [[ $# -ge 2 ]] && shift 2 || shift 1
-        ;;
-      --success | -s)
-        type_icon="✅"
-        type_color="$GREEN"
-        shift 1
-        ;;
-      --warn | -w)
-        type_icon="⚠️ "
-        type_color="$YELLOW"
-        shift 1
-        ;;
-      --error | -e)
-        type_icon="❌"
-        type_color="$RED"
-        shift 1
-        ;;
-      --info | -i)
-        type_icon="ℹ️"
-        type_color="$GRAY"
-        shift 1
-        ;;
-      --clear | -cl)
-        clear_line=true
-        shift 1
-        ;;
-      --inline | -in)
-        is_inline=true
-        shift 1
-        ;;
-      --silent | -sl)
-        is_silent=true
-        shift 1
-        ;;
-      *) shift 1 ;;
-    esac
-  done
-
-  if [ "$is_silent" = true ] || [ -z "$msg" ]; then
-    return 0
+  if ((is_success)); then
+    type_icon="✅"
+    type_color="$GREEN"
+  elif ((is_warn)); then
+    type_icon="⚠️ "
+    type_color="$YELLOW"
+  elif ((is_error)); then
+    type_icon="❌"
+    type_color="$RED"
+  elif ((is_info)); then
+    type_icon="ℹ️"
+    type_color="$GRAY"
   fi
 
   local final_color="$type_color"
@@ -130,14 +93,14 @@ log() {
   fi
 
   local start=""
-  [ "$clear_line" = true ] && start=$'\r\033[K'
+  ((clear_line)) && start=$'\r\033[K'
 
   local end=$'\n'
-  [ "$is_inline" = true ] && end=""
+  ((is_inline)) && end=""
 
   local reset_color="${NC:-\033[0m}"
 
-  if [ -n "$final_icon" ]; then
+  if [[ -n "$final_icon" ]]; then
     printf "%b${final_color}%s%b %b${reset_color}%b" "$start" "$indent" "$final_icon" "$msg" "$end"
   else
     printf "%b${final_color}%s%b${reset_color}%b" "$start" "$indent" "$msg" "$end"

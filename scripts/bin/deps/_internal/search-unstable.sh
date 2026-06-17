@@ -6,11 +6,11 @@
 LOCKFILE_PATH="$USER_ROOT_DIR/$LOCKFILE"
 
 if [ ! -f "$LOCKFILE_PATH" ]; then
-  log -cl -e -m "Error: File $LOCKFILE not found in the project root ($USER_ROOT_DIR)!\n"
+  log -cl -e -m "Error: File $LOCKFILE not found in the project root ($USER_ROOT_DIR)!\n" -sl "$SILENT_MODE"
   exit 1
 fi
 
-log -ic "⏳" -m "Searching $LOCKFILE for 0.x.x packages..." -in
+log -ic "⏳" -m "Searching $LOCKFILE for 0.x.x packages..." -in -sl "$SILENT_MODE"
 
 if [ "$PACKAGE_MANAGER" = "npm" ]; then
   PACKAGE_INFO=$(node -e "
@@ -28,29 +28,32 @@ if [ "$PACKAGE_MANAGER" = "npm" ]; then
       });
       console.log([...res].join('\n'));
     } catch(e) {}
-  " | sort -u)
+  " 2> /dev/null | sort -u)
 elif [ "$PACKAGE_MANAGER" = "pnpm" ]; then
-  PACKAGE_INFO=$(grep -Eo '(@?[a-zA-Z0-9_\.\-]+)@0\.[0-9]+\.[0-9]+' "$LOCKFILE_PATH" | sed -E 's/@(0\.[0-9]+\.[0-9]+)$/ \1/' | sort -u)
+  PACKAGE_INFO=$(grep -Eo '(@?[a-zA-Z0-9_\.\-]+)@0\.[0-9]+\.[0-9]+' "$LOCKFILE_PATH" 2> /dev/null | sed -E 's/@(0\.[0-9]+\.[0-9]+)$/ \1/' | sort -u)
 else
   PACKAGE_INFO=$(awk '/^[^[:space:]]/ {pkg=$0} /^[[:space:]]*version: "?0\./ {
     ver=$2; gsub(/["\r]/, "", ver); print pkg "===" ver
-  }' "$LOCKFILE_PATH" | sed -E 's/^"?(@?[^@:,]+)@.*===([^ ]+)/\1 \2/' | sort -u)
+  }' "$LOCKFILE_PATH" 2> /dev/null | sed -E 's/^"?(@?[^@:,]+)@.*===([^ ]+)/\1 \2/' | sort -u)
 fi
 
 if [ -z "$PACKAGE_INFO" ]; then
-  log -cl -s -m "No packages with 0.x.x version found."
+  log -cl -s -m "No packages with 0.x.x version found." -sl "$SILENT_MODE"
   emit_meta "__SKIPPED__"
   exit 0
 fi
 
-TOTAL=$(echo "$PACKAGE_INFO" | wc -l | tr -d ' ')
-log -cl -w -m "Found potentially unstable packages: $TOTAL"
+TOTAL=$(echo "$PACKAGE_INFO" | grep -v '^$' | wc -l | tr -d ' ')
 
-if ((!SILENT_MODE)); then
+silent=$(echo "$SILENT_MODE" | tr '[:upper:]' '[:lower:]')
+if [[ "$silent" != "1" && "$silent" != "true" ]]; then
+  log -cl -w -m "Found potentially unstable packages: $TOTAL"
   echo ""
   echo "📦 Packages list:"
   echo "$PACKAGE_INFO" | while read -r pkg ver; do
-    echo "  - $pkg: $ver"
+    if [ -n "$pkg" ]; then
+      echo "  - $pkg: $ver"
+    fi
   done
   echo ""
 fi

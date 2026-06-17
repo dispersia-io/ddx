@@ -8,7 +8,7 @@
 # Options:
 #   --audit, -a                      : [Optional] Run security audit before scanning.
 #   --pin-unstable, -pu              : [Optional] Automatically write ignore rules to Dependabot config.
-#   --silent, -s                     : [Optional] Suppress standard output logs (useful for CI/CD).
+#   --silent, -sl                    : [Optional] Suppress standard output logs (useful for CI/CD).
 #   --meta, -m                       : [Optional] Emit state markers (__UPDATED__, __SKIPPED__) for automation workflows.
 #   --package-manager, -pm <name>    : [Optional] Specifies the package manager (yarn, npm, pnpm). Default: auto-detect OR yarn.
 #
@@ -27,7 +27,7 @@ source "$BIN_DIR/utils/options.sh"
 OPTIONS_CONFIG="
   RUN_AUDIT       | --audit           | -a   | optional | flag   |
   PIN_UNSTABLE    | --pin-unstable    | -pu  | optional | flag   |
-  SILENT_MODE     | --silent          | -s   | optional | flag   |
+  SILENT_MODE     | --silent          | -sl  | optional | flag   |
   EMIT_META       | --meta            | -m   | optional | flag   |
   PACKAGE_MANAGER | --package-manager | -pm  | optional | string |
 "
@@ -49,8 +49,6 @@ fi
 
 if ((PIN_UNSTABLE)); then
   source "$DEPS_INTERNAL_DIR/pin-unstable.sh"
-else
-  if ((!SILENT_MODE)) && [ -n "$DEPENDABOT_FILE" ]; then
-    log -i -ic "💡" -m "Run with --pin-unstable to automatically block minor updates for these packages."
-  fi
+elif [ -n "$DEPENDABOT_FILE" ]; then
+  log -i -ic "💡" -m "Run with --pin-unstable to automatically block minor updates for these packages." -sl "$SILENT_MODE"
 fi

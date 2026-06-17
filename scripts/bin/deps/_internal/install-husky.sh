@@ -7,9 +7,7 @@ HUSKY_VERSION_STR=$(node -p "
   try {
     const p = require('${USER_ROOT_DIR}/package.json');
     p.devDependencies?.husky || p.dependencies?.husky || '';
-  } catch (e) {
-    '';
-  }
+  } catch {}
 " 2> /dev/null)
 
 if [ -n "$HUSKY_VERSION_STR" ]; then
@@ -20,14 +18,15 @@ if [ -n "$HUSKY_VERSION_STR" ]; then
   fi
 
   if [[ "$HUSKY_MAJOR_VERSION" =~ ^[0-9]+$ ]] && [ "$HUSKY_MAJOR_VERSION" -ge 9 ]; then
-    HUSKY_CMD="$PACKAGE_MANAGER_RUNNER husky"
+    HUSKY_CMD="CI=1 $PACKAGE_MANAGER_RUNNER husky"
   else
-    HUSKY_CMD="$PACKAGE_MANAGER_RUNNER husky install && chmod +x \"$USER_ROOT_DIR/.husky/\"*"
+    HUSKY_CMD="CI=1 $PACKAGE_MANAGER_RUNNER husky install && chmod +x \"$USER_ROOT_DIR/.husky/\"*"
   fi
 
   execute subtask \
     --icon "🐶" \
     --subject "Husky" \
     --template "install" \
-    --cmd "$HUSKY_CMD"
+    --cmd "$HUSKY_CMD" \
+    --silent "$SILENT_MODE"
 fi

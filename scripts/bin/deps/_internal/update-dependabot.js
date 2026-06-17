@@ -8,6 +8,7 @@ const yaml = require('yaml');
 
 try {
   const yamlPath = process.env.DEPENDABOT_FILE;
+  const isSilent = process.env.SILENT_MODE === '1' || process.env.SILENT_MODE === 'true';
 
   if (!yamlPath) throw new Error('DEPENDABOT_FILE is not defined');
 
@@ -108,6 +109,6 @@ try {
     console.log('SKIPPED');
   }
 } catch (error) {
-  console.error(`Error updating dependabot config: ${error.message}`);
+  if (!isSilent) console.error(`Error updating dependabot config: ${error.message}`);
   process.exit(1);
 }

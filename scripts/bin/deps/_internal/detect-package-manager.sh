@@ -30,9 +30,7 @@ case "$PACKAGE_MANAGER" in
     PACKAGE_MANAGER_AUDIT_CMD="pnpm audit"
     ;;
   *)
-    if ((!SILENT_MODE)); then
-      log -cl -e -m "Error: Unsupported package manager '$PACKAGE_MANAGER'. Supported options: yarn, npm, pnpm."
-    fi
+    log -cl -e -m "Error: Unsupported package manager '$PACKAGE_MANAGER'. Supported options: yarn, npm, pnpm." -sl "$SILENT_MODE"
     exit 1
     ;;
 esac
