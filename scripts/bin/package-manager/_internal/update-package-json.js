@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const { ROOT_DIR, NEW_VERSION, PACKAGE_MANAGER, WORKSPACES: RAW_WORKSPACES } = process.env;
+const { ROOT_DIR, VERSION, PACKAGE_MANAGER, WORKSPACES: RAW_WORKSPACES } = process.env;
 
 const IGNORED_FOLDERS = ['src', 'dist', 'build', 'node_modules'];
 const WORKSPACES = RAW_WORKSPACES?.trim().split(/[\s,]+/) ?? [];
@@ -13,9 +13,9 @@ function updatePackageJson(filePath) {
     const json = JSON.parse(fs.readFileSync(filePath, 'utf8'));
 
     json.volta ??= {};
-    json.volta[PACKAGE_MANAGER] = NEW_VERSION;
+    json.volta[PACKAGE_MANAGER] = VERSION;
 
-    json.packageManager = `${PACKAGE_MANAGER}@${NEW_VERSION}`;
+    json.packageManager = `${PACKAGE_MANAGER}@${VERSION}`;
 
     fs.writeFileSync(filePath, `${JSON.stringify(json, null, 2)}\n`);
   } catch {}

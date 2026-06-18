@@ -44,7 +44,7 @@ run_task() {
   error_msg="${error_msg:-Task '$task_name' encountered an error.}"
 
   if [[ -n "$icon" ]]; then
-    -ic "$icon" -m "$task_name\n" log -ll "$log_level" -slm "$silent_mode"
+    log -ic "$icon" -m "$task_name\n" -ll "$log_level" -slm "$silent_mode"
   else
     log -m "$task_name\n" -ll "$log_level" -slm "$silent_mode"
   fi

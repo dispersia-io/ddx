@@ -1,10 +1,10 @@
 const fs = require('fs');
 const path = require('path');
 
-const { ROOT_DIR, NEW_VERSION, PACKAGE_MANAGER, WORKSPACES: RAW_WORKSPACES } = process.env;
+const { ROOT_DIR, VERSION, PACKAGE_MANAGER, WORKSPACES: RAW_WORKSPACES } = process.env;
 
-if (!ROOT_DIR || !NEW_VERSION || !PACKAGE_MANAGER) {
-  throw new Error('Missing environment variables (ROOT_DIR, NEW_VERSION, or PACKAGE_MANAGER)');
+if (!ROOT_DIR || !VERSION || !PACKAGE_MANAGER) {
+  throw new Error('Missing environment variables (ROOT_DIR, VERSION, or PACKAGE_MANAGER)');
 }
 
 const IGNORED_FOLDERS = ['src', 'dist', 'build', 'node_modules'];
@@ -20,7 +20,7 @@ function updateMarkdown(filePath) {
   const content = fs.readFileSync(filePath, 'utf8');
 
   if (content.includes(START_TAG) && content.includes(END_TAG)) {
-    const updatedContent = content.replace(TAGS_REGEX, `${START_TAG}${NEW_VERSION}${END_TAG}`);
+    const updatedContent = content.replace(TAGS_REGEX, `${START_TAG}${VERSION}${END_TAG}`);
 
     fs.writeFileSync(filePath, updatedContent);
   }

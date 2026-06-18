@@ -1,13 +1,13 @@
 const fs = require('fs');
 const path = require('path');
 
-const { ROOT_DIR, NEW_VERSION, PACKAGE_MANAGER, WORKSPACES: RAW_WORKSPACES } = process.env;
+const { ROOT_DIR, VERSION, PACKAGE_MANAGER, WORKSPACES: RAW_WORKSPACES } = process.env;
 
 const IGNORED_FOLDERS = ['src', 'dist', 'build', 'node_modules'];
 const WORKSPACES = RAW_WORKSPACES?.trim().split(/[\s,]+/) ?? [];
 
 const COREPACK_REGEX = new RegExp(`corepack prepare ${PACKAGE_MANAGER}@[0-9\\.]+`, 'g');
-const COREPACK_REPLACEMENT = `corepack prepare ${PACKAGE_MANAGER}@${NEW_VERSION}`;
+const COREPACK_REPLACEMENT = `corepack prepare ${PACKAGE_MANAGER}@${VERSION}`;
 
 function updateDockerfile(filePath) {
   if (!fs.existsSync(filePath)) return;

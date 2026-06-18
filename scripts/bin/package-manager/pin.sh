@@ -31,86 +31,94 @@ source "$BIN_DIR/utils/options.sh"
 source "$BIN_DIR/tasks/execute.sh"
 
 OPTIONS_CONFIG="
-  PACKAGE_MANAGER | --package-manager | -pm | required | string |
-  NEW_VERSION     | --version         | -v  | required | string |
-  WORKSPACES      | --workspaces      | -w  | optional | string |
-  FLAG_VOLTA      | --volta           |     | optional | flag   |
-  FLAG_PKG_JSON   | --package-json    |     | optional | flag   |
-  FLAG_DOCKER     | --dockerfile      |     | optional | flag   |
-  FLAG_DOCS       | --docs            |     | optional | flag   |
+  PACKAGE_MANAGER       | --package-manager | -pm | required | string |
+  VERSION               | --version         | -v  | required | string |
+  WORKSPACES            | --workspaces      | -w  | optional | string |
+  SHOULD_PIN_VOLTA      | --volta           |     | optional | flag   |
+  SHOULD_PIN_PKG_JSON   | --package-json    |     | optional | flag   |
+  SHOULD_PIN_DOCKERFILE | --dockerfile      |     | optional | flag   |
+  SHOULD_PIN_DOCS       | --docs            |     | optional | flag   |
+  IS_SILENT             | --silent          | -sl | optional | flag   |
 "
 
 eval "$(parse_options "$OPTIONS_CONFIG")"
 
 if [[ "$PACKAGE_MANAGER" != "yarn" && "$PACKAGE_MANAGER" != "npm" && "$PACKAGE_MANAGER" != "pnpm" ]]; then
-  log -e -c "gray" -m "Error: Unsupported package manager '$PACKAGE_MANAGER'. Use: yarn, npm, or pnpm."
+  log -e -c "gray" -m "Error: Unsupported package manager '$PACKAGE_MANAGER'. Use: yarn, npm, or pnpm." -slm "$IS_SILENT"
   exit 1
 fi
 
-if [[ ! "$NEW_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-  log -e -c "gray" -m "Error: Version '$NEW_VERSION' must be a strict SemVer (e.g., 1.2.3)."
+if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+  log -e -c "gray" -m "Error: Version '$VERSION' must be a strict SemVer (e.g., 1.2.3)." -slm "$IS_SILENT"
   exit 1
 fi
 
-if [[ "$FLAG_VOLTA" -eq 0 && "$FLAG_PKG_JSON" -eq 0 && "$FLAG_DOCKER" -eq 0 && "$FLAG_DOCS" -eq 0 ]]; then
-  log -e -c "gray" -m "Error: At least one target flag must be specified: --volta, --package-json, --dockerfile, or --docs."
+if [[ "$SHOULD_PIN_VOLTA" -eq 0 && "$SHOULD_PIN_PKG_JSON" -eq 0 && "$SHOULD_PIN_DOCKERFILE" -eq 0 && "$SHOULD_PIN_DOCS" -eq 0 ]]; then
+  log -e -c "gray" -m "Error: At least one target flag must be specified: --volta, --package-json, --dockerfile, or --docs." -slm "$IS_SILENT"
   exit 1
 fi
+
+export PACKAGE_MANAGER VERSION WORKSPACES
 
 if [[ "$PACKAGE_MANAGER" == "yarn" ]]; then
-  VERIFY_RELEASE_CMD="curl -s -f -I \"https://registry.npmjs.org/@yarnpkg/cli-dist/${NEW_VERSION}\" || curl -s -f -I \"https://registry.npmjs.org/yarn/${NEW_VERSION}\""
+  VERIFY_RELEASE_CMD="curl -s -f -I \"https://registry.npmjs.org/@yarnpkg/cli-dist/${VERSION}\" || curl -s -f -I \"https://registry.npmjs.org/yarn/${VERSION}\""
 else
-  VERIFY_RELEASE_CMD="curl -s -f -I \"https://registry.npmjs.org/${PACKAGE_MANAGER}/${NEW_VERSION}\""
+  VERIFY_RELEASE_CMD="curl -s -f -I \"https://registry.npmjs.org/${PACKAGE_MANAGER}/${VERSION}\""
 fi
-
-VOLTA_PIN_CMD="cd \"${ROOT_DIR}\" && volta pin ${PACKAGE_MANAGER}@${NEW_VERSION}"
-
-export NEW_VERSION PACKAGE_MANAGER WORKSPACES
-
-UPDATE_DOCKER_CMD="node \"$PM_INTERNAL_DIR/update-dockerfile.js\""
-UPDATE_PKG_CMD="node \"$PM_INTERNAL_DIR/update-package-json.js\""
-UPDATE_DOCS_CMD="node \"$PM_INTERNAL_DIR/update-docs.js\""
 
 PIN_CMD="execute subtask \\
   --icon \"✅\" \\
-  --subject \"${PACKAGE_MANAGER}@${NEW_VERSION}\" \\
+  --subject \"${PACKAGE_MANAGER}@${VERSION}\" \\
   --template \"verify\" \\
-  --cmd \"${VERIFY_RELEASE_CMD}\""
+  --cmd \"${VERIFY_RELEASE_CMD}\" \\
+  --silent-mode \"${IS_SILENT}\""
 
-if [[ "$FLAG_VOLTA" -eq 1 ]]; then
+if [[ "$SHOULD_PIN_VOLTA" -eq 1 ]]; then
+  VOLTA_PIN_CMD="cd \"${ROOT_DIR}\" && volta pin ${PACKAGE_MANAGER}@${VERSION}"
+
   PIN_CMD="$PIN_CMD && \\
-  execute subtask \\
-    --icon \"⚡️\" \\
-    --subject \"Volta\" \\
-    --template \"pin\" \\
-    --cmd \"${VOLTA_PIN_CMD}\""
+    execute subtask \\
+      --icon \"⚡️\" \\
+      --subject \"Volta\" \\
+      --template \"pin\" \\
+      --cmd \"${VOLTA_PIN_CMD}\" \\
+      --silent-mode \"${IS_SILENT}\""
 fi
 
-if [[ "$FLAG_DOCKER" -eq 1 ]]; then
+if [[ "$SHOULD_PIN_DOCKERFILE" -eq 1 ]]; then
+  UPDATE_DOCKERFILE_CMD="node \"$PM_INTERNAL_DIR/update-dockerfile.js\""
+
   PIN_CMD="$PIN_CMD && \\
-  execute subtask \\
-    --icon \"🐳\" \\
-    --subject \"Dockerfile files\" \\
-    --template \"pin\" \\
-    --cmd \"${UPDATE_DOCKER_CMD}\""
+    execute subtask \\
+      --icon \"🐳\" \\
+      --subject \"Dockerfile files\" \\
+      --template \"pin\" \\
+      --cmd \"${UPDATE_DOCKERFILE_CMD}\" \\
+      --silent-mode \"${IS_SILENT}\""
 fi
 
-if [[ "$FLAG_PKG_JSON" -eq 1 ]]; then
+if [[ "$SHOULD_PIN_PKG_JSON" -eq 1 ]]; then
+  UPDATE_PKG_JSON_CMD="node \"$PM_INTERNAL_DIR/update-package-json.js\""
+
   PIN_CMD="$PIN_CMD && \\
-  execute subtask \\
-    --icon \"📝\" \\
-    --subject \"package.json files\" \\
-    --template \"pin\" \\
-    --cmd \"${UPDATE_PKG_CMD}\""
+    execute subtask \\
+      --icon \"📝\" \\
+      --subject \"package.json files\" \\
+      --template \"pin\" \\
+      --cmd \"${UPDATE_PKG_JSON_CMD}\" \\
+      --silent-mode \"${IS_SILENT}\""
 fi
 
-if [[ "$FLAG_DOCS" -eq 1 ]]; then
+if [[ "$SHOULD_PIN_DOCS" -eq 1 ]]; then
+  UPDATE_DOCS_CMD="node \"$PM_INTERNAL_DIR/update-docs.js\""
+
   PIN_CMD="$PIN_CMD && \\
-  execute subtask \\
-    --icon \"📖\" \\
-    --subject \"Documents\" \\
-    --template \"pin\" \\
-    --cmd \"${UPDATE_DOCS_CMD}\""
+    execute subtask \\
+      --icon \"📖\" \\
+      --subject \"Documents\" \\
+      --template \"pin\" \\
+      --cmd \"${UPDATE_DOCS_CMD}\" \\
+      --silent-mode \"${IS_SILENT}\""
 fi
 
 execute task \
@@ -118,4 +126,5 @@ execute task \
   --name "${PACKAGE_MANAGER} version update" \
   --success-msg "${PACKAGE_MANAGER} version updated across the project!" \
   --error-msg "Failed to update ${PACKAGE_MANAGER} version!" \
-  --cmd "$PIN_CMD"
+  --cmd "$PIN_CMD" \
+  --silent-mode "$IS_SILENT"
