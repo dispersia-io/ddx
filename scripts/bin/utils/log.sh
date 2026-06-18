@@ -34,9 +34,11 @@
 __IS_UTILS_LOG_SH_INCLUDED=1
 
 UTILS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BIN_DIR="$UTILS_DIR/.."
 
-source "$UTILS_DIR/colors.sh"
-source "$UTILS_DIR/options.sh"
+source "$BIN_DIR/core/root.sh"
+source "$BIN_DIR/core/colors.sh"
+source "$BIN_DIR/utils/options.sh"
 
 log() {
   local msg log_level icon color_name is_success is_warn is_error is_info clear_line is_inline silent_mode

@@ -24,9 +24,9 @@ PM_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PM_INTERNAL_DIR="$PM_DIR/_internal"
 BIN_DIR="$PM_DIR/.."
 
-export ROOT_DIR="$(pwd)"
-
+source "$BIN_DIR/core/root.sh"
 source "$BIN_DIR/utils/log.sh"
+source "$BIN_DIR/utils/flags.sh"
 source "$BIN_DIR/utils/options.sh"
 source "$BIN_DIR/tasks/execute.sh"
 
@@ -53,7 +53,7 @@ if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
   exit 1
 fi
 
-if [[ "$SHOULD_PIN_VOLTA" -eq 0 && "$SHOULD_PIN_PKG_JSON" -eq 0 && "$SHOULD_PIN_DOCKERFILE" -eq 0 && "$SHOULD_PIN_DOCS" -eq 0 ]]; then
+if ! (is_truthy "$SHOULD_PIN_VOLTA" || is_truthy "$SHOULD_PIN_PKG_JSON" || is_truthy "$SHOULD_PIN_DOCKERFILE" || is_truthy "$SHOULD_PIN_DOCS"); then
   log -e -c "gray" -m "Error: At least one target flag must be specified: --volta, --package-json, --dockerfile, or --docs." -slm "$IS_SILENT"
   exit 1
 fi
@@ -73,7 +73,7 @@ PIN_CMD="execute subtask \\
   --cmd \"${VERIFY_RELEASE_CMD}\" \\
   --silent-mode \"${IS_SILENT}\""
 
-if [[ "$SHOULD_PIN_VOLTA" -eq 1 ]]; then
+if is_truthy "$SHOULD_PIN_VOLTA"; then
   VOLTA_PIN_CMD="cd \"${ROOT_DIR}\" && volta pin ${PACKAGE_MANAGER}@${VERSION}"
 
   PIN_CMD="$PIN_CMD && \\
@@ -85,7 +85,7 @@ if [[ "$SHOULD_PIN_VOLTA" -eq 1 ]]; then
       --silent-mode \"${IS_SILENT}\""
 fi
 
-if [[ "$SHOULD_PIN_DOCKERFILE" -eq 1 ]]; then
+if is_truthy "$SHOULD_PIN_DOCKERFILE"; then
   UPDATE_DOCKERFILE_CMD="node \"$PM_INTERNAL_DIR/update-dockerfile.js\""
 
   PIN_CMD="$PIN_CMD && \\
@@ -97,7 +97,7 @@ if [[ "$SHOULD_PIN_DOCKERFILE" -eq 1 ]]; then
       --silent-mode \"${IS_SILENT}\""
 fi
 
-if [[ "$SHOULD_PIN_PKG_JSON" -eq 1 ]]; then
+if is_truthy "$SHOULD_PIN_PKG_JSON"; then
   UPDATE_PKG_JSON_CMD="node \"$PM_INTERNAL_DIR/update-package-json.js\""
 
   PIN_CMD="$PIN_CMD && \\
@@ -109,7 +109,7 @@ if [[ "$SHOULD_PIN_PKG_JSON" -eq 1 ]]; then
       --silent-mode \"${IS_SILENT}\""
 fi
 
-if [[ "$SHOULD_PIN_DOCS" -eq 1 ]]; then
+if is_truthy "$SHOULD_PIN_DOCS"; then
   UPDATE_DOCS_CMD="node \"$PM_INTERNAL_DIR/update-docs.js\""
 
   PIN_CMD="$PIN_CMD && \\

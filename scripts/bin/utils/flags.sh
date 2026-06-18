@@ -42,3 +42,14 @@ is_flag_on() {
       ;;
   esac
 }
+
+is_truthy() {
+  case "$1" in
+    1 | [tT][rR][uU][eE]) return 0 ;;
+    "" | 0 | [fF][aA][lL][sS][eE]) return 1 ;;
+    *)
+      log -cl -e -m "Error: Unrecognized boolean-like value '$1'."
+      exit 1
+      ;;
+  esac
+}
