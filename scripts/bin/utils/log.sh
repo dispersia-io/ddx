@@ -37,7 +37,7 @@ UTILS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BIN_DIR="$UTILS_DIR/.."
 
 source "$BIN_DIR/core/root.sh"
-source "$BIN_DIR/core/colors.sh"
+source "$BIN_DIR/core/theme.sh"
 source "$BIN_DIR/utils/options.sh"
 
 log() {
@@ -74,26 +74,26 @@ log() {
   local type_color=""
 
   if ((is_success)); then
-    type_icon="✅"
-    type_color="$GREEN"
+    type_icon="$ICON_SUCCESS"
+    type_color="$COLOR_GREEN"
   elif ((is_warn)); then
-    type_icon="⚠️ "
-    type_color="$YELLOW"
+    type_icon="$ICON_WARNING"
+    type_color="$COLOR_YELLOW"
   elif ((is_error)); then
-    type_icon="❌"
-    type_color="$RED"
+    type_icon="$ICON_ERROR"
+    type_color="$COLOR_RED"
   elif ((is_info)); then
-    type_icon="ℹ️"
-    type_color="$GRAY"
+    type_icon="$ICON_INFO"
+    type_color="$COLOR_GRAY"
   fi
 
   local final_color="$type_color"
   case "$color_name" in
-    green) final_color="$GREEN" ;;
-    red) final_color="$RED" ;;
-    yellow) final_color="$YELLOW" ;;
-    blue) final_color="$BLUE" ;;
-    gray) final_color="$GRAY" ;;
+    green) final_color="$COLOR_GREEN" ;;
+    red) final_color="$COLOR_RED" ;;
+    yellow) final_color="$COLOR_YELLOW" ;;
+    blue) final_color="$COLOR_BLUE" ;;
+    gray) final_color="$COLOR_GRAY" ;;
   esac
 
   local final_icon="${icon:-$type_icon}"
@@ -109,7 +109,7 @@ log() {
   local end=$'\n'
   ((is_inline)) && end=""
 
-  local reset_color="${NC:-\033[0m}"
+  local reset_color="${COLOR_RESET:-\033[0m}"
 
   if [[ -n "$final_icon" ]]; then
     printf "%b${final_color}%s%b %b${reset_color}%b" "$start" "$indent" "$final_icon" "$msg" "$end"

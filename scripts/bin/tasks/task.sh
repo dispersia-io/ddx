@@ -19,11 +19,11 @@ __IS_TASKS_TASK_SH_INCLUDED=1
 
 TASKS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BIN_DIR="$TASKS_DIR/.."
-UTILS_DIR="$BIN_DIR/utils"
 
-source "$UTILS_DIR/log.sh"
-source "$UTILS_DIR/flags.sh"
-source "$UTILS_DIR/options.sh"
+source "$BIN_DIR/core/theme.sh"
+source "$BIN_DIR/utils/log.sh"
+source "$BIN_DIR/utils/flags.sh"
+source "$BIN_DIR/utils/options.sh"
 
 run_task() {
   local task_name icon success_msg error_msg command log_level silent_mode
@@ -52,7 +52,7 @@ run_task() {
   if eval "$command"; then
     if ! is_flag_on "$silent_mode"; then
       echo ""
-      log -s -ic "✨" -m "$success_msg" -ll "$log_level"
+      log -s -ic "$ICON_DONE" -m "$success_msg" -ll "$log_level"
     fi
     return 0
   else

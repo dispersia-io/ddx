@@ -24,7 +24,7 @@ if [ -n "$HUSKY_VERSION_STR" ]; then
   fi
 
   execute subtask \
-    --icon "🐶" \
+    --icon "$ICON_HUSKY" \
     --subject "Husky" \
     --template "install" \
     --cmd "$HUSKY_CMD" \

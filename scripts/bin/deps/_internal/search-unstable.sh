@@ -10,7 +10,7 @@ if [ ! -f "$LOCKFILE_PATH" ]; then
   exit 1
 fi
 
-log -ic "⏳" -m "Searching $LOCKFILE for 0.x.x packages..." -in -slm "$IS_SILENT"
+log -ic "$ICON_PROGRESS" -m "Searching $LOCKFILE for 0.x.x packages..." -in -slm "$IS_SILENT"
 
 if [ "$PACKAGE_MANAGER" = "npm" ]; then
   PACKAGE_INFO=$(node -e "
@@ -48,7 +48,7 @@ TOTAL=$(echo "$PACKAGE_INFO" | grep -v '^$' | wc -l | tr -d ' ')
 if ! is_flag_on "$IS_SILENT"; then
   log -cl -w -m "Found potentially unstable packages: $TOTAL"
   echo ""
-  echo "📦 Packages list:"
+  echo "$ICON_PACKAGE Packages list:"
   echo "$PACKAGE_INFO" | while read -r pkg ver; do
     if [ -n "$pkg" ]; then
       echo "  - $pkg: $ver"

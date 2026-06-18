@@ -5,7 +5,7 @@
 
 source "$DEPS_INTERNAL_DIR/search-unstable.sh"
 
-log -ic "⏳" -m "Updating $DEPENDABOT_FILE..." -in -slm "$IS_SILENT"
+log -ic "$ICON_PROGRESS" -m "Updating $DEPENDABOT_FILE..." -in -slm "$IS_SILENT"
 
 PACKAGES_ONLY=$(echo "$PACKAGE_INFO" | awk '{print $1}')
 export PACKAGES_ENV="$PACKAGES_ONLY"
@@ -17,7 +17,7 @@ if [ $? -eq 0 ]; then
     log -cl -s -m "Package update exceptions written to $DEPENDABOT_FILE" -slm "$IS_SILENT"
     emit_meta "__UPDATED__"
   else
-    log -cl -i -ic "⏩" -m "The $DEPENDABOT_FILE file has not been modified" -slm "$IS_SILENT"
+    log -cl -i -ic "$ICON_SKIP" -m "The $DEPENDABOT_FILE file has not been modified" -slm "$IS_SILENT"
     emit_meta "__SKIPPED__"
   fi
 else

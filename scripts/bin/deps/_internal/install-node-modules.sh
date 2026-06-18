@@ -4,7 +4,7 @@
 # Relies on variables from the parent script: PACKAGE_MANAGER, ROOT_DIR, IS_SILENT
 
 execute subtask \
-  --icon "📦" \
+  --icon "$ICON_PACKAGE" \
   --subject "node modules" \
   --template "install" \
   --cmd "cd \"$ROOT_DIR\" && $PACKAGE_MANAGER install" \

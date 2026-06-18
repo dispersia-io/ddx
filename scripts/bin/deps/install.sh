@@ -14,6 +14,7 @@ DEPS_INTERNAL_DIR="$DEPS_DIR/_internal"
 BIN_DIR="$DEPS_DIR/.."
 
 source "$BIN_DIR/core/root.sh"
+source "$BIN_DIR/core/theme.sh"
 source "$BIN_DIR/utils/log.sh"
 source "$BIN_DIR/utils/flags.sh"
 source "$BIN_DIR/utils/options.sh"

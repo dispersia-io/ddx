@@ -15,6 +15,7 @@ ENV_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BIN_DIR="$ENV_DIR/.."
 
 source "$BIN_DIR/core/root.sh"
+source "$BIN_DIR/core/theme.sh"
 source "$BIN_DIR/utils/log.sh"
 source "$BIN_DIR/utils/options.sh"
 
@@ -30,7 +31,7 @@ eval "$(parse_options "$OPTIONS_CONFIG")"
 
 LOG_LEVEL=$((HEADER_LOG_LEVEL + 1))
 
-log -ic "🔐" -m "Environment files:" -ll "$HEADER_LOG_LEVEL" -slm "$IS_SILENT"
+log -ic "$ICON_ENV" -m "Environment files:" -ll "$HEADER_LOG_LEVEL" -slm "$IS_SILENT"
 
 FILES_TO_PROCESS=()
 
@@ -72,8 +73,8 @@ for SOURCE_PATH in "${FILES_TO_PROCESS[@]}"; do
 
   if [ ! -f "$TARGET_PATH" ]; then
     cp "$SOURCE_PATH" "$TARGET_PATH"
-    log -s -ic "📃" -m "Created: $REL_TARGET" -ll "$LOG_LEVEL" -slm "$IS_SILENT"
+    log -s -m "Created: $REL_TARGET" -ll "$LOG_LEVEL" -slm "$IS_SILENT"
   else
-    log -i -ic "📃" -m "Skipped: $REL_TARGET (already exists)" -ll "$LOG_LEVEL" -slm "$IS_SILENT"
+    log -i -m "Skipped: $REL_TARGET (already exists)" -ll "$LOG_LEVEL" -slm "$IS_SILENT"
   fi
 done

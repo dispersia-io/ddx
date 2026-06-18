@@ -20,6 +20,7 @@ DEPS_INTERNAL_DIR="$DEPS_DIR/_internal"
 BIN_DIR="$DEPS_DIR/.."
 
 source "$BIN_DIR/core/root.sh"
+source "$BIN_DIR/core/theme.sh"
 source "$BIN_DIR/utils/log.sh"
 source "$BIN_DIR/utils/flags.sh"
 source "$BIN_DIR/utils/options.sh"
@@ -50,5 +51,5 @@ fi
 if is_truthy "$PIN_UNSTABLE"; then
   source "$DEPS_INTERNAL_DIR/pin-unstable.sh"
 elif [ -n "$DEPENDABOT_FILE" ]; then
-  log -i -ic "💡" -m "Run with --pin-unstable to automatically block minor updates for these packages." -slm "$IS_SILENT"
+  log -i -ic "$ICON_TIP" -m "Run with --pin-unstable to automatically block minor updates for these packages." -slm "$IS_SILENT"
 fi

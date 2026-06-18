@@ -25,6 +25,7 @@ PM_INTERNAL_DIR="$PM_DIR/_internal"
 BIN_DIR="$PM_DIR/.."
 
 source "$BIN_DIR/core/root.sh"
+source "$BIN_DIR/core/theme.sh"
 source "$BIN_DIR/utils/log.sh"
 source "$BIN_DIR/utils/flags.sh"
 source "$BIN_DIR/utils/options.sh"
@@ -67,7 +68,7 @@ else
 fi
 
 PIN_CMD="execute subtask \\
-  --icon \"✅\" \\
+  --icon \"${ICON_SUCCESS}\" \\
   --subject \"${PACKAGE_MANAGER}@${VERSION}\" \\
   --template \"verify\" \\
   --cmd \"${VERIFY_RELEASE_CMD}\" \\
@@ -78,7 +79,7 @@ if is_truthy "$SHOULD_PIN_VOLTA"; then
 
   PIN_CMD="$PIN_CMD && \\
     execute subtask \\
-      --icon \"⚡️\" \\
+      --icon \"${ICON_VOLTA}\" \\
       --subject \"Volta\" \\
       --template \"pin\" \\
       --cmd \"${VOLTA_PIN_CMD}\" \\
@@ -90,7 +91,7 @@ if is_truthy "$SHOULD_PIN_DOCKERFILE"; then
 
   PIN_CMD="$PIN_CMD && \\
     execute subtask \\
-      --icon \"🐳\" \\
+      --icon \"${ICON_DOCKER}\" \\
       --subject \"Dockerfile files\" \\
       --template \"pin\" \\
       --cmd \"${UPDATE_DOCKERFILE_CMD}\" \\
@@ -102,7 +103,7 @@ if is_truthy "$SHOULD_PIN_PKG_JSON"; then
 
   PIN_CMD="$PIN_CMD && \\
     execute subtask \\
-      --icon \"📝\" \\
+      --icon \"${ICON_JSON}\" \\
       --subject \"package.json files\" \\
       --template \"pin\" \\
       --cmd \"${UPDATE_PKG_JSON_CMD}\" \\
@@ -114,7 +115,7 @@ if is_truthy "$SHOULD_PIN_DOCS"; then
 
   PIN_CMD="$PIN_CMD && \\
     execute subtask \\
-      --icon \"📖\" \\
+      --icon \"${ICON_DOCS}\" \\
       --subject \"Documents\" \\
       --template \"pin\" \\
       --cmd \"${UPDATE_DOCS_CMD}\" \\
@@ -122,7 +123,7 @@ if is_truthy "$SHOULD_PIN_DOCS"; then
 fi
 
 execute task \
-  --icon "📦" \
+  --icon "$ICON_PACKAGE" \
   --name "${PACKAGE_MANAGER} version update" \
   --success-msg "${PACKAGE_MANAGER} version updated across the project!" \
   --error-msg "Failed to update ${PACKAGE_MANAGER} version!" \
