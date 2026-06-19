@@ -19,7 +19,7 @@
 #   --docs                           : Update dynamic version markers in Markdown documents.
 #
 # Usage:
-#   bash ./scripts/bin/package-manager/pin.sh -pm yarn -v 4.13.0 --package-json --dockerfile
+#   bash scripts/bin/package-manager/pin.sh -pm yarn -v 4.13.0 --package-json --dockerfile
 
 PM_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PM_INTERNAL_DIR="$PM_DIR/_internal"
@@ -38,8 +38,8 @@ source "$BIN_DIR/tasks/execute.sh"
 
 OPTIONS_CONFIG="
   PACKAGE_MANAGER       | --package-manager | -pm | required | string:name   | | The package manager to use (yarn, npm, pnpm)
-  VERSION               | --version         | -v  | required | string:semver | | Strict semantic version (e.g., 4.13.0)
-  WORKSPACES            | --workspaces      | -w  | optional | string:dirs   | | Space or comma-separated list of workspace directories to scan
+  PM_VERSION            | --version         | -v  | required | string:semver | | Strict semantic version (e.g., 4.13.0)
+  PM_WORKSPACES         | --workspaces      | -w  | optional | string:dirs   | | Space or comma-separated list of workspace directories to scan
   SHOULD_PIN_VOLTA      | --volta           |     | optional | flag          | | Update version in Volta configuration
   SHOULD_PIN_PKG_JSON   | --package-json    |     | optional | flag          | | Update 'packageManager' in package.json files
   SHOULD_PIN_DOCKERFILE | --dockerfile      |     | optional | flag          | | Update corepack in Dockerfile files
@@ -61,8 +61,8 @@ if [[ "$PACKAGE_MANAGER" != "yarn" && "$PACKAGE_MANAGER" != "npm" && "$PACKAGE_M
   exit 1
 fi
 
-if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-  log -e -c "gray" -m "Error: Version '$VERSION' must be a strict SemVer (e.g., 1.2.3)." -slm "$IS_SILENT"
+if [[ ! "$PM_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+  log -e -c "gray" -m "Error: Version '$PM_VERSION' must be a strict SemVer (e.g., 1.2.3)." -slm "$IS_SILENT"
   exit 1
 fi
 
@@ -71,23 +71,23 @@ if is_falsy "$SHOULD_PIN_VOLTA" && is_falsy "$SHOULD_PIN_PKG_JSON" && is_falsy "
   exit 1
 fi
 
-export PACKAGE_MANAGER VERSION WORKSPACES
+export PACKAGE_MANAGER PM_VERSION PM_WORKSPACES
 
 if [[ "$PACKAGE_MANAGER" == "yarn" ]]; then
-  VERIFY_RELEASE_CMD="curl -s -f -I \"https://registry.npmjs.org/@yarnpkg/cli-dist/${VERSION}\" || curl -s -f -I \"https://registry.npmjs.org/yarn/${VERSION}\""
+  VERIFY_RELEASE_CMD="curl -s -f -I \"https://registry.npmjs.org/@yarnpkg/cli-dist/${PM_VERSION}\" || curl -s -f -I \"https://registry.npmjs.org/yarn/${PM_VERSION}\""
 else
-  VERIFY_RELEASE_CMD="curl -s -f -I \"https://registry.npmjs.org/${PACKAGE_MANAGER}/${VERSION}\""
+  VERIFY_RELEASE_CMD="curl -s -f -I \"https://registry.npmjs.org/${PACKAGE_MANAGER}/${PM_VERSION}\""
 fi
 
 PIN_CMD="execute subtask \\
   --icon \"${ICON_SUCCESS}\" \\
-  --subject \"${PACKAGE_MANAGER}@${VERSION}\" \\
+  --subject \"${PACKAGE_MANAGER}@${PM_VERSION}\" \\
   --template \"verify\" \\
   --cmd \"${VERIFY_RELEASE_CMD}\" \\
   --silent-mode \"${IS_SILENT}\""
 
 if is_truthy "$SHOULD_PIN_VOLTA"; then
-  VOLTA_PIN_CMD="cd \"${ROOT_DIR}\" && volta pin ${PACKAGE_MANAGER}@${VERSION}"
+  VOLTA_PIN_CMD="cd \"${ROOT_DIR}\" && volta pin ${PACKAGE_MANAGER}@${PM_VERSION}"
 
   PIN_CMD="$PIN_CMD && \\
     execute subtask \\

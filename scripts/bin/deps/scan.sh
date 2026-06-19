@@ -13,7 +13,7 @@
 #   --silent, -sl                    : [Optional] Suppress standard output logs.
 #
 # Usage:
-# bash scripts/bin/deps/scan.sh [--package-manager <yarn/npm/pnpm>] [--audit] [--pin-unstable] [--silent]
+#   bash scripts/bin/deps/scan.sh [--package-manager <yarn/npm/pnpm>] [--audit] [--pin-unstable] [--silent]
 
 DEPS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DEPS_INTERNAL_DIR="$DEPS_DIR/_internal"

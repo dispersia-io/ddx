@@ -10,7 +10,7 @@
 #   --silent, -sl                : [Optional] Suppress standard output logs.
 #
 # Usage:
-# bash scripts/bin/env/init.sh [--workspaces "apps packages"] [--from .env.example] [--to .env] [--log-level 1]
+#   bash scripts/bin/env/init.sh [--workspaces "apps packages"] [--from .env.example] [--to .env] [--log-level 1]
 
 ENV_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BIN_DIR="$ENV_DIR/.."

@@ -5,6 +5,7 @@
 
 const fs = require('fs');
 const yaml = require('yaml');
+const { EnvironmentError } = require('../../utils/env.js');
 
 try {
   const yamlPath = process.env.DEPENDABOT_FILE;
@@ -13,10 +14,10 @@ try {
 
     if (/^(1|true|y(es)?|on|enabled?)$/iu.test(value)) return true;
     if (/^(0|false|no?|off|disabled?)?$/iu.test(value)) return false;
-    throw new Error(`Unrecognized flag value '${value}'. Expected boolean-like value.`);
+    throw new Error(`Unrecognized boolean-like value '${value}'`);
   })();
 
-  if (!yamlPath) throw new Error('DEPENDABOT_FILE is not defined');
+  if (!yamlPath) throw new EnvironmentError('DEPENDABOT_FILE');
 
   const yamlContent = fs.readFileSync(yamlPath, 'utf8');
   const yamlDoc = yamlContent.trim() ? yaml.parseDocument(yamlContent) : new yaml.Document();

@@ -7,7 +7,7 @@
 #   --log-level, -ll <int>    : [Optional] Logging indentation level (defaults to 1)
 #
 # Usage:
-# bash scripts/bin/symlink/create.sh [--paths "./from.js ./to.js"] [--log-level 2]
+#   bash scripts/bin/symlink/create.sh [--paths "./from.js ./to.js"] [--log-level 2]
 
 SYMLINKS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BIN_DIR="$(cd "$SYMLINKS_DIR/.." && pwd)"

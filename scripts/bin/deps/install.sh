@@ -7,7 +7,7 @@
 #   --silent, -sl                    : [Optional] Suppress standard output logs.
 #
 # Usage:
-# bash scripts/bin/deps/install.sh [--package-manager <yarn/npm/pnpm>] [--silent]
+#   bash scripts/bin/deps/install.sh [--package-manager <yarn/npm/pnpm>] [--silent]
 
 DEPS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DEPS_INTERNAL_DIR="$DEPS_DIR/_internal"

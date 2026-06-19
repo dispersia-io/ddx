@@ -1,0 +1,21 @@
+class EnvironmentError extends Error {
+  constructor(varname) {
+    super(`Environment variable '${varname}' is not defined`);
+    this.name = 'EnvironmentError';
+  }
+}
+
+class SemVerError extends Error {
+  constructor(version) {
+    super(`Invalid SemVer format: "${VERSION}"`);
+    this.name = 'SemVerError';
+  }
+}
+
+const isSemVer = (version) => typeof version === 'string' && /^\d+\.\d+\.\d+$/u.test(version);
+
+module.exports = {
+  isSemVer,
+  SemVerError,
+  EnvironmentError,
+};

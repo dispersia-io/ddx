@@ -2,12 +2,11 @@ const fs = require('fs');
 const path = require('path');
 const { EnvironmentError, SemVerError, isSemVer } = require('../../utils/env.js');
 
-const { ROOT_DIR, PACKAGE_MANAGER, PM_VERSION, PM_WORKSPACES: RAW_WORKSPACES } = process.env;
+const { ROOT_DIR, NODE_VERSION, NODE_WORKSPACES: RAW_WORKSPACES } = process.env;
 
 if (!ROOT_DIR) throw new EnvironmentError('ROOT_DIR');
-if (!PACKAGE_MANAGER) throw new EnvironmentError('PACKAGE_MANAGER');
-if (!PM_VERSION) throw new EnvironmentError('PM_VERSION');
-if (!isSemVer(PM_VERSION)) throw new SemVerError(PM_VERSION);
+if (!NODE_VERSION) throw new EnvironmentError('NODE_VERSION');
+if (!isSemVer(NODE_VERSION)) throw new SemVerError(NODE_VERSION);
 
 const IGNORED_FOLDERS = ['src', 'dist', 'build', 'node_modules'];
 const WORKSPACES = RAW_WORKSPACES?.trim().split(/[\s,]+/) ?? [];
@@ -18,7 +17,8 @@ function updatePackageJson(filePath) {
   try {
     const json = JSON.parse(fs.readFileSync(filePath, 'utf8'));
 
-    json.packageManager = `${PACKAGE_MANAGER}@${PM_VERSION}`;
+    json.engines ??= {};
+    json.engines.node = NODE_VERSION;
 
     fs.writeFileSync(filePath, `${JSON.stringify(json, null, 2)}\n`);
   } catch {}
