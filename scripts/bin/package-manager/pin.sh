@@ -10,10 +10,11 @@
 #   --version, -v <semver>           : [Required] Strict semantic version (e.g., 4.13.0).
 #   --workspaces, -w <dirs>          : [Optional] Space or comma-separated list of workspace
 #                                      directories to recursively scan (e.g., "apps packages docs").
+#   --silent, -sl                    : [Optional] Suppress standard output logs.
 #
 # Target Flags (At least one must be specified):
 #   --volta                          : Update version in Volta configuration.
-#   --package-json                   : Update 'packageManager' and 'volta' in package.json files.
+#   --package-json                   : Update 'packageManager' in package.json files.
 #   --dockerfile                     : Update corepack in Dockerfile files.
 #   --docs                           : Update dynamic version markers in Markdown documents.
 #
@@ -26,21 +27,32 @@ BIN_DIR="$PM_DIR/.."
 
 source "$BIN_DIR/core/root.sh"
 source "$BIN_DIR/core/theme.sh"
+
+source "$BIN_DIR/cli/help.sh"
+source "$BIN_DIR/cli/options.sh"
+
 source "$BIN_DIR/utils/log.sh"
 source "$BIN_DIR/utils/flags.sh"
-source "$BIN_DIR/utils/options.sh"
+
 source "$BIN_DIR/tasks/execute.sh"
 
 OPTIONS_CONFIG="
-  PACKAGE_MANAGER       | --package-manager | -pm | required | string |
-  VERSION               | --version         | -v  | required | string |
-  WORKSPACES            | --workspaces      | -w  | optional | string |
-  SHOULD_PIN_VOLTA      | --volta           |     | optional | flag   |
-  SHOULD_PIN_PKG_JSON   | --package-json    |     | optional | flag   |
-  SHOULD_PIN_DOCKERFILE | --dockerfile      |     | optional | flag   |
-  SHOULD_PIN_DOCS       | --docs            |     | optional | flag   |
-  IS_SILENT             | --silent          | -sl | optional | flag   |
+  PACKAGE_MANAGER       | --package-manager | -pm | required | string:name   | | The package manager to use (yarn, npm, pnpm)
+  VERSION               | --version         | -v  | required | string:semver | | Strict semantic version (e.g., 4.13.0)
+  WORKSPACES            | --workspaces      | -w  | optional | string:dirs   | | Space or comma-separated list of workspace directories to scan
+  SHOULD_PIN_VOLTA      | --volta           |     | optional | flag          | | Update version in Volta configuration
+  SHOULD_PIN_PKG_JSON   | --package-json    |     | optional | flag          | | Update 'packageManager' in package.json files
+  SHOULD_PIN_DOCKERFILE | --dockerfile      |     | optional | flag          | | Update corepack in Dockerfile files
+  SHOULD_PIN_DOCS       | --docs            |     | optional | flag          | | Update dynamic version markers in Markdown documents
+  IS_SILENT             | --silent          | -sl | optional | flag          | | Suppress standard output logs
 "
+
+intercept_help \
+  --name "pin-pm" \
+  --description "Updates and pins the Package Manager version across the entire workspace." \
+  --usage "ddx pin-pm [options]" \
+  --options "$OPTIONS_CONFIG" \
+  -- "$@"
 
 eval "$(parse_options "$OPTIONS_CONFIG")"
 
@@ -54,7 +66,7 @@ if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
   exit 1
 fi
 
-if ! (is_truthy "$SHOULD_PIN_VOLTA" || is_truthy "$SHOULD_PIN_PKG_JSON" || is_truthy "$SHOULD_PIN_DOCKERFILE" || is_truthy "$SHOULD_PIN_DOCS"); then
+if is_falsy "$SHOULD_PIN_VOLTA" && is_falsy "$SHOULD_PIN_PKG_JSON" && is_falsy "$SHOULD_PIN_DOCKERFILE" && is_falsy "$SHOULD_PIN_DOCS"; then
   log -e -c "gray" -m "Error: At least one target flag must be specified: --volta, --package-json, --dockerfile, or --docs." -slm "$IS_SILENT"
   exit 1
 fi

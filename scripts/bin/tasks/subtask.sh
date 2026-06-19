@@ -40,11 +40,11 @@ __IS_TASKS_SUBTASK_SH_INCLUDED=1
 
 TASKS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BIN_DIR="$TASKS_DIR/.."
-UTILS_DIR="$BIN_DIR/utils"
 
-source "$UTILS_DIR/log.sh"
-source "$UTILS_DIR/flags.sh"
-source "$UTILS_DIR/options.sh"
+source "$BIN_DIR/cli/options.sh"
+
+source "$BIN_DIR/utils/log.sh"
+source "$BIN_DIR/utils/flags.sh"
 
 run_subtask() {
   local command name subject template icon success_msg error_msg log_level silent_mode

@@ -21,9 +21,11 @@ TASKS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BIN_DIR="$TASKS_DIR/.."
 
 source "$BIN_DIR/core/theme.sh"
+
+source "$BIN_DIR/cli/options.sh"
+
 source "$BIN_DIR/utils/log.sh"
 source "$BIN_DIR/utils/flags.sh"
-source "$BIN_DIR/utils/options.sh"
 
 run_task() {
   local task_name icon success_msg error_msg command log_level silent_mode

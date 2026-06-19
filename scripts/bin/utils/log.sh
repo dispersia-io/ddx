@@ -38,7 +38,10 @@ BIN_DIR="$UTILS_DIR/.."
 
 source "$BIN_DIR/core/root.sh"
 source "$BIN_DIR/core/theme.sh"
-source "$BIN_DIR/utils/options.sh"
+
+source "$BIN_DIR/cli/options.sh"
+
+source "$BIN_DIR/utils/flags.sh"
 
 log() {
   local msg log_level icon color_name is_success is_warn is_error is_info clear_line is_inline silent_mode
@@ -73,16 +76,16 @@ log() {
   local type_icon=""
   local type_color=""
 
-  if ((is_success)); then
+  if is_truthy "$is_success"; then
     type_icon="$ICON_SUCCESS"
     type_color="$COLOR_GREEN"
-  elif ((is_warn)); then
+  elif is_truthy "$is_warn"; then
     type_icon="$ICON_WARNING"
     type_color="$COLOR_YELLOW"
-  elif ((is_error)); then
+  elif is_truthy "$is_error"; then
     type_icon="$ICON_ERROR"
     type_color="$COLOR_RED"
-  elif ((is_info)); then
+  elif is_truthy "$is_info"; then
     type_icon="$ICON_INFO"
     type_color="$COLOR_GRAY"
   fi
@@ -104,10 +107,10 @@ log() {
   fi
 
   local start=""
-  ((clear_line)) && start=$'\r\033[K'
+  is_truthy "$clear_line" && start=$'\r\033[K'
 
   local end=$'\n'
-  ((is_inline)) && end=""
+  is_truthy "$is_inline" && end=""
 
   local reset_color="${COLOR_RESET:-\033[0m}"
 

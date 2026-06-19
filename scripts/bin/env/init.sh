@@ -7,6 +7,7 @@
 #   --from <filename>, -f        : [Optional] Source filename (e.g., .env.example). Default: ".env.example".
 #   --to <filename>, -t          : [Optional] Destination filename (e.g., .env). Default: ".env".
 #   --log-level <number>, -ll    : [Optional] Base level for logs (>= 1). Default: 1.
+#   --silent, -sl                : [Optional] Suppress standard output logs.
 #
 # Usage:
 # bash scripts/bin/env/init.sh [--workspaces "apps packages"] [--from .env.example] [--to .env] [--log-level 1]
@@ -16,16 +17,26 @@ BIN_DIR="$ENV_DIR/.."
 
 source "$BIN_DIR/core/root.sh"
 source "$BIN_DIR/core/theme.sh"
+
+source "$BIN_DIR/cli/help.sh"
+source "$BIN_DIR/cli/options.sh"
+
 source "$BIN_DIR/utils/log.sh"
-source "$BIN_DIR/utils/options.sh"
 
 OPTIONS_CONFIG="
-  WORKSPACES       | --workspaces | -w  | optional | string |
-  FILE_FROM        | --from       | -f  | optional | string | .env.example
-  FILE_TO          | --to         | -t  | optional | string | .env
-  HEADER_LOG_LEVEL | --log-level  | -ll | optional | int    | 1
-  IS_SILENT        | --silent     | -sl | optional | flag   |
+  WORKSPACES       | --workspaces | -w  | optional | string:dirs     |              | Space-separated list of directories to scan
+  FILE_FROM        | --from       | -f  | optional | string:filename | .env.example | Source filename template
+  FILE_TO          | --to         | -t  | optional | string:filename | .env         | Destination filename to create
+  HEADER_LOG_LEVEL | --log-level  | -ll | optional | int:number      | 1            | Base level for output logs
+  IS_SILENT        | --silent     | -sl | optional | flag            |              | Suppress all log outputs
 "
+
+intercept_help \
+  --name "init-env" \
+  --description "Initializes local environment files from examples across the project workspace." \
+  --usage "ddx init-env [options]" \
+  --options "$OPTIONS_CONFIG" \
+  -- "$@"
 
 eval "$(parse_options "$OPTIONS_CONFIG")"
 
