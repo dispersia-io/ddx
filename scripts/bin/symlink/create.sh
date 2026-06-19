@@ -26,7 +26,7 @@ OPTIONS_CONFIG="
 
 intercept_help \
   --name "symlink create" \
-  --description "Automates the creation of absolute symbolic links from provided path pairs." \
+  --description "Creates absolute symbolic links from provided path pairs." \
   --usage "ddx symlink create -ps \"<target1> <link1> [<target2> <link2> ...]\" [options]" \
   --options "$OPTIONS_CONFIG" \
   -- "$@"

@@ -48,9 +48,9 @@ OPTIONS_CONFIG="
 "
 
 intercept_help \
-  --name "pin-pm" \
+  --name "package-manager pin" \
   --description "Updates and pins the Package Manager version across the entire workspace." \
-  --usage "ddx pin-pm [options]" \
+  --usage "ddx package-manager pin [options]" \
   --options "$OPTIONS_CONFIG" \
   -- "$@"
 

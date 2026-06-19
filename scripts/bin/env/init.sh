@@ -32,9 +32,9 @@ OPTIONS_CONFIG="
 "
 
 intercept_help \
-  --name "init-env" \
+  --name "env init" \
   --description "Initializes local environment files from examples across the project workspace." \
-  --usage "ddx init-env [options]" \
+  --usage "ddx env init [options]" \
   --options "$OPTIONS_CONFIG" \
   -- "$@"
 
