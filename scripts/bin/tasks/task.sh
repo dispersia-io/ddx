@@ -31,13 +31,13 @@ run_task() {
   local task_name icon success_msg error_msg command log_level silent_mode
 
   local OPTIONS_CONFIG="
-    task_name   | --name        | -n    | required | string     | 
-    command     | --cmd         | -c    | required | string     | 
-    icon        | --icon        | -i    | optional | string     | 
-    success_msg | --success-msg | -sm   | optional | string     | 
-    error_msg   | --error-msg   | -em   | optional | string     | 
-    log_level   | --log-level   | -ll   | optional | int        | 1
-    silent_mode | --silent-mode | -slm  | optional | flag_value | disabled
+    task_name   | --name        | -n    | required | string | 
+    command     | --cmd         | -c    | required | string | 
+    icon        | --icon        | -i    | optional | string | 
+    success_msg | --success-msg | -sm   | optional | string | 
+    error_msg   | --error-msg   | -em   | optional | string | 
+    log_level   | --log-level   | -ll   | optional | int    | 1
+    silent_mode | --silent-mode | -slm  | optional | toggle | disabled
   "
 
   eval "$(parse_options "$OPTIONS_CONFIG" "return 1")"
@@ -52,13 +52,13 @@ run_task() {
   fi
 
   if eval "$command"; then
-    if ! is_flag_on "$silent_mode"; then
+    if ! is_enabled "$silent_mode"; then
       echo ""
       log -s -ic "$ICON_DONE" -m "$success_msg" -ll "$log_level"
     fi
     return 0
   else
-    if ! is_flag_on "$silent_mode"; then
+    if ! is_enabled "$silent_mode"; then
       echo ""
       log -e -m "$error_msg" -ll "$log_level"
     fi

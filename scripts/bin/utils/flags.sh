@@ -25,10 +25,10 @@ source "$UTILS_DIR/log.sh"
 #   1 - If the value is unrecognized.
 #
 # Usage:
-#   if is_flag_on "$IS_SILENT"; then
+#   if is_enabled "$IS_SILENT"; then
 #     echo "Silent mode enabled"
 #   fi
-is_flag_on() {
+is_enabled() {
   case "$1" in
     1 | [tT][rR][uU][eE] | [yY] | [yY][eE][sS] | [oO][nN] | [eE][nN][aA][bB][lL][eE] | [eE][nN][aA][bB][lL][eE][dD])
       return 0

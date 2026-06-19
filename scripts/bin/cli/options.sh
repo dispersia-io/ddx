@@ -5,13 +5,13 @@
 # binary flags handling, and required argument checks.
 #
 # Format:
-# <var_name> | <long_opt> | <short_opt> | <requirement> (required/optional) | <type[:display_type]> (string/int/flag/flag_value) | <default_value> | <description>
+# <var_name> | <long_opt> | <short_opt> | <requirement> (required/optional) | <type[:display_type]> (string/int/flag/toggle) | <default_value> | <description>
 #
 # Types:
-#   string     : Standard text argument.
-#   int        : Validates that the argument is an integer >= 1.
-#   flag       : Binary switch (0 by default, 1 if passed without arguments). Ignores 'default_value'.
-#   flag_value : Boolean-like argument. Accepts any value, validates via is_flag_on, and normalizes to 0 or 1.
+#   string    : Standard text argument.
+#   int       : Validates that the argument is an integer >= 1.
+#   flag      : Binary switch (0 by default, 1 if passed without arguments). Ignores 'default_value'.
+#   toggle    : Boolean-like argument. Accepts any value, validates via is_enabled, and normalizes to 0 or 1.
 #
 # Types can optionally include a custom display name after a colon for help rendering, e.g.:
 #   string:dirs
@@ -19,10 +19,10 @@
 #
 # Usage Example:
 #   OPTIONS_CONFIG="
-#     NAME        | --name         | -n   | required | string     |          | Name of the project
-#     RETRIES     | --retry        | -r   | optional | int        | 3        | Number of retries
-#     IS_ENABLED  | --enabled      | -e   | optional | flag       |          | Enable the feature
-#     SILENT_MODE | --silent-mode  | -slm | optional | flag_value | disabled | Run in silent mode
+#     NAME        | --name         | -n   | required | string |          | Name of the project
+#     RETRIES     | --retry        | -r   | optional | int    | 3        | Number of retries
+#     IS_ENABLED  | --enabled      | -e   | optional | flag   |          | Enable the feature
+#     SILENT_MODE | --silent-mode  | -slm | optional | toggle | disabled | Run in silent mode
 #   "
 
 [[ -n "$__IS_CLI_OPTIONS_SH_INCLUDED" ]] && return 0
@@ -52,8 +52,8 @@ parse_options() {
 
     if [[ "$base_type" == "flag" ]]; then
       echo "$var_name=0"
-    elif [[ "$base_type" == "flag_value" ]]; then
-      if [[ -n "$default_value" ]] && is_flag_on "$default_value" 2> /dev/null; then
+    elif [[ "$base_type" == "toggle" ]]; then
+      if [[ -n "$default_value" ]] && is_enabled "$default_value" 2> /dev/null; then
         echo "$var_name=1"
       else
         echo "$var_name=0"
@@ -90,8 +90,8 @@ parse_options() {
       if [[ "$base_type" == "int" ]]; then
         echo "      if ! [[ \"\$2\" =~ ^[1-9][0-9]*\$ ]]; then log -e -c \"gray\" -m \"Error: Option '\$1' must be an integer >= 1.\" -ll \"\${log_level:-1}\"; $error_action; fi"
         echo "      $var_name=\"\$2\""
-      elif [[ "$base_type" == "flag_value" ]]; then
-        echo "      if is_flag_on \"\$2\"; then $var_name=1; else $var_name=0; fi"
+      elif [[ "$base_type" == "toggle" ]]; then
+        echo "      if is_enabled \"\$2\"; then $var_name=1; else $var_name=0; fi"
       else
         echo "      $var_name=\"\$2\""
       fi

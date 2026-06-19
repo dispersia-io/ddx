@@ -45,7 +45,7 @@ fi
 
 TOTAL=$(echo "$PACKAGE_INFO" | grep -v '^$' | wc -l | tr -d ' ')
 
-if ! is_flag_on "$IS_SILENT"; then
+if ! is_enabled "$IS_SILENT"; then
   log -cl -w -m "Found potentially unstable packages: $TOTAL"
   echo ""
   echo "$ICON_PACKAGE Packages list:"

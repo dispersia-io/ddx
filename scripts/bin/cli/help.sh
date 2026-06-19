@@ -72,7 +72,7 @@ print_help() {
       fi
 
       local type_str=""
-      if [[ -n "$type" && "$type" != "flag" && "$type" != "flag_value" ]]; then
+      if [[ -n "$type" && "$type" != "flag" ]]; then
         local placeholder="$type"
         [[ "$type" == *":"* ]] && placeholder="${type#*:}"
         type_str="<$placeholder>"

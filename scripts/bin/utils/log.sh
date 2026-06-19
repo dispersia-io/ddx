@@ -47,17 +47,17 @@ log() {
   local msg log_level icon color_name is_success is_warn is_error is_info clear_line is_inline silent_mode
 
   local OPTIONS_CONFIG="
-    msg         | --msg         | -m    | required | string     | 
-    log_level   | --log-level   | -ll   | optional | int        | 1
-    icon        | --icon        | -ic   | optional | string     | 
-    color_name  | --color       | -c    | optional | string     | 
-    is_success  | --success     | -s    | optional | flag       | 
-    is_warn     | --warn        | -w    | optional | flag       | 
-    is_error    | --error       | -e    | optional | flag       | 
-    is_info     | --info        | -i    | optional | flag       | 
-    clear_line  | --clear       | -cl   | optional | flag       | 
-    is_inline   | --inline      | -in   | optional | flag       | 
-    silent_mode | --silent-mode | -slm  | optional | flag_value | disabled
+    msg         | --msg         | -m    | required | string | 
+    log_level   | --log-level   | -ll   | optional | int    | 1
+    icon        | --icon        | -ic   | optional | string | 
+    color_name  | --color       | -c    | optional | string | 
+    is_success  | --success     | -s    | optional | flag   | 
+    is_warn     | --warn        | -w    | optional | flag   | 
+    is_error    | --error       | -e    | optional | flag   | 
+    is_info     | --info        | -i    | optional | flag   | 
+    clear_line  | --clear       | -cl   | optional | flag   | 
+    is_inline   | --inline      | -in   | optional | flag   | 
+    silent_mode | --silent-mode | -slm  | optional | toggle | disabled
   "
 
   eval "$(parse_options "$OPTIONS_CONFIG" "return 0")"

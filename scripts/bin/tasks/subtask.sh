@@ -51,15 +51,15 @@ run_subtask() {
   local pending_msg=""
 
   local OPTIONS_CONFIG="
-    command     | --cmd         | -c    | required | string     | 
-    name        | --name        | -n    | optional | string     | 
-    subject     | --subject     | -s    | optional | string     | 
-    template    | --template    | -t    | optional | string     | 
-    icon        | --icon        | -i    | optional | string     | 
-    success_msg | --success-msg | -sm   | optional | string     | 
-    error_msg   | --error-msg   | -em   | optional | string     | 
-    log_level   | --log-level   | -ll   | optional | int        | 2
-    silent_mode | --silent-mode | -slm  | optional | flag_value | disabled
+    command     | --cmd         | -c    | required | string | 
+    name        | --name        | -n    | optional | string | 
+    subject     | --subject     | -s    | optional | string | 
+    template    | --template    | -t    | optional | string | 
+    icon        | --icon        | -i    | optional | string | 
+    success_msg | --success-msg | -sm   | optional | string | 
+    error_msg   | --error-msg   | -em   | optional | string | 
+    log_level   | --log-level   | -ll   | optional | int    | 2
+    silent_mode | --silent-mode | -slm  | optional | toggle | disabled
   "
 
   eval "$(parse_options "$OPTIONS_CONFIG" "return 1")"
@@ -140,7 +140,7 @@ run_subtask() {
   else
     log -cl -e "${icon_args[@]}" -m "$error_msg" -ll "$log_level" -slm "$silent_mode"
 
-    if ! is_flag_on "$silent_mode"; then
+    if ! is_enabled "$silent_mode"; then
       printf "\n%s\n\n" "$OUT"
     fi
     exit 1
