@@ -12,9 +12,6 @@ function updatePackageJson(filePath) {
   try {
     const json = JSON.parse(fs.readFileSync(filePath, 'utf8'));
 
-    json.volta ??= {};
-    json.volta[PACKAGE_MANAGER] = VERSION;
-
     json.packageManager = `${PACKAGE_MANAGER}@${VERSION}`;
 
     fs.writeFileSync(filePath, `${JSON.stringify(json, null, 2)}\n`);
