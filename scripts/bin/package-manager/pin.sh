@@ -120,6 +120,16 @@ if is_truthy "$SHOULD_PIN_PKG_JSON"; then
       --template \"pin\" \\
       --cmd \"${UPDATE_PKG_JSON_CMD}\" \\
       --silent-mode \"${IS_SILENT}\""
+
+  INSTALL_CMD="cd \"${ROOT_DIR}\" && ${PACKAGE_MANAGER} install"
+
+  PIN_CMD="$PIN_CMD && \\
+    execute subtask \\
+      --icon \"${ICON_PACKAGE}\" \\
+      --subject \"Lockfile\" \\
+      --template \"sync\" \\
+      --cmd \"${INSTALL_CMD}\" \\
+      --silent-mode \"${IS_SILENT}\""
 fi
 
 if is_truthy "$SHOULD_PIN_DOCS"; then
