@@ -8,7 +8,21 @@ BIN_DIR="$CLI_DIR/.."
 
 source "$BIN_DIR/core/theme.sh"
 
+__trim() {
+  local var="$1"
+  var="${var#"${var%%[![:space:]]*}"}"
+  var="${var%"${var##*[![:space:]]}"}"
+  printf "%s" "$var"
+}
+
+# Renders and formats the CLI help screen, parsing declarative configuration for visually aligned output.
 print_help() {
+  intercept_help \
+    --name "ddx cli help print" \
+    --description "Renders and formats the CLI help screen with aligned options and descriptions." \
+    --usage "ddx cli help print <command_name> <description> <usage> [config]" \
+    -- "$@"
+
   local cmd_name="$1"
   local description="$2"
   local usage="$3"
@@ -27,12 +41,12 @@ print_help() {
     local has_required=false
 
     while IFS='|' read -r var long short req type default desc || [ -n "$var" ]; do
-      var=$(echo "$var" | xargs 2> /dev/null)
+      var=$(__trim "$var")
       [ -z "$var" ] && continue
 
-      short=$(echo "$short" | xargs 2> /dev/null)
-      long=$(echo "$long" | xargs 2> /dev/null)
-      req=$(echo "$req" | xargs 2> /dev/null)
+      short=$(__trim "$short")
+      long=$(__trim "$long")
+      req=$(__trim "$req")
 
       if [[ "$req" == "required" ]]; then
         has_required=true
@@ -54,15 +68,15 @@ print_help() {
     ((short_width < 1)) && short_width=1
 
     echo "$config" | while IFS='|' read -r var long short req type default desc || [ -n "$var" ]; do
-      var=$(echo "$var" | xargs 2> /dev/null)
+      var=$(__trim "$var")
       [ -z "$var" ] && continue
 
-      long=$(echo "$long" | xargs 2> /dev/null)
-      short=$(echo "$short" | xargs 2> /dev/null)
-      req=$(echo "$req" | xargs 2> /dev/null)
-      type=$(echo "$type" | xargs 2> /dev/null)
-      default=$(echo "$default" | xargs 2> /dev/null)
-      desc=$(echo "$desc" | xargs 2> /dev/null)
+      long=$(__trim "$long")
+      short=$(__trim "$short")
+      req=$(__trim "$req")
+      type=$(__trim "$type")
+      default=$(__trim "$default")
+      desc=$(__trim "$desc")
 
       local short_str=""
       if [[ -n "$short" && -n "$long" ]]; then
@@ -112,6 +126,7 @@ print_help() {
   fi
 }
 
+# Scans provided arguments for help flags (-h, --help) and triggers the help formatter before exiting.
 intercept_help() {
   local name=""
   local description=""

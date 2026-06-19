@@ -41,6 +41,7 @@ __IS_TASKS_SUBTASK_SH_INCLUDED=1
 TASKS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BIN_DIR="$TASKS_DIR/.."
 
+source "$BIN_DIR/cli/help.sh"
 source "$BIN_DIR/cli/options.sh"
 
 source "$BIN_DIR/utils/log.sh"
@@ -51,16 +52,23 @@ run_subtask() {
   local pending_msg=""
 
   local OPTIONS_CONFIG="
-    command     | --cmd         | -c    | required | string | 
-    name        | --name        | -n    | optional | string | 
-    subject     | --subject     | -s    | optional | string | 
-    template    | --template    | -t    | optional | string | 
-    icon        | --icon        | -i    | optional | string | 
-    success_msg | --success-msg | -sm   | optional | string | 
-    error_msg   | --error-msg   | -em   | optional | string | 
-    log_level   | --log-level   | -ll   | optional | int    | 2
-    silent_mode | --silent-mode | -slm  | optional | toggle | disabled
+    command     | --cmd         | -c    | required | string |          | Command string to execute
+    name        | --name        | -n    | optional | string |          | Custom name for the task
+    subject     | --subject     | -s    | optional | string |          | Subject of the action
+    template    | --template    | -t    | optional | string |          | Predefined action template
+    icon        | --icon        | -i    | optional | string |          | Icon for the task
+    success_msg | --success-msg | -sm   | optional | string |          | Custom success text
+    error_msg   | --error-msg   | -em   | optional | string |          | Custom error text
+    log_level   | --log-level   | -ll   | optional | int    | 2        | Logging indentation level
+    silent_mode | --silent-mode | -slm  | optional | toggle | disabled | Suppresses all logs
   "
+
+  intercept_help \
+    --name "subtask" \
+    --description "Executes a subtask with formatted output." \
+    --usage "subtask [options]" \
+    --options "$OPTIONS_CONFIG" \
+    -- "$@"
 
   eval "$(parse_options "$OPTIONS_CONFIG" "return 1")"
 

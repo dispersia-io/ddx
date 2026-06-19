@@ -1,3 +1,8 @@
+/**
+ * Provides custom error classes and validation utilities
+ * for environment variables and semantic versioning.
+ */
+
 class EnvironmentError extends Error {
   constructor(varname) {
     super(`Environment variable '${varname}' is not defined`);

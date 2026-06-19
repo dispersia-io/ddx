@@ -39,26 +39,34 @@ BIN_DIR="$UTILS_DIR/.."
 source "$BIN_DIR/core/root.sh"
 source "$BIN_DIR/core/theme.sh"
 
+source "$BIN_DIR/cli/help.sh"
 source "$BIN_DIR/cli/options.sh"
 
 source "$BIN_DIR/utils/flags.sh"
 
 log() {
-  local msg log_level icon color_name is_success is_warn is_error is_info clear_line is_inline silent_mode
-
   local OPTIONS_CONFIG="
-    msg         | --msg         | -m    | required | string | 
-    log_level   | --log-level   | -ll   | optional | int    | 1
-    icon        | --icon        | -ic   | optional | string | 
-    color_name  | --color       | -c    | optional | string | 
-    is_success  | --success     | -s    | optional | flag   | 
-    is_warn     | --warn        | -w    | optional | flag   | 
-    is_error    | --error       | -e    | optional | flag   | 
-    is_info     | --info        | -i    | optional | flag   | 
-    clear_line  | --clear       | -cl   | optional | flag   | 
-    is_inline   | --inline      | -in   | optional | flag   | 
-    silent_mode | --silent-mode | -slm  | optional | toggle | disabled
+    msg         | --msg         | -m    | required | string      |          | Message text to display
+    log_level   | --log-level   | -ll   | optional | int         | 1        | Indentation level
+    icon        | --icon        | -ic   | optional | string      |          | Overrides the default icon
+    color_name  | --color       | -c    | optional | string:name |          | Overrides the text color
+    is_success  | --success     | -s    | optional | flag        |          | Sets type to SUCCESS
+    is_warn     | --warn        | -w    | optional | flag        |          | Sets type to WARNING
+    is_error    | --error       | -e    | optional | flag        |          | Sets type to ERROR
+    is_info     | --info        | -i    | optional | flag        |          | Sets type to INFO
+    clear_line  | --clear       | -cl   | optional | flag        |          | Clears the current line before printing
+    is_inline   | --inline      | -in   | optional | flag        |          | Prints without a trailing newline
+    silent_mode | --silent-mode | -slm  | optional | toggle      | disabled | Suppresses all output
   "
+
+  intercept_help \
+    --name "log" \
+    --description "A universal logging utility for project scripts." \
+    --usage "log [options]" \
+    --options "$OPTIONS_CONFIG" \
+    -- "$@"
+
+  local msg log_level icon color_name is_success is_warn is_error is_info clear_line is_inline silent_mode
 
   eval "$(parse_options "$OPTIONS_CONFIG" "return 0")"
 

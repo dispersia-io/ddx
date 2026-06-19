@@ -22,6 +22,7 @@ BIN_DIR="$TASKS_DIR/.."
 
 source "$BIN_DIR/core/theme.sh"
 
+source "$BIN_DIR/cli/help.sh"
 source "$BIN_DIR/cli/options.sh"
 
 source "$BIN_DIR/utils/log.sh"
@@ -31,14 +32,21 @@ run_task() {
   local task_name icon success_msg error_msg command log_level silent_mode
 
   local OPTIONS_CONFIG="
-    task_name   | --name        | -n    | required | string | 
-    command     | --cmd         | -c    | required | string | 
-    icon        | --icon        | -i    | optional | string | 
-    success_msg | --success-msg | -sm   | optional | string | 
-    error_msg   | --error-msg   | -em   | optional | string | 
-    log_level   | --log-level   | -ll   | optional | int    | 1
-    silent_mode | --silent-mode | -slm  | optional | toggle | disabled
+    task_name   | --name        | -n    | required | string |          | Name of the task
+    command     | --cmd         | -c    | required | string |          | Command string to execute
+    icon        | --icon        | -i    | optional | string |          | Icon for the task
+    success_msg | --success-msg | -sm   | optional | string |          | Message to display on success
+    error_msg   | --error-msg   | -em   | optional | string |          | Message to display on error
+    log_level   | --log-level   | -ll   | optional | int    | 1        | Logging indentation level
+    silent_mode | --silent-mode | -slm  | optional | toggle | disabled | Suppresses all logs
   "
+
+  intercept_help \
+    --name "task" \
+    --description "Executes a high-level task with content passed as a command string." \
+    --usage "task [options]" \
+    --options "$OPTIONS_CONFIG" \
+    -- "$@"
 
   eval "$(parse_options "$OPTIONS_CONFIG" "return 1")"
 

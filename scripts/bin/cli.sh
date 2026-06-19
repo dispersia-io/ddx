@@ -178,7 +178,7 @@ case "$COMMAND" in
       CMD_HELP    | help    | h    | | | | Intercept --help flags or print layout render engine
     "
 
-    if [[ -z "$SUBCOMMAND" || "$SUBCOMMAND" == "--help" || "$SUBCOMMAND" == "-h" || "$SUBCOMMAND" == "help" ]]; then
+    if [[ -z "$SUBCOMMAND" || "$SUBCOMMAND" == "--help" || "$SUBCOMMAND" == "-h" ]]; then
       print_help "ddx cli" "Central CLI Core Engine Settings." "ddx cli <subcommand> [action] [options]" "$CLI_CONFIG"
       exit 0
     fi

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Resolves and exports the absolute path to the project root directory (ROOT_DIR).
+
 if [ -n "$ROOT_DIR" ]; then
   return 0 2> /dev/null || exit 0
 fi

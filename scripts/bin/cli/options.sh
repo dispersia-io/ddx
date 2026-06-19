@@ -31,10 +31,18 @@ __IS_CLI_OPTIONS_SH_INCLUDED=1
 CLI_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BIN_DIR="$CLI_DIR/.."
 
+source "$BIN_DIR/cli/help.sh"
+
 source "$BIN_DIR/utils/log.sh"
 source "$BIN_DIR/utils/flags.sh"
 
 parse_options() {
+  intercept_help \
+    --name "parse_options" \
+    --description "Generates JIT bash parsing logic from a declarative configuration string." \
+    --usage "parse_options <config_string> [error_action]" \
+    -- "$@"
+
   local config="$1"
   local error_action="${2:-exit 1}"
   local var_name long_opt short_opt requirement type default_value description base_type

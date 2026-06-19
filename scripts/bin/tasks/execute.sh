@@ -18,10 +18,18 @@ __IS_TASKS_EXECUTE_SH_INCLUDED=1
 TASKS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BIN_DIR="$TASKS_DIR/.."
 
+source "$BIN_DIR/cli/help.sh"
+
 source "$TASKS_DIR/task.sh"
 source "$TASKS_DIR/subtask.sh"
 
 execute() {
+  intercept_help \
+    --name "execute" \
+    --description "Acts as a central router to unify command execution between tasks and granular subtasks." \
+    --usage "execute [task | subtask] [options...]" \
+    -- "$@"
+
   local target="$1"
   shift
 
