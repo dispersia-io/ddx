@@ -103,6 +103,7 @@ parse_options() {
 
   echo "    *)"
   echo "      log -e -c \"gray\" -m \"Error: Unknown argument passed: \$1\" -ll \"\${log_level:-1}\""
+  echo "      shift 1"
   echo "      $error_action"
   echo "      ;;"
   echo '  esac'

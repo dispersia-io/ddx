@@ -31,7 +31,7 @@ intercept_help \
   --options "$OPTIONS_CONFIG" \
   -- "$@"
 
-eval "$(parse_options "$OPTIONS_CONFIG" "$@")"
+eval "$(parse_options "$OPTIONS_CONFIG")"
 
 resolve_path() {
   local path="$1"
