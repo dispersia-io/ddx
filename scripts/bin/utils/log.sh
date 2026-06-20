@@ -6,7 +6,7 @@
 # between other scripts; it is not intended for standalone execution.
 #
 # Options:
-#   --msg, -m              : [Required] Message text to display
+#   --message, -m          : [Required] Message text to display
 #   --log-level, -ll       : [Optional] Indentation level: 1 (none), 2 (3 spaces), 3 (6 spaces)
 #   --icon, -ic            : [Optional] Overrides the default icon for the message
 #   --color, -c            : [Optional] Overrides the color (green, red, yellow, blue, gray)
@@ -24,8 +24,8 @@
 #    Example: log -s -m "Dependencies installed successfully"
 #
 # 2. Status with Progress (Inline):
-#    Example: log --inline --icon "⏳" --msg "Processing data..."
-#    Next log: log --clear --success --msg "Data processed"
+#    Example: log --inline --icon "⏳" --message "Processing data..."
+#    Next log: log --clear --success --message "Data processed"
 #
 # 3. Indented Error:
 #    Example: log -e -c "gray" -m "Failed to locate configuration file" -ll 2
@@ -46,7 +46,7 @@ source "$BIN_DIR/utils/flags.sh"
 
 log() {
   local OPTIONS_CONFIG="
-    msg         | --msg         | -m    | required | string      |          | Message text to display
+    message     | --message     | -m    | required | string      |          | Message text to display
     log_level   | --log-level   | -ll   | optional | int         | 1        | Indentation level
     icon        | --icon        | -ic   | optional | string      |          | Overrides the default icon
     color_name  | --color       | -c    | optional | string:name |          | Overrides the text color
@@ -66,7 +66,7 @@ log() {
     --options "$OPTIONS_CONFIG" \
     -- "$@"
 
-  local msg log_level icon color_name is_success is_warn is_error is_info clear_line is_inline silent_mode
+  local message log_level icon color_name is_success is_warn is_error is_info clear_line is_inline silent_mode
 
   eval "$(parse_options "$OPTIONS_CONFIG" "return 0")"
 
@@ -123,8 +123,8 @@ log() {
   local reset_color="${COLOR_RESET:-\033[0m}"
 
   if [[ -n "$final_icon" ]]; then
-    printf "%b${final_color}%s%b %b${reset_color}%b" "$start" "$indent" "$final_icon" "$msg" "$end"
+    printf "%b${final_color}%s%b %b${reset_color}%b" "$start" "$indent" "$final_icon" "$message" "$end"
   else
-    printf "%b${final_color}%s%b${reset_color}%b" "$start" "$indent" "$msg" "$end"
+    printf "%b${final_color}%s%b${reset_color}%b" "$start" "$indent" "$message" "$end"
   fi
 }
