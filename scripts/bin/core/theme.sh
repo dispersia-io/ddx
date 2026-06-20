@@ -21,7 +21,7 @@ COLOR_YELLOW='\033[0;33m'
 # --- Process Icons ---
 ICON_DONE='✨'
 ICON_ERROR='❌'
-ICON_INFO='ℹ️'
+ICON_INFO='ℹ️ '
 ICON_LINK='🔗'
 ICON_PROGRESS='⏳'
 ICON_SKIP='⏩'

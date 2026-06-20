@@ -83,6 +83,7 @@ log() {
 
   local type_icon=""
   local type_color=""
+  local descriptor=1
 
   if is_truthy "$is_success"; then
     type_icon="$ICON_SUCCESS"
@@ -90,9 +91,11 @@ log() {
   elif is_truthy "$is_warn"; then
     type_icon="$ICON_WARNING"
     type_color="$COLOR_YELLOW"
+    descriptor=2
   elif is_truthy "$is_error"; then
     type_icon="$ICON_ERROR"
     type_color="$COLOR_RED"
+    descriptor=2
   elif is_truthy "$is_info"; then
     type_icon="$ICON_INFO"
     type_color="$COLOR_GRAY"
@@ -123,8 +126,8 @@ log() {
   local reset_color="${COLOR_RESET:-\033[0m}"
 
   if [[ -n "$final_icon" ]]; then
-    printf "%b${final_color}%s%b %b${reset_color}%b" "$start" "$indent" "$final_icon" "$message" "$end"
+    printf "%b${final_color}%s%b %b${reset_color}%b" "$start" "$indent" "$final_icon" "$message" "$end" >&"$descriptor"
   else
-    printf "%b${final_color}%s%b${reset_color}%b" "$start" "$indent" "$message" "$end"
+    printf "%b${final_color}%s%b${reset_color}%b" "$start" "$indent" "$message" "$end" >&"$descriptor"
   fi
 }
