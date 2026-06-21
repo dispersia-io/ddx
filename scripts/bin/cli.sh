@@ -10,6 +10,19 @@
 
 BIN_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+export NO_COLOR=0
+NEW_ARGS=()
+
+for arg in "$@"; do
+  if [[ "$arg" == "--no-color" || "$arg" == "-nc" ]]; then
+    export NO_COLOR=1
+  else
+    NEW_ARGS+=("$arg")
+  fi
+done
+
+set -- "${NEW_ARGS[@]}"
+
 source "$BIN_DIR/core/root.sh"
 source "$BIN_DIR/core/theme.sh"
 
