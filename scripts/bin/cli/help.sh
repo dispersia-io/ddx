@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 [[ -n "$__IS_CLI_HELP_SH_INCLUDED" ]] && return 0
 __IS_CLI_HELP_SH_INCLUDED=1

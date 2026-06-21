@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Updates and pins the Package Manager version across the entire workspace.
 #

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Updates and pins the Node.js version across the entire workspace.
 #

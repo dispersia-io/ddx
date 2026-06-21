@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # This is an internal script. Do not run it directly.
 # Relies on variables from the parent script: DEPS_INTERNAL_DIR, DEPENDABOT_FILE, PACKAGE_INFO, IS_SILENT

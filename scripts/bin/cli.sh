@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Central entry point and router for the Dispersia Developer Experience (ddx) CLI.
 # Manages local environment setup, workspaces dependencies, packages pinning,

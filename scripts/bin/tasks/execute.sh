@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Acts as a central router to unify command execution between tasks and granular subtasks.
 #

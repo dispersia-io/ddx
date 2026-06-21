@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Executes a high-level task with content passed as a command string.
 #

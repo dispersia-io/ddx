@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Scans lockfiles for unstable (0.x.x) dependencies.
 #

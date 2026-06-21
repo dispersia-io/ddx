@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # This is an internal script. Do not run it directly.
 # Relies on variables from the parent script: SHOULD_PIN_UNSTABLE, ROOT_DIR, IS_SILENT

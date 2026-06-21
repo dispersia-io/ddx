@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Performs a deep cleanup of the project workspace.
 # Clears the Yarn cache and deletes all node_modules directories.

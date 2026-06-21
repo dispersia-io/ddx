@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # A centralized repository of ANSI color escape codes.
 # Ensures consistent color output across all shell-based CLI utilities.

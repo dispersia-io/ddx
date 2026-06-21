@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # This is an internal script. Do not run it directly.
 # Relies on variables from the parent script: PACKAGE_MANAGER, PACKAGE_MANAGER_AUDIT_CMD, ROOT_DIR, IS_SILENT

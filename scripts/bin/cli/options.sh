@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Generates JIT bash parsing logic from a declarative configuration string.
 # Automates variable initialization, default values, type validation,

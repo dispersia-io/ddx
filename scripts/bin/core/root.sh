@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Resolves and exports the absolute path to the project root directory (ROOT_DIR).
 
