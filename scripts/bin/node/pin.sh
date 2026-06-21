@@ -56,7 +56,7 @@ OPTIONS_CONFIG="
 
 intercept_help \
   --name "node pin" \
-  --description "Updates and pins the Node.js version across the entire workspace." \
+  --description "Updates and pins the Node.js version across the entire workspace" \
   --usage "ddx node pin -v <semver> [options]" \
   --options "$OPTIONS_CONFIG" \
   -- "$@"
@@ -64,12 +64,12 @@ intercept_help \
 eval "$(parse_options "$OPTIONS_CONFIG")"
 
 if [[ ! "$NODE_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-  log -e -c "gray" -m "Error: Version '$NODE_VERSION' must be a strict SemVer (e.g., 24.14.1)." -slm "$IS_SILENT"
+  log -e -c "gray" -m "Error: Version '$NODE_VERSION' must be a strict SemVer (e.g., 24.14.1)" -slm "$IS_SILENT"
   exit 1
 fi
 
 if is_falsy "$SHOULD_PIN_VOLTA" && is_falsy "$SHOULD_PIN_VERSION_FILE" && is_falsy "$SHOULD_PIN_ENGINE" && is_falsy "$SHOULD_PIN_ENV" && is_falsy "$SHOULD_PIN_DOCS"; then
-  log -e -c "gray" -m "Error: At least one target flag must be specified: --volta, --version-file, --engine, --env, or --docs." -slm "$IS_SILENT"
+  log -e -c "gray" -m "Error: At least one target flag must be specified: --volta, --version-file, --engine, --env, or --docs" -slm "$IS_SILENT"
   exit 1
 fi
 

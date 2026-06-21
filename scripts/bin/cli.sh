@@ -38,7 +38,7 @@ source "$BIN_DIR/utils/log.sh"
 throw_unknown_command() {
   local cmd_path="$1"
   log -cl -e -m "Error: Unknown or missing command '$cmd_path'"
-  log -c "gray" -m "Run 'ddx --help' for a list of available commands."
+  log -c "gray" -m "Run 'ddx --help' for a list of available commands"
   exit 1
 }
 
@@ -67,7 +67,7 @@ print_root_help() {
   echo -e "  ${COLOR_ORANGE}              help intercept${COLOR_RESET}       ${COLOR_GRAY}Intercept --help flag and render formatting${COLOR_RESET}"
   echo -e "  ${COLOR_ORANGE}              help print${COLOR_RESET}           ${COLOR_GRAY}Print raw help table directly${COLOR_RESET}"
   echo ""
-  echo -e "${COLOR_GRAY}Run 'ddx <command> [subcommand] --help' for more information on a specific command.${COLOR_RESET}"
+  echo -e "${COLOR_GRAY}Run 'ddx <command> [subcommand] --help' for more information on a specific command${COLOR_RESET}"
   echo ""
 }
 
@@ -89,7 +89,7 @@ case "$COMMAND" in
     "
 
     if [[ -z "$SUBCOMMAND" || "$SUBCOMMAND" == "--help" || "$SUBCOMMAND" == "-h" || "$SUBCOMMAND" == "help" ]]; then
-      print_help "ddx env" "Environment Configurations Management." "ddx env <subcommand> [options]" "$ENV_CONFIG"
+      print_help "ddx env" "Environment Configurations Management" "ddx env <subcommand> [options]" "$ENV_CONFIG"
       exit 0
     fi
 
@@ -109,7 +109,7 @@ case "$COMMAND" in
     "
 
     if [[ -z "$SUBCOMMAND" || "$SUBCOMMAND" == "--help" || "$SUBCOMMAND" == "-h" || "$SUBCOMMAND" == "help" ]]; then
-      print_help "ddx deps" "Workspace Dependencies Management." "ddx deps <subcommand> [options]" "$DEPS_CONFIG"
+      print_help "ddx deps" "Workspace Dependencies Management" "ddx deps <subcommand> [options]" "$DEPS_CONFIG"
       exit 0
     fi
 
@@ -130,7 +130,7 @@ case "$COMMAND" in
     "
 
     if [[ -z "$SUBCOMMAND" || "$SUBCOMMAND" == "--help" || "$SUBCOMMAND" == "-h" || "$SUBCOMMAND" == "help" ]]; then
-      print_help "ddx node" "Node.js Environment Management." "ddx node <subcommand> [options]" "$NODE_CONFIG"
+      print_help "ddx node" "Node.js Environment Management" "ddx node <subcommand> [options]" "$NODE_CONFIG"
       exit 0
     fi
 
@@ -150,7 +150,7 @@ case "$COMMAND" in
     "
 
     if [[ -z "$SUBCOMMAND" || "$SUBCOMMAND" == "--help" || "$SUBCOMMAND" == "-h" || "$SUBCOMMAND" == "help" ]]; then
-      print_help "ddx pm" "Package Manager Pining Automation." "ddx pm <subcommand> [options]" "$PM_CONFIG"
+      print_help "ddx pm" "Package Manager Pining Automation" "ddx pm <subcommand> [options]" "$PM_CONFIG"
       exit 0
     fi
 
@@ -169,7 +169,7 @@ case "$COMMAND" in
     "
 
     if [[ -z "$SUBCOMMAND" || "$SUBCOMMAND" == "--help" || "$SUBCOMMAND" == "-h" || "$SUBCOMMAND" == "help" ]]; then
-      print_help "ddx symlink" "Symbolic Links Orchestration." "ddx symlink <subcommand> [options]" "$SYMLINK_CONFIG"
+      print_help "ddx symlink" "Symbolic Links Orchestration" "ddx symlink <subcommand> [options]" "$SYMLINK_CONFIG"
       exit 0
     fi
 
@@ -199,7 +199,7 @@ case "$COMMAND" in
     "
 
     if [[ -z "$SUBCOMMAND" || "$SUBCOMMAND" == "--help" || "$SUBCOMMAND" == "-h" ]]; then
-      print_help "ddx cli" "Central CLI Core Engine Settings." "ddx cli <subcommand> [action] [options]" "$CLI_CONFIG"
+      print_help "ddx cli" "Central CLI Core Engine Settings" "ddx cli <subcommand> [action] [options]" "$CLI_CONFIG"
       exit 0
     fi
 
@@ -213,7 +213,7 @@ case "$COMMAND" in
         "
 
         if [[ -z "$ACTION" || "$ACTION" == "--help" || "$ACTION" == "-h" || "$ACTION" == "help" ]]; then
-          print_help "ddx cli options" "Options parsing engine." "ddx cli options <action> [options]" "$CLI_OPTS_CONFIG"
+          print_help "ddx cli options" "Options parsing engine" "ddx cli options <action> [options]" "$CLI_OPTS_CONFIG"
           exit 0
         fi
 
@@ -236,7 +236,7 @@ case "$COMMAND" in
         "
 
         if [[ -z "$ACTION" || "$ACTION" == "--help" || "$ACTION" == "-h" || "$ACTION" == "help" ]]; then
-          print_help "ddx cli help" "Dynamic help rendering core." "ddx cli help <action> [options]" "$CLI_HELP_CONFIG"
+          print_help "ddx cli help" "Dynamic help rendering core" "ddx cli help <action> [options]" "$CLI_HELP_CONFIG"
           exit 0
         fi
 

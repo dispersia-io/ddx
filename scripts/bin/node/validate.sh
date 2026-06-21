@@ -35,7 +35,7 @@ OPTIONS_CONFIG="
 
 intercept_help \
   --name "node validate" \
-  --description "Validates the active Node.js version against the project's requirements." \
+  --description "Validates the active Node.js version against the project's requirements" \
   --usage "ddx node validate [options]" \
   --options "$OPTIONS_CONFIG" \
   -- "$@"
@@ -56,10 +56,10 @@ current_node_version="${raw_node_version#v}"
 
 if ! MIN_NODE_VERSION="$MIN_NODE_VERSION" node "$NODE_DIR/_internal/validate-version.js" 2> /dev/null; then
   if is_falsy "$IS_SILENT"; then
-    log -ll 2 -m "Node.js version mismatch!\n" -e
+    log -ll 2 -m "Node.js version mismatch\n" -e
     log -ll 3 -m "Expected: ${COLOR_GREEN}^$MIN_NODE_VERSION${COLOR_RESET}"
     log -ll 3 -m "Received: ${COLOR_RED} ^$current_node_version${COLOR_RESET}\n"
-    log -ll 3 -m "Please update your local Node.js environment to match the required version." -c "gray"
+    log -ll 3 -m "Please update your local Node.js environment to match the required version" -c "gray"
     log -ll 3 -m "Examples:" -c "gray"
     log -ll 3 -m "  - NVM:   nvm use" -c "gray"
     log -ll 3 -m "  - FNM:   fnm use" -c "gray"

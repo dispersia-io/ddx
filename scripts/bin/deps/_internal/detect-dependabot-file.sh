@@ -10,6 +10,6 @@ if [ -f "$ROOT_DIR/.github/dependabot.yml" ]; then
 elif [ -f "$ROOT_DIR/.github/dependabot.yaml" ]; then
   DEPENDABOT_FILE="$ROOT_DIR/.github/dependabot.yaml"
 elif is_truthy "$SHOULD_PIN_UNSTABLE"; then
-  log -cl -e -m "Error: Dependabot configuration not found." -slm "$IS_SILENT"
+  log -cl -e -m "Error: Dependabot configuration not found" -slm "$IS_SILENT"
   exit 1
 fi

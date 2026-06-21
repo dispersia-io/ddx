@@ -6,7 +6,7 @@
 LOCKFILE_PATH="$ROOT_DIR/$LOCKFILE"
 
 if [ ! -f "$LOCKFILE_PATH" ]; then
-  log -cl -e -m "Error: File $LOCKFILE not found in the project root ($ROOT_DIR)!\n" -slm "$IS_SILENT"
+  log -cl -e -m "Error: File $LOCKFILE not found in the project root ($ROOT_DIR)\n" -slm "$IS_SILENT"
   exit 1
 fi
 
@@ -38,7 +38,7 @@ else
 fi
 
 if [ -z "$PACKAGE_INFO" ]; then
-  log -cl -s -m "No packages with 0.x.x version found." -slm "$IS_SILENT"
+  log -cl -s -m "No packages with 0.x.x version found" -slm "$IS_SILENT"
   emit_meta "__SKIPPED__"
   exit 0
 fi

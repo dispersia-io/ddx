@@ -30,7 +30,7 @@ source "$TASKS_DIR/subtask.sh"
 execute() {
   intercept_help \
     --name "exec" \
-    --description "Acts as a central router to unify command execution between tasks and granular subtasks." \
+    --description "Acts as a central router to unify command execution between tasks and granular subtasks" \
     --usage "ddx exec <subcommand> [options]" \
     -- "$@"
 

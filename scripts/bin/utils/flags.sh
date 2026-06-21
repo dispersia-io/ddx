@@ -37,7 +37,7 @@ is_enabled() {
       return 1
       ;;
     *)
-      log -cl -e -m "Error: Unrecognized flag value '$1'."
+      log -cl -e -m "Error: Unrecognized flag value '$1'"
       exit 1
       ;;
   esac
@@ -69,7 +69,7 @@ is_truthy() {
     1 | [tT][rR][uU][eE]) return 0 ;;
     "" | 0 | [fF][aA][lL][sS][eE]) return 1 ;;
     *)
-      log -cl -e -m "Error: Unrecognized boolean-like value '$1'."
+      log -cl -e -m "Error: Unrecognized boolean-like value '$1'"
       exit 1
       ;;
   esac

@@ -46,15 +46,15 @@ run_task() {
 
   intercept_help \
     --name "exec task" \
-    --description "Executes a high-level task with content passed as a command string." \
+    --description "Executes a high-level task with content passed as a command string" \
     --usage "ddx exec task -n <string> -c <string> [options]" \
     --options "$OPTIONS_CONFIG" \
     -- "$@"
 
   eval "$(parse_options "$OPTIONS_CONFIG" "return 1")"
 
-  success_msg="${success_msg:-Task '$task_name' completed successfully.}"
-  error_msg="${error_msg:-Task '$task_name' encountered an error.}"
+  success_msg="${success_msg:-Task '$task_name' completed successfully}"
+  error_msg="${error_msg:-Task '$task_name' encountered an error}"
 
   if [[ -n "$icon" ]]; then
     log -ic "$icon" -m "$task_name\n" -ll "$log_level" -slm "$silent_mode"

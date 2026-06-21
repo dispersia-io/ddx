@@ -56,7 +56,7 @@ run_subtask() {
 
   intercept_help \
     --name "exec subtask" \
-    --description "Executes a subtask with formatted output." \
+    --description "Executes a subtask with formatted output" \
     --usage "ddx exec subtask -c <string> [options]" \
     --options "$OPTIONS_CONFIG" \
     -- "$@"
@@ -123,7 +123,7 @@ run_subtask() {
       pending_msg="$name"
     fi
   else
-    log -cl -e -c "gray" -m "Error: Invalid flag combination. Provide either --template AND --subject, OR custom --name." -ll "$log_level" -slm "$silent_mode"
+    log -cl -e -c "gray" -m "Error: Invalid flag combination. Provide either --template AND --subject, OR custom --name" -ll "$log_level" -slm "$silent_mode"
     exit 1
   fi
 

@@ -54,7 +54,7 @@ log() {
 
   intercept_help \
     --name "log" \
-    --description "A universal logging utility for project scripts." \
+    --description "A universal logging utility for project scripts" \
     --usage "log -m <string> [options]" \
     --options "$OPTIONS_CONFIG" \
     -- "$@"
@@ -69,7 +69,7 @@ log() {
       ;;
     "" | 0 | [fF][aA][lL][sS][eE] | [nN] | [nN][oO] | [oO][fF][fF] | [dD][iI][sS][aA][bB][lL][eE] | [dD][iI][sS][aA][bB][lL][eE][dD]) ;;
     *)
-      echo "Error: Unrecognized '--silent-mode' option value '$silent_mode'. Expected boolean-like value." >&2
+      echo "Error: Unrecognized '--silent-mode' option value '$silent_mode'" >&2
       exit 1
       ;;
   esac

@@ -34,7 +34,7 @@ OPTIONS_CONFIG="
 
 intercept_help \
   --name "symlink create" \
-  --description "Creates absolute symbolic links from provided path pairs." \
+  --description "Creates absolute symbolic links from provided path pairs" \
   --usage "ddx symlink create -ps \"<target1> <link1> [<target2> <link2> ...]\" [options]" \
   --options "$OPTIONS_CONFIG" \
   -- "$@"
@@ -55,7 +55,7 @@ resolve_path() {
 read -ra PATH_ARR <<< "$PATHS"
 
 if [ $((${#PATH_ARR[@]} % 2)) -ne 0 ] || [ ${#PATH_ARR[@]} -eq 0 ]; then
-  log -e -m "Error: Symlinks must be provided in path pairs. Found ${#PATH_ARR[@]} paths."
+  log -e -m "Error: Symlinks must be provided in path pairs. Found ${#PATH_ARR[@]} paths"
   exit 1
 fi
 

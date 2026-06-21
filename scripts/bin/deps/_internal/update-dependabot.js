@@ -12,8 +12,8 @@ try {
   const isSilent = (() => {
     const value = process.env.IS_SILENT ?? '';
 
-    if (/^(1|true|y(es)?|on|enabled?)$/iu.test(value)) return true;
-    if (/^(0|false|no?|off|disabled?)?$/iu.test(value)) return false;
+    if (/^(1|true)$/iu.test(value)) return true;
+    if (/^(0|false)?$/iu.test(value)) return false;
     throw new Error(`Unrecognized boolean-like value '${value}'`);
   })();
 

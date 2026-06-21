@@ -56,7 +56,7 @@ OPTIONS_CONFIG="
 
 intercept_help \
   --name "pm pin" \
-  --description "Updates and pins the Package Manager version across the entire workspace." \
+  --description "Updates and pins the Package Manager version across the entire workspace" \
   --usage "ddx pm pin -n <name> -v <semver> [options]" \
   --options "$OPTIONS_CONFIG" \
   -- "$@"
@@ -64,17 +64,17 @@ intercept_help \
 eval "$(parse_options "$OPTIONS_CONFIG")"
 
 if [[ "$PM_NAME" != "yarn" && "$PM_NAME" != "npm" && "$PM_NAME" != "pnpm" ]]; then
-  log -e -c "gray" -m "Error: Unsupported package manager '$PM_NAME'. Use: yarn, npm, or pnpm." -slm "$IS_SILENT"
+  log -e -c "gray" -m "Error: Unsupported package manager '$PM_NAME'. Use: yarn, npm, or pnpm" -slm "$IS_SILENT"
   exit 1
 fi
 
 if [[ ! "$PM_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-  log -e -c "gray" -m "Error: Version '$PM_VERSION' must be a strict SemVer (e.g., 1.2.3)." -slm "$IS_SILENT"
+  log -e -c "gray" -m "Error: Version '$PM_VERSION' must be a strict SemVer (e.g., 1.2.3)" -slm "$IS_SILENT"
   exit 1
 fi
 
 if is_falsy "$SHOULD_PIN_VOLTA" && is_falsy "$SHOULD_PIN_PKG_JSON" && is_falsy "$SHOULD_PIN_DOCKERFILE" && is_falsy "$SHOULD_PIN_DOCS"; then
-  log -e -c "gray" -m "Error: At least one target flag must be specified: --volta, --package-json, --dockerfile, or --docs." -slm "$IS_SILENT"
+  log -e -c "gray" -m "Error: At least one target flag must be specified: --volta, --package-json, --dockerfile, or --docs" -slm "$IS_SILENT"
   exit 1
 fi
 

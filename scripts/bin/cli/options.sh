@@ -10,8 +10,8 @@
 # Types:
 #   string    : Standard text argument
 #   int       : Validates that the argument is an integer >= 1
-#   flag      : Binary switch (0 by default, 1 if passed without arguments). Ignores default values.
-#   toggle    : Boolean-like argument. Accepts any value, validates via is_enabled, and normalizes to 0 or 1.
+#   flag      : Binary switch (0 by default, 1 if passed without arguments). Ignores default values
+#   toggle    : Boolean-like argument. Accepts any value, validates via is_enabled, and normalizes to 0 or 1
 #
 # Types can optionally include a custom display name after a colon for help rendering, e.g.:
 #   string:dirs
@@ -41,7 +41,7 @@ source "$BIN_DIR/utils/flags.sh"
 parse_options() {
   intercept_help \
     --name "parse_options" \
-    --description "Generates JIT bash parsing logic from a declarative configuration string." \
+    --description "Generates JIT bash parsing logic from a declarative configuration string" \
     --usage "parse_options <config_string> [error_action]" \
     -- "$@"
 
@@ -96,10 +96,10 @@ parse_options() {
       echo "      $var_name=1"
       echo "      shift 1"
     else
-      echo "      if [[ -z \"\$2\" || \"\$2\" == -* ]]; then log -e -c \"gray\" -m \"Error: Option '\$1' requires an argument.\" -ll \"\${log_level:-1}\"; $error_action; fi"
+      echo "      if [[ -z \"\$2\" || \"\$2\" == -* ]]; then log -e -c \"gray\" -m \"Error: Option '\$1' requires an argument\" -ll \"\${log_level:-1}\"; $error_action; fi"
 
       if [[ "$base_type" == "int" ]]; then
-        echo "      if ! [[ \"\$2\" =~ ^[1-9][0-9]*\$ ]]; then log -e -c \"gray\" -m \"Error: Option '\$1' must be an integer >= 1.\" -ll \"\${log_level:-1}\"; $error_action; fi"
+        echo "      if ! [[ \"\$2\" =~ ^[1-9][0-9]*\$ ]]; then log -e -c \"gray\" -m \"Error: Option '\$1' must be an integer >= 1\" -ll \"\${log_level:-1}\"; $error_action; fi"
         echo "      $var_name=\"\$2\""
       elif [[ "$base_type" == "toggle" ]]; then
         echo "      if is_enabled \"\$2\"; then $var_name=1; else $var_name=0; fi"
@@ -127,7 +127,7 @@ parse_options() {
     [[ -z "$var_name" || "$var_name" == \#* ]] && continue
 
     if [[ "$requirement" == "required" ]]; then
-      echo "if [[ -z \"\$$var_name\" ]]; then log -e -c \"gray\" -m \"Error: The '$long_opt' option is required.\" -ll \"\${log_level:-1}\"; $error_action; fi"
+      echo "if [[ -z \"\$$var_name\" ]]; then log -e -c \"gray\" -m \"Error: The '$long_opt' option is required\" -ll \"\${log_level:-1}\"; $error_action; fi"
     fi
   done <<< "$config"
 }

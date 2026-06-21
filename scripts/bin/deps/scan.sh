@@ -45,7 +45,7 @@ OPTIONS_CONFIG="
 
 intercept_help \
   --name "deps scan" \
-  --description "Scans lockfiles for unstable dependencies." \
+  --description "Scans lockfiles for unstable dependencies" \
   --usage "ddx deps scan [options]" \
   --options "$OPTIONS_CONFIG" \
   -- "$@"
@@ -68,5 +68,5 @@ fi
 if is_truthy "$SHOULD_PIN_UNSTABLE"; then
   source "$DEPS_INTERNAL_DIR/pin-unstable.sh"
 elif [ -n "$DEPENDABOT_FILE" ]; then
-  log -i -ic "$ICON_TIP" -m "Run with --pin-unstable to automatically block minor updates for these packages." -slm "$IS_SILENT"
+  log -i -ic "$ICON_TIP" -m "Run with --pin-unstable to automatically block minor updates for these packages" -slm "$IS_SILENT"
 fi

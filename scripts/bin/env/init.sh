@@ -40,7 +40,7 @@ OPTIONS_CONFIG="
 
 intercept_help \
   --name "env init" \
-  --description "Initializes local environment files from examples across the project workspace." \
+  --description "Initializes local environment files from examples across the project workspace" \
   --usage "ddx env init [options]" \
   --options "$OPTIONS_CONFIG" \
   -- "$@"
@@ -75,7 +75,7 @@ fi
 FILES_FOUND=${#FILES_TO_PROCESS[@]}
 
 if [[ "$FILES_FOUND" -eq 0 ]]; then
-  log -c "gray" -m "No files matching '$FILE_FROM' were found." -ll "$LOG_LEVEL" -slm "$IS_SILENT"
+  log -c "gray" -m "No files matching '$FILE_FROM' were found" -ll "$LOG_LEVEL" -slm "$IS_SILENT"
   exit 0
 fi
 
