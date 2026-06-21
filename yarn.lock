@@ -226,9 +226,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dispersiajs/dx@workspace:.":
+"@dispersiajs/ddx@workspace:.":
   version: 0.0.0-use.local
-  resolution: "@dispersiajs/dx@workspace:."
+  resolution: "@dispersiajs/ddx@workspace:."
   dependencies:
     "@commitlint/cli": "npm:^21.0.2"
     "@commitlint/config-conventional": "npm:^21.0.2"
