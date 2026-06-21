@@ -2,18 +2,18 @@ const fs = require('fs');
 const path = require('path');
 const { EnvironmentError, SemVerError, isSemVer } = require('../../utils/env.js');
 
-const { ROOT_DIR, PACKAGE_MANAGER, PM_VERSION, PM_WORKSPACES: RAW_WORKSPACES } = process.env;
+const { ROOT_DIR, PM_NAME, PM_VERSION, PM_WORKSPACES: RAW_WORKSPACES } = process.env;
 
 if (!ROOT_DIR) throw new EnvironmentError('ROOT_DIR');
-if (!PACKAGE_MANAGER) throw new EnvironmentError('PACKAGE_MANAGER');
+if (!PM_NAME) throw new EnvironmentError('PM_NAME');
 if (!PM_VERSION) throw new EnvironmentError('PM_VERSION');
 if (!isSemVer(PM_VERSION)) throw new SemVerError(PM_VERSION);
 
 const IGNORED_FOLDERS = ['src', 'dist', 'build', 'node_modules'];
 const WORKSPACES = RAW_WORKSPACES?.trim().split(/[\s,]+/) ?? [];
 
-const COREPACK_REGEX = new RegExp(`corepack prepare ${PACKAGE_MANAGER}@[0-9\\.]+`, 'g');
-const COREPACK_REPLACEMENT = `corepack prepare ${PACKAGE_MANAGER}@${PM_VERSION}`;
+const COREPACK_REGEX = new RegExp(`corepack prepare ${PM_NAME}@[0-9\\.]+`, 'g');
+const COREPACK_REPLACEMENT = `corepack prepare ${PM_NAME}@${PM_VERSION}`;
 
 function updateDockerfile(filePath) {
   if (!fs.existsSync(filePath)) return;
