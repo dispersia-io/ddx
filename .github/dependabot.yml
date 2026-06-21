@@ -23,3 +23,17 @@ updates:
         update-types: [version-update:semver-minor]
       - dependency-name: string-argv
         update-types: [version-update:semver-minor]
+
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    target-branch: 'canary'
+    groups:
+      actions-dependencies:
+        patterns:
+          - '*'
+    labels:
+      - 'deps'
+      - 'actions'
+      - 'dependabot'
