@@ -5,6 +5,7 @@
 # Options:
 #   * -ps, --paths <string>     : Space-separated sequence of targets and links
 #     -ll, --log-level <int>    : Logging indentation level (Default: 1)
+#     -sl, --silent             : Suppress standard output logs.
 #
 # Usage:
 #   ddx symlink create -ps "<target1> <link1> [<target2> <link2> ...]" [options]
@@ -14,8 +15,6 @@
 #
 # Examples:
 #   ddx symlink create -ps "./foo ./foo_link ./bar ./bar_link"
-
-# ! TODO: add silent mode
 
 SYMLINKS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BIN_DIR="$(cd "$SYMLINKS_DIR/.." && pwd)"
@@ -30,6 +29,7 @@ source "$BIN_DIR/utils/log.sh"
 OPTIONS_CONFIG="
   PATHS     | --paths     | -ps | required | string:pairs |   | Space-separated sequence of target and link path pairs
   LOG_LEVEL | --log-level | -ll | optional | int          | 1 | Logging indentation level
+  IS_SILENT | --silent    | -sl | optional | flag         |   | Suppress all log outputs
 "
 
 intercept_help \
@@ -55,7 +55,7 @@ resolve_path() {
 read -ra PATH_ARR <<< "$PATHS"
 
 if [ $((${#PATH_ARR[@]} % 2)) -ne 0 ] || [ ${#PATH_ARR[@]} -eq 0 ]; then
-  log -e -m "Error: Symlinks must be provided in path pairs. Found ${#PATH_ARR[@]} paths"
+  log -e -m "Error: Symlinks must be provided in path pairs. Found ${#PATH_ARR[@]} paths" -slm "$IS_SILENT"
   exit 1
 fi
 
@@ -70,8 +70,8 @@ for ((i = 0; i < ${#PATH_ARR[@]}; i += 2)); do
   ln -s "$ABS_TARGET" "$ABS_LINK"
 
   if [ $? -eq 0 ]; then
-    log -cl -s -ic "$ICON_LINK" -m "Symlink created: $RAW_TARGET -> $RAW_LINK" -ll "$LOG_LEVEL"
+    log -cl -s -ic "$ICON_LINK" -m "Symlink created: $RAW_TARGET -> $RAW_LINK" -ll "$LOG_LEVEL" -slm "$IS_SILENT"
   else
-    log -cl -e -ic "$ICON_LINK" -m "Failed to create symlink: $RAW_TARGET -> $RAW_LINK" -ll "$LOG_LEVEL"
+    log -cl -e -ic "$ICON_LINK" -m "Failed to create symlink: $RAW_TARGET -> $RAW_LINK" -ll "$LOG_LEVEL" -slm "$IS_SILENT"
   fi
 done
