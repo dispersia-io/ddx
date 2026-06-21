@@ -1,0 +1,56 @@
+{
+  "name": "@dispersiajs/ddx",
+  "version": "1.0.0",
+  "description": "Internal developer experience (DX) infrastructure and automation toolset for Dispersia projects",
+  "license": "MIT",
+  "author": "Oleg Putseiko <oleg.putseiko@gmail.com> (https://github.com/oleg-putseiko)",
+  "keywords": [
+    "dx",
+    "bash",
+    "automation",
+    "scripts",
+    "ci-cd",
+    "dispersia"
+  ],
+  "homepage": "https://github.com/dispersia-io/ddx#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dispersia-io/ddx.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dispersia-io/ddx/issues"
+  },
+  "type": "commonjs",
+  "files": [
+    "scripts/bin/**/*"
+  ],
+  "bin": "./scripts/bin/ddx.js",
+  "scripts": {
+    "scripts:perms": "find ./scripts -type f -name \"*.sh\" -exec chmod +x {} +",
+    "scripts:perms:track": "find ./scripts -type f -name \"*.sh\" -exec git update-index --chmod=+x {} +",
+    "cleanup": "bash ./scripts/internal/cleanup.sh",
+    "setup": "bash ./scripts/internal/setup.sh",
+    "audit": "bash ./scripts/bin/deps/scan.sh --audit",
+    "audit:fix": "bash ./scripts/bin/deps/scan.sh --pin-unstable",
+    "pin": "bash ./scripts/bin/package-manager/pin.sh --name yarn --package-json --volta --docs -v"
+  },
+  "dependencies": {
+    "yaml": "^2.9.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^21.0.2",
+    "@commitlint/config-conventional": "^21.0.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.7",
+    "prettier": "^3.8.4",
+    "prettier-plugin-sh": "^0.18.1"
+  },
+  "engines": {
+    "node": "^20.9.0 || >=21.1.0"
+  },
+  "volta": {
+    "node": "24.14.1",
+    "yarn": "4.17.0"
+  },
+  "packageManager": "yarn@4.17.0"
+}

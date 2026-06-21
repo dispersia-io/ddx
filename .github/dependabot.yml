@@ -1,0 +1,39 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: daily
+    labels:
+      - deps
+      - node
+      - dependabot
+    ignore:
+      - dependency-name: '*'
+        update-types: [version-update:semver-major]
+      - dependency-name: '@dispersiajs/ddx'
+        update-types: [version-update:semver-minor]
+      - dependency-name: '@reteps/dockerfmt'
+        update-types: [version-update:semver-minor]
+      - dependency-name: is-arrayish
+        update-types: [version-update:semver-minor]
+      - dependency-name: prettier-plugin-sh
+        update-types: [version-update:semver-minor]
+      - dependency-name: sh-syntax
+        update-types: [version-update:semver-minor]
+      - dependency-name: string-argv
+        update-types: [version-update:semver-minor]
+
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    target-branch: 'canary'
+    groups:
+      actions-dependencies:
+        patterns:
+          - '*'
+    labels:
+      - 'deps'
+      - 'actions'
+      - 'dependabot'

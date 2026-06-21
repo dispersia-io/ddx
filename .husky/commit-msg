@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+source "$(dirname "$0")/../scripts/internal/husky.sh"
+
+run_step "Validating commit message" "Commit message is valid" yarn commitlint --edit "$1"
