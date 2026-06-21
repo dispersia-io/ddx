@@ -68,7 +68,7 @@ run_task() {
   else
     if ! is_enabled "$silent_mode"; then
       echo ""
-      log -e -m "$error_msg" -ll "$log_level"
+      log -e -ic "$ICON_FAIL" -m "$error_msg" -ll "$log_level"
     fi
     return 1
   fi
