@@ -24,6 +24,9 @@
   "files": [
     "scripts/bin/**/*"
   ],
+  "bin": {
+    "ddx": "./scripts/bin/ddx.js"
+  },
   "scripts": {
     "scripts:perms": "find ./scripts -type f -name \"*.sh\" -exec chmod +x {} +",
     "scripts:perms:track": "find ./scripts -type f -name \"*.sh\" -exec git update-index --chmod=+x {} +",
@@ -31,7 +34,7 @@
     "setup": "bash ./scripts/internal/setup.sh",
     "deps:scan": "bash ./scripts/bin/deps/scan.sh --audit",
     "deps:scan:fix": "bash ./scripts/bin/deps/scan.sh --pin-unstable",
-    "pin": "bash ./scripts/bin/package-manager/pin.sh -pm yarn --package-json --volta --docs -v"
+    "pin": "bash ./scripts/bin/package-manager/pin.sh --name yarn --package-json --volta --docs -v"
   },
   "dependencies": {
     "yaml": "^2.9.0"

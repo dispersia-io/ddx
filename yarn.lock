@@ -237,6 +237,8 @@ __metadata:
     prettier: "npm:^3.8.4"
     prettier-plugin-sh: "npm:^0.18.1"
     yaml: "npm:^2.9.0"
+  bin:
+    ddx: ./scripts/bin/ddx.js
   languageName: unknown
   linkType: soft
 
