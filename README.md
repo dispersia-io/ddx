@@ -5,7 +5,7 @@ Internal developer tooling for managing local environments, workspace dependenci
 ## Installation
 
 ```bash
-npm install -g @dispersiajs/dx
+npm install -g @dispersiajs/ddx
 ```
 
 ## Usage
