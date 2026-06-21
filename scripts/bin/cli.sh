@@ -8,9 +8,8 @@
 #   ddx <command> [subcommand] [options]
 #   ddx [command] --help
 
-# ! TODO: add a version command
-
 BIN_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PACKAGE_ROOT_DIR="$BIN_DIR/../.."
 
 export NO_COLOR=0
 export NO_UNICODE=0
@@ -70,6 +69,12 @@ print_root_help() {
   echo -e "${COLOR_GRAY}Run 'ddx <command> [subcommand] --help' for more information on a specific command${COLOR_RESET}"
   echo ""
 }
+
+if [[ -z "$1" || "$1" == "--version" || "$1" == "-v" ]]; then
+  VERSION=$(grep '"version"' "$PACKAGE_ROOT_DIR/package.json" | head -n 1 | awk -F: '{ print $2 }' | sed 's/[", ]//g')
+  echo "$VERSION"
+  exit 0
+fi
 
 if [[ -z "$1" || "$1" == "--help" || "$1" == "-h" || "$1" == "help" ]]; then
   print_root_help
