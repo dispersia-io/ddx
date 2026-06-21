@@ -12,8 +12,10 @@ BIN_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 source "$BIN_DIR/core/root.sh"
 source "$BIN_DIR/core/theme.sh"
-source "$BIN_DIR/utils/log.sh"
+
 source "$BIN_DIR/cli/help.sh"
+
+source "$BIN_DIR/utils/log.sh"
 
 throw_unknown_command() {
   local cmd_path="$1"
