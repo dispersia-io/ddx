@@ -8,6 +8,8 @@
 #   ddx <command> [subcommand] [options]
 #   ddx [command] --help
 
+# ! TODO: add a version command
+
 BIN_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 export NO_COLOR=0

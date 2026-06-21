@@ -3,14 +3,21 @@
 # Initializes local environment files from examples across the project workspace.
 #
 # Options:
-#   --workspaces <dirs>, -w      : [Optional] Space-separated list of directories to scan.
-#   --from <filename>, -f        : [Optional] Source filename (e.g., .env.example). Default: ".env.example".
-#   --to <filename>, -t          : [Optional] Destination filename (e.g., .env). Default: ".env".
-#   --log-level <number>, -ll    : [Optional] Base level for logs (>= 1). Default: 1.
-#   --silent, -sl                : [Optional] Suppress standard output logs.
+#   -w, --workspaces <dirs>    : Space-separated list of directories to scan
+#   -f, --from <filename>      : Source filename (Default: ".env.example")
+#   -t, --to <filename>        : Destination filename (Default: ".env")
+#   -ll, --log-level <int>     : Logging indentation level (Default: 1)
+#   -sl, --silent              : Suppress standard output logs.
 #
 # Usage:
-#   bash scripts/bin/env/init.sh [--workspaces "apps packages"] [--from .env.example] [--to .env] [--log-level 1]
+#   ddx env init [options]
+#
+# Alternative (Direct execution):
+#   ./scripts/bin/env/init.sh [options]
+#
+# Examples:
+#   ddx env init -f .env.example -t .env
+#   ddx env init -w "apps packages"
 
 ENV_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BIN_DIR="$ENV_DIR/.."
@@ -27,7 +34,7 @@ OPTIONS_CONFIG="
   WORKSPACES       | --workspaces | -w  | optional | string:dirs     |              | Space-separated list of directories to scan
   FILE_FROM        | --from       | -f  | optional | string:filename | .env.example | Source filename template
   FILE_TO          | --to         | -t  | optional | string:filename | .env         | Destination filename to create
-  HEADER_LOG_LEVEL | --log-level  | -ll | optional | int:number      | 1            | Base level for output logs
+  HEADER_LOG_LEVEL | --log-level  | -ll | optional | int             | 1            | Logging indentation level
   IS_SILENT        | --silent     | -sl | optional | flag            |              | Suppress all log outputs
 "
 

@@ -2,15 +2,19 @@
 
 # Acts as a central router to unify command execution between tasks and granular subtasks.
 #
-# NOTE: This script is designed strictly for internal use and coordination
-# between other scripts; it is not intended for standalone execution.
-#
 # Subcommands:
-#   task       : [Optional] Dispatches the command to the 'run_task' executor.
-#   subtask    : [Optional] Dispatches the command to the 'run_subtask' executor.
+#   task       : Dispatches the command to the 'run_task' executor
+#   subtask    : Dispatches the command to the 'run_subtask' executor
 #
 # Usage:
-# execute [task | subtask] [options...]
+#   ddx exec <subcommand> [options]
+#
+# Alternative (Direct execution):
+#   ./scripts/bin/tasks/execute.sh <subcommand> [subcommand-options]
+#
+# Examples:
+#   ddx exec task -n "Push image" -c "docker push"
+#   ddx exec subtask -n "Install deps" -c "yarn install"
 
 [[ -n "$__IS_TASKS_EXECUTE_SH_INCLUDED" ]] && return 0
 __IS_TASKS_EXECUTE_SH_INCLUDED=1
@@ -25,9 +29,9 @@ source "$TASKS_DIR/subtask.sh"
 
 execute() {
   intercept_help \
-    --name "execute" \
+    --name "exec" \
     --description "Acts as a central router to unify command execution between tasks and granular subtasks." \
-    --usage "execute [task | subtask] [options...]" \
+    --usage "ddx exec <subcommand> [options]" \
     -- "$@"
 
   local target="$1"

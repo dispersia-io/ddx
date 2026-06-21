@@ -3,11 +3,18 @@
 # Validates the active Node.js version against the project's requirements.
 #
 # Options:
-#   --file, -f       : [Optional] Override the path to the .node-version file. Default is $ROOT_DIR/.node-version
-#   --silent, -sl    : [Optional] Suppress standard output logs.
+#   -f, --file <path>    : Override the path to the .node-version file (Default: "$ROOT_DIR/.node-version")
+#   -sl, --silent        : Suppress standard output logs
 #
 # Usage:
-#   bash scripts/bin/node/validate.sh [--file <path>]
+#   ddx node validate [options]
+#
+# Alternative (Direct execution):
+#   ./scripts/bin/node/validate.sh [options]
+#
+# Examples:
+#   ddx node validate
+#   ddx node validate -f "/custom/path/to/.node-version"
 
 NODE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BIN_DIR="$(cd "$NODE_DIR/.." && pwd)"

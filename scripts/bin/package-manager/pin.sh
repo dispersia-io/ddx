@@ -6,20 +6,27 @@
 # by automatically updating targeted parts of the project using specific flags.
 #
 # Options:
-#   --name, -n <string>              : [Required] The package manager to use (yarn, npm, pnpm).
-#   --version, -v <semver>           : [Required] Strict semantic version (e.g., 4.13.0).
-#   --workspaces, -w <dirs>          : [Optional] Space or comma-separated list of workspace
-#                                      directories to recursively scan (e.g., "apps packages docs").
-#   --silent, -sl                    : [Optional] Suppress standard output logs.
+#   * -n, --name <string>        : The package manager to use (yarn, npm, pnpm)
+#   * -v, --version <semver>     : Strict semantic version (e.g., 4.13.0)
+#     -w, --workspaces <dirs>    : Space or comma-separated list of workspace
+#                                  directories to recursively scan (e.g., "apps packages docs")
+#     -sl, --silent              : Suppress standard output logs
 #
 # Target Flags (At least one must be specified):
-#   --volta                          : Update version in Volta configuration.
-#   --package-json                   : Update 'packageManager' in package.json files.
-#   --dockerfile                     : Update corepack in Dockerfile files.
-#   --docs                           : Update dynamic version markers in Markdown documents.
+#     --volta                    : Update version in Volta configuration
+#     --package-json             : Update 'packageManager' in package.json files
+#     --dockerfile               : Update corepack in Dockerfile files
+#     --docs                     : Update dynamic version markers in Markdown documents
 #
 # Usage:
-#   bash scripts/bin/package-manager/pin.sh -n yarn -v 4.13.0 --package-json --dockerfile
+#   ddx pm pin -n <name> -v <semver> [options]
+#
+# Alternative (Direct execution):
+#   ./scripts/bin/package-manager/pin.sh -n <name> -v <semver> [options]
+#
+# Examples:
+#   ddx pm pin -n yarn -v 4.17.0 --volta --package-json --dockerfile
+#   ddx pm pin -n yarn -v 4.17.0 -w "apps packages docs" --docs
 
 PM_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PM_INTERNAL_DIR="$PM_DIR/_internal"
@@ -48,9 +55,9 @@ OPTIONS_CONFIG="
 "
 
 intercept_help \
-  --name "package-manager pin" \
+  --name "pm pin" \
   --description "Updates and pins the Package Manager version across the entire workspace." \
-  --usage "ddx package-manager pin [options]" \
+  --usage "ddx pm pin -n <name> -v <semver> [options]" \
   --options "$OPTIONS_CONFIG" \
   -- "$@"
 

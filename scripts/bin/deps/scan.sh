@@ -6,14 +6,21 @@
 # to ignore minor version updates for these specific packages.
 #
 # Options:
-#   --package-manager, -pm <name>    : [Optional] Specifies the package manager (yarn, npm, pnpm). Default: auto-detect or yarn.
-#   --audit, -a                      : [Optional] Run security audit before scanning.
-#   --pin-unstable, -pu              : [Optional] Automatically write ignore rules to Dependabot config.
-#   --meta, -m                       : [Optional] Emit state markers (__UPDATED__, __SKIPPED__) for automation workflows.
-#   --silent, -sl                    : [Optional] Suppress standard output logs.
+#   -pm, --package-manager <name>    : Specifies the package manager: yarn, npm, pnpm (Default: auto-detect or yarn)
+#   -a, --audit                      : Run security audit before scanning
+#   -pu, --pin-unstable              : Automatically write ignore rules to Dependabot config
+#   -m, --meta                       : Emit state markers (__UPDATED__, __SKIPPED__) for automation workflows
+#   -sl, --silent                    : Suppress standard output logs
 #
 # Usage:
-#   bash scripts/bin/deps/scan.sh [--package-manager <yarn/npm/pnpm>] [--audit] [--pin-unstable] [--silent]
+#   ddx deps scan [options]
+#
+# Alternative (Direct execution):
+#   ./scripts/bin/deps/scan.sh [options]
+#
+# Examples:
+#   ddx deps scan --pin-unstable
+#   ddx deps scan --package-manager yarn --audit
 
 DEPS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DEPS_INTERNAL_DIR="$DEPS_DIR/_internal"
@@ -29,7 +36,7 @@ source "$BIN_DIR/utils/log.sh"
 source "$BIN_DIR/utils/flags.sh"
 
 OPTIONS_CONFIG="
-  PACKAGE_MANAGER     | --package-manager | -pm  | optional | string:name | | Specifies the package manager: yarn, npm or pnpm. (Default: auto-detect or yarn)
+  PACKAGE_MANAGER     | --package-manager | -pm  | optional | string:name | | Specifies the package manager: yarn, npm or pnpm (Default: auto-detect or yarn)
   SHOULD_RUN_AUDIT    | --audit           | -a   | optional | flag        | | Run security audit before scanning
   SHOULD_PIN_UNSTABLE | --pin-unstable    | -pu  | optional | flag        | | Automatically write ignore rules to Dependabot config
   SHOULD_EMIT_META    | --meta            | -m   | optional | flag        | | Emit state markers for automation workflows

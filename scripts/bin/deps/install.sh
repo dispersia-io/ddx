@@ -3,11 +3,18 @@
 # Installs all dependencies and sets up git hooks.
 #
 # Options:
-#   --package-manager, -pm <name>    : [Optional] Specifies the package manager (yarn, npm, pnpm). Default is auto-detect or yarn.
-#   --silent, -sl                    : [Optional] Suppress standard output logs.
+#   -pm, --package-manager <name>    : Specifies the package manager: yarn, npm, pnpm (Default: auto-detect or yarn)
+#   -sl, --silent                    : Suppress standard output logs
 #
 # Usage:
-#   bash scripts/bin/deps/install.sh [--package-manager <yarn/npm/pnpm>] [--silent]
+#   ddx deps install [options]
+#
+# Alternative (Direct execution):
+#   ./scripts/bin/deps/install.sh [options]
+#
+# Examples:
+#   ddx deps install -pm yarn
+#   ddx deps install -sl
 
 DEPS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DEPS_INTERNAL_DIR="$DEPS_DIR/_internal"

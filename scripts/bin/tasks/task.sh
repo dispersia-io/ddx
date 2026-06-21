@@ -2,17 +2,20 @@
 
 # Executes a high-level task with content passed as a command string.
 #
-# NOTE: This script is designed strictly for internal use and coordination
-# between other scripts; it is not intended for standalone execution.
-#
 # Options:
-#   --name, -n             : [Required] Name of the task
-#   --cmd, -c              : [Required] Command string to execute
-#   --icon, -i             : [Optional] Icon for the task
-#   --success-msg, -sm     : [Optional] Message to display on success (defaults to generic message)
-#   --error-msg, -em       : [Optional] Message to display on error (defaults to generic message)
-#   --log-level, -ll       : [Optional] Logging indentation level (defaults to 1)
-#   --silent-mode, -slm    : [Optional] Suppresses all logs (boolean-like value)
+#   * -n, --name             : Name of the task
+#   * -c, --cmd              : Command string to execute
+#     -i, --icon             : Icon for the task
+#     -sm, --success-msg     : Message to display on success (Default: auto-generated)
+#     -em, --error-msg       : Message to display on error (Default: auto-generated)
+#     -ll, --log-level       : Logging indentation level (Default: 1)
+#     -slm, --silent-mode    : Suppresses all logs (Default: "disabled")
+#
+# Usage:
+#   ddx exec task -n <string> -c <string> [options]
+#
+# Examples:
+#   ddx exec task -n "Push image" -c "docker push"
 
 [[ -n "$__IS_TASKS_TASK_SH_INCLUDED" ]] && return 0
 __IS_TASKS_TASK_SH_INCLUDED=1
@@ -42,9 +45,9 @@ run_task() {
   "
 
   intercept_help \
-    --name "task" \
+    --name "exec task" \
     --description "Executes a high-level task with content passed as a command string." \
-    --usage "task [options]" \
+    --usage "ddx exec task -n <string> -c <string> [options]" \
     --options "$OPTIONS_CONFIG" \
     -- "$@"
 

@@ -8,7 +8,7 @@ UTILS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$UTILS_DIR/log.sh"
 
 # Validates and checks if the provided value represents an enabled flag state.
-# Accepts typical boolean markers (case-insensitive).
+# Accepts typical toggle markers (case-insensitive).
 #
 # Truthy values: 1, "true", "y", "yes", "on", "enable", "enabled" -> Returns 0
 # Falsy values:  0, "false", "n", "no", "off", "disable", "disabled", or empty "" -> Returns 1

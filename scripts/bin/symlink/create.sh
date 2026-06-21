@@ -3,11 +3,19 @@
 # Automates the creation of absolute symbolic links.
 #
 # Options:
-#   --paths, -ps <string>     : [Required] Space-separated sequence of targets and links.
-#   --log-level, -ll <int>    : [Optional] Logging indentation level (defaults to 1)
+#   * -ps, --paths <string>     : Space-separated sequence of targets and links
+#     -ll, --log-level <int>    : Logging indentation level (Default: 1)
 #
 # Usage:
-#   bash scripts/bin/symlink/create.sh [--paths "./from.js ./to.js"] [--log-level 2]
+#   ddx symlink create -ps "<target1> <link1> [<target2> <link2> ...]" [options]
+#
+# Alternative (Direct execution):
+#   ./scripts/bin/symlink/create.sh -ps <pairs> [options]
+#
+# Examples:
+#   ddx symlink create -ps "./foo ./foo_link ./bar ./bar_link"
+
+# ! TODO: add silent mode
 
 SYMLINKS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BIN_DIR="$(cd "$SYMLINKS_DIR/.." && pwd)"
@@ -21,7 +29,7 @@ source "$BIN_DIR/utils/log.sh"
 
 OPTIONS_CONFIG="
   PATHS     | --paths     | -ps | required | string:pairs |   | Space-separated sequence of target and link path pairs
-  LOG_LEVEL | --log-level | -ll | optional | int          | 1 | Indentation level for logging
+  LOG_LEVEL | --log-level | -ll | optional | int          | 1 | Logging indentation level
 "
 
 intercept_help \

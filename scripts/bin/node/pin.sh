@@ -6,20 +6,27 @@
 # of the project using specific flags.
 #
 # Options:
-#   --version, -v <semver>           : [Required] Strict semantic version (e.g., 24.14.1).
-#   --workspaces, -w <dirs>          : [Optional] Space or comma-separated list of workspace
-#                                      directories to recursively scan.
-#   --silent, -sl                    : [Optional] Suppress standard output logs.
+#   * -v, --version <semver>     : Strict semantic version (e.g., 24.14.1)
+#     -w, --workspaces <dirs>    : Space or comma-separated list of workspace
+#                                  directories to recursively scan
+#     -sl, --silent              : Suppress standard output logs
 #
 # Target Flags (At least one must be specified):
-#   --volta                          : Update version in Volta configuration.
-#   --version-file                   : Update the root .node-version file.
-#   --package-json                   : Update 'engines.node' in package.json files.
-#   --env                            : Update NODE_VERSION in environment files.
-#   --docs                           : Update dynamic version markers in Markdown documents.
+#     --volta                    : Update version in Volta configuration
+#     --version-file             : Update the root .node-version file
+#     --engine                   : Update 'engines.node' in package.json files
+#     --env                      : Update NODE_VERSION in environment files
+#     --docs                     : Update dynamic version markers in Markdown documents
 #
 # Usage:
-#   bash scripts/bin/node/pin.sh -v 24.14.1 --volta --package-json --env
+#   ddx node pin -v <semver> [options]
+#
+# Alternative (Direct execution):
+#   ./scripts/bin/node/pin.sh -v <semver> [options]
+#
+# Examples:
+#   ddx node pin -v 24.14.1 --volta --engine
+#   ddx node pin -v 24.14.1 -w "apps packages" --env --docs
 
 NODE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 NODE_INTERNAL_DIR="$NODE_DIR/_internal"
@@ -41,7 +48,7 @@ OPTIONS_CONFIG="
   NODE_WORKSPACES         | --workspaces   | -w  | optional | string:dirs   | | Space or comma-separated list of workspace directories to scan
   SHOULD_PIN_VOLTA        | --volta        |     | optional | flag          | | Update version in Volta configuration
   SHOULD_PIN_VERSION_FILE | --version-file |     | optional | flag          | | Update the root .node-version file
-  SHOULD_PIN_PKG_JSON     | --package-json |     | optional | flag          | | Update 'engines.node' in package.json files
+  SHOULD_PIN_ENGINE       | --engine       |     | optional | flag          | | Update 'engines.node' in package.json files
   SHOULD_PIN_ENV          | --env          |     | optional | flag          | | Update NODE_VERSION in environment files
   SHOULD_PIN_DOCS         | --docs         |     | optional | flag          | | Update version markers in documentation
   IS_SILENT               | --silent       | -sl | optional | flag          | | Suppress standard output logs
@@ -50,7 +57,7 @@ OPTIONS_CONFIG="
 intercept_help \
   --name "node pin" \
   --description "Updates and pins the Node.js version across the entire workspace." \
-  --usage "ddx node pin -v <version> [options]" \
+  --usage "ddx node pin -v <semver> [options]" \
   --options "$OPTIONS_CONFIG" \
   -- "$@"
 
@@ -61,8 +68,8 @@ if [[ ! "$NODE_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
   exit 1
 fi
 
-if is_falsy "$SHOULD_PIN_VOLTA" && is_falsy "$SHOULD_PIN_VERSION_FILE" && is_falsy "$SHOULD_PIN_PKG_JSON" && is_falsy "$SHOULD_PIN_ENV" && is_falsy "$SHOULD_PIN_DOCS"; then
-  log -e -c "gray" -m "Error: At least one target flag must be specified: --volta, --version-file, --package-json, --env, or --docs." -slm "$IS_SILENT"
+if is_falsy "$SHOULD_PIN_VOLTA" && is_falsy "$SHOULD_PIN_VERSION_FILE" && is_falsy "$SHOULD_PIN_ENGINE" && is_falsy "$SHOULD_PIN_ENV" && is_falsy "$SHOULD_PIN_DOCS"; then
+  log -e -c "gray" -m "Error: At least one target flag must be specified: --volta, --version-file, --engine, --env, or --docs." -slm "$IS_SILENT"
   exit 1
 fi
 
@@ -101,8 +108,8 @@ if is_truthy "$SHOULD_PIN_VERSION_FILE"; then
       --silent-mode \"${IS_SILENT}\""
 fi
 
-if is_truthy "$SHOULD_PIN_PKG_JSON"; then
-  UPDATE_PKG_JSON_CMD="node \"$NODE_INTERNAL_DIR/update-package-json.js\""
+if is_truthy "$SHOULD_PIN_ENGINE"; then
+  UPDATE_PKG_JSON_CMD="node \"$NODE_INTERNAL_DIR/update-engine.js\""
 
   PIN_CMD="$PIN_CMD && \\
     execute subtask \\

@@ -2,38 +2,29 @@
 
 # Executes a subtask with formatted output.
 #
-# NOTE: This script is designed strictly for internal use and coordination
-# between other scripts; it is not intended for standalone execution.
-#
 # Options:
-#   --cmd, -c              : [Required] Command string to execute
-#   --icon, -i             : [Optional] Icon for the task
-#   --subject, -s          : [Optional] Subject of the action
-#   --template, -t         : [Optional] Predefined action template (Mode 1)
-#   --name, -n             : [Optional] Custom name for the task (Mode 2 & 3)
-#   --success-msg, -sm     : [Optional] Custom success text (Mode 2 & 3)
-#   --error-msg, -em       : [Optional] Custom error text (Mode 2 & 3)
-#   --log-level, -ll       : [Optional] Logging indentation level (defaults to 2)
-#   --silent-mode, -slm    : [Optional] Suppresses all logs (boolean-like value)
+#   * -c, --cmd              : Command string to execute
+#     -i, --icon             : Icon for the task
+#     -n, --name             : Custom name for the task
+#     -s, --subject          : Subject of the action
+#     -t, --template         : Predefined action template
+#     -sm, --success-msg     : Custom success text
+#     -em, --error-msg       : Custom error text
+#     -ll, --log-level       : Logging indentation level (Default: 2)
+#     -slm, --silent-mode    : Suppresses all logs (Default: disabled)
 #
-# Available Templates (--template):
+# Available Templates (-t, --template):
 #   install, update, pin, build, generate, verify, remove,
 #   start, stop, restart, deploy, sync, test, lint, format,
 #   publish, download, upload
 #
-# Usage Variants:
+# Usage:
+#   ddx exec subtask -c <string> [options]
 #
-# 1. Template Mode:
-#    Requires: --subject, --template, --cmd
-#    Example: run_subtask -i "🌈" -s "Prisma Client" -t "generate" -c "$GENERATE_CMD"
-#
-# 2. Custom WITHOUT Subject:
-#    Requires: --name, --cmd
-#    Example: run_subtask -n "Pushing image" -c "docker push"
-#
-# 3. Custom WITH Subject:
-#    Requires: --subject, --name, --cmd
-#    Example: run_subtask -s "Cache files" -n "Cleaning" -c "rm -rf"
+# Examples:
+#   ddx exec subtask -n "Install deps" -c "yarn install"
+#   ddx exec subtask -n "Installing" -s "Node modules" -c "yarn install"
+#   ddx exec subtask -t "install" -s "Node modules" -c "yarn install"
 
 [[ -n "$__IS_TASKS_SUBTASK_SH_INCLUDED" ]] && return 0
 __IS_TASKS_SUBTASK_SH_INCLUDED=1
@@ -64,9 +55,9 @@ run_subtask() {
   "
 
   intercept_help \
-    --name "subtask" \
+    --name "exec subtask" \
     --description "Executes a subtask with formatted output." \
-    --usage "subtask [options]" \
+    --usage "ddx exec subtask -c <string> [options]" \
     --options "$OPTIONS_CONFIG" \
     -- "$@"
 

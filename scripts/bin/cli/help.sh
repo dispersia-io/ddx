@@ -17,12 +17,6 @@ __trim() {
 
 # Renders and formats the CLI help screen, parsing declarative configuration for visually aligned output.
 print_help() {
-  intercept_help \
-    --name "ddx cli help print" \
-    --description "Renders and formats the CLI help screen with aligned options and descriptions." \
-    --usage "ddx cli help print <command_name> <description> <usage> [config]" \
-    -- "$@"
-
   local cmd_name="$1"
   local description="$2"
   local usage="$3"

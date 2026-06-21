@@ -5,12 +5,12 @@
 # binary flags handling, and required argument checks.
 #
 # Format:
-# <var_name> | <long_opt> | <short_opt> | <requirement> (required/optional) | <type[:display_type]> (string/int/flag/toggle) | <default_value> | <description>
+# <var_name> | <long_opt> | <short_opt> | <requirement> (required|optional) | <type[:display-type]> (string|int|flag|toggle) | <default-value> | <description>
 #
 # Types:
-#   string    : Standard text argument.
-#   int       : Validates that the argument is an integer >= 1.
-#   flag      : Binary switch (0 by default, 1 if passed without arguments). Ignores 'default_value'.
+#   string    : Standard text argument
+#   int       : Validates that the argument is an integer >= 1
+#   flag      : Binary switch (0 by default, 1 if passed without arguments). Ignores default values.
 #   toggle    : Boolean-like argument. Accepts any value, validates via is_enabled, and normalizes to 0 or 1.
 #
 # Types can optionally include a custom display name after a colon for help rendering, e.g.:
@@ -24,6 +24,8 @@
 #     IS_ENABLED  | --enabled      | -e   | optional | flag   |          | Enable the feature
 #     SILENT_MODE | --silent-mode  | -slm | optional | toggle | disabled | Run in silent mode
 #   "
+#
+#   eval "$(parse_options "$OPTIONS_CONFIG")"
 
 [[ -n "$__IS_CLI_OPTIONS_SH_INCLUDED" ]] && return 0
 __IS_CLI_OPTIONS_SH_INCLUDED=1
