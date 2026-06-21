@@ -12,8 +12,8 @@ if (!isSemVer(PM_VERSION)) throw new SemVerError(PM_VERSION);
 const IGNORED_FOLDERS = ['src', 'dist', 'build', 'node_modules'];
 const WORKSPACES = RAW_WORKSPACES?.trim().split(/[\s,]+/) ?? [];
 
-const START_TAG = '<!--yarn-version-->';
-const END_TAG = '<!--/yarn-version-->';
+const START_TAG = `<!--${PM_NAME}-version-->`;
+const END_TAG = `<!--/${PM_NAME}-version-->`;
 const TAGS_REGEX = new RegExp(`${START_TAG}.*?${END_TAG}`, 'gu');
 
 function updateDocument(filePath) {
