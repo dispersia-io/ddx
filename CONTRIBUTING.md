@@ -71,6 +71,7 @@ Run these commands from the root directory:
 - `yarn setup` — Initialize the environment (installs dependencies and configures hooks).
 - `yarn cleanup` — Perform a deep workspace purge.
 - `yarn audit` — Run a dependency audit utilizing the internal CLI.
+- `yarn new:command` — Scaffold a new CLI command structure and boilerplate using Hygen.
 
 ---
 

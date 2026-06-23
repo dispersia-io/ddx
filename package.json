@@ -32,7 +32,8 @@
     "setup": "bash ./scripts/internal/setup.sh",
     "audit": "bash ./scripts/bin/deps/scan.sh --audit",
     "audit:fix": "bash ./scripts/bin/deps/scan.sh --pin-unstable",
-    "pin": "bash ./scripts/bin/package-manager/pin.sh --name yarn --package-json --volta --docs -v"
+    "pin": "bash ./scripts/bin/package-manager/pin.sh --name yarn --package-json --volta --docs -v",
+    "new:command": "hygen cli command"
   },
   "dependencies": {
     "yaml": "^2.9.0"
@@ -41,6 +42,7 @@
     "@commitlint/cli": "^21.0.2",
     "@commitlint/config-conventional": "^21.0.2",
     "husky": "^9.1.7",
+    "hygen": "^6.2.11",
     "lint-staged": "^17.0.7",
     "prettier": "^3.8.4",
     "prettier-plugin-sh": "^0.18.1"
