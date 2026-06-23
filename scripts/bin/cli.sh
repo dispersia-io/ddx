@@ -41,31 +41,49 @@ throw_unknown_command() {
   exit 1
 }
 
+print_root_help_command() {
+  local command="$1"
+  local subcommand="$2"
+  local description="$3"
+  printf "   ${COLOR_ORANGE}%-20s %-30s${COLOR_RESET} ${COLOR_GRAY}%s${COLOR_RESET}\n" "$command" "$subcommand" "$description"
+}
+
 print_root_help() {
   echo -e "${COLOR_WHITE_BOLD}ddx${COLOR_RESET} - Dispersia Developer Experience CLI"
   echo ""
+
   echo -e "${COLOR_WHITE_BOLD}Usage:${COLOR_RESET}"
   echo -e "  ${COLOR_GRAY}\$${COLOR_ORANGE} ddx <command> [subcommand] [options]${COLOR_RESET}"
   echo ""
+
   echo -e "${COLOR_WHITE_BOLD}Commands:${COLOR_RESET}"
-  echo -e "  ${COLOR_ORANGE}e,  env       init (i)${COLOR_RESET}             ${COLOR_GRAY}Initialize local .env files${COLOR_RESET}"
-  echo -e "  ${COLOR_ORANGE}d,  deps      install (i)${COLOR_RESET}          ${COLOR_GRAY}Install workspace dependencies${COLOR_RESET}"
-  echo -e "  ${COLOR_ORANGE}              scan (s)${COLOR_RESET}             ${COLOR_GRAY}Scan project dependencies${COLOR_RESET}"
-  echo -e "  ${COLOR_ORANGE}n,  node      pin (p)${COLOR_RESET}              ${COLOR_GRAY}Pin Node.js version${COLOR_RESET}"
-  echo -e "  ${COLOR_ORANGE}              validate (v)${COLOR_RESET}         ${COLOR_GRAY}Validate current Node.js environment${COLOR_RESET}"
-  echo -e "  ${COLOR_ORANGE}pm            pin (p)${COLOR_RESET}              ${COLOR_GRAY}Pin Package Manager version${COLOR_RESET}"
-  echo -e "  ${COLOR_ORANGE}sl, symlink   create (c)${COLOR_RESET}           ${COLOR_GRAY}Create project symlinks${COLOR_RESET}"
+  print_root_help_command "e,  env            " "init (i)" "Initialize local .env files"
+  # GEN:HELP:ENV
+  print_root_help_command "d,  deps           " "install (i) " "Install workspace dependencies"
+  print_root_help_command "                   " "scan (s)    " "Scan project dependencies"
+  # GEN:HELP:DEPS
+  print_root_help_command "n,  node           " "pin (p)     " "Pin Node.js version"
+  print_root_help_command "                   " "validate (v)" "Validate current Node.js environment"
+  # GEN:HELP:NODE
+  print_root_help_command "pm, package-manager" "pin (p)     " "Pin Package Manager version"
+  # GEN:HELP:PM
+  print_root_help_command "sl, symlink        " "create (c)  " "Create project symlinks"
   echo ""
+  # GEN:HELP:SYMLINK
+  # GEN:HELP:NEW_COMMAND
+
   echo -e "${COLOR_WHITE_BOLD}Utilities:${COLOR_RESET}"
-  echo -e "  ${COLOR_ORANGE}x,  exec      task${COLOR_RESET}                 ${COLOR_GRAY}Execute specific pipeline task${COLOR_RESET}"
-  echo -e "  ${COLOR_ORANGE}              subtask${COLOR_RESET}              ${COLOR_GRAY}Execute specific pipeline subtask${COLOR_RESET}"
-  echo -e "  ${COLOR_ORANGE}l,  log${COLOR_RESET}                            ${COLOR_GRAY}Print formatted log message${COLOR_RESET}"
+  print_root_help_command "x,  exec" "task (t)   " "Execute specific pipeline task"
+  print_root_help_command "        " "subtask (s)" "Execute specific pipeline subtask"
+  print_root_help_command "l,  log " "           " "Print formatted log message"
   echo ""
+
   echo -e "${COLOR_WHITE_BOLD}CLI Core & Internal:${COLOR_RESET}"
-  echo -e "  ${COLOR_ORANGE}c,  cli       options parse${COLOR_RESET}        ${COLOR_GRAY}Parse raw CLI arguments into bash-eval string${COLOR_RESET}"
-  echo -e "  ${COLOR_ORANGE}              help intercept${COLOR_RESET}       ${COLOR_GRAY}Intercept --help flag and render formatting${COLOR_RESET}"
-  echo -e "  ${COLOR_ORANGE}              help print${COLOR_RESET}           ${COLOR_GRAY}Print raw help table directly${COLOR_RESET}"
+  print_root_help_command "c,  cli" "options (opts) parse (p)" "Parse raw CLI arguments into bash-eval string"
+  print_root_help_command "       " "help (h) intercept (i)  " "Intercept --help flag and render formatting"
+  print_root_help_command "       " "help (h) print (p)      " "Print raw help table directly"
   echo ""
+
   echo -e "${COLOR_GRAY}Run 'ddx <command> [subcommand] --help' for more information on a specific command${COLOR_RESET}"
   echo ""
 }
@@ -100,6 +118,7 @@ case "$COMMAND" in
 
     case "$SUBCOMMAND" in
       "i" | "init") bash "$BIN_DIR/env/init.sh" "$@" ;;
+      # GEN:ROUTER:ENV
       *) throw_unknown_command "$COMMAND $SUBCOMMAND" ;;
     esac
     ;;
@@ -121,6 +140,7 @@ case "$COMMAND" in
     case "$SUBCOMMAND" in
       "i" | "install") bash "$BIN_DIR/deps/install.sh" "$@" ;;
       "s" | "scan") bash "$BIN_DIR/deps/scan.sh" "$@" ;;
+      # GEN:ROUTER:DEPS
       *) throw_unknown_command "$COMMAND $SUBCOMMAND" ;;
     esac
     ;;
@@ -142,6 +162,7 @@ case "$COMMAND" in
     case "$SUBCOMMAND" in
       "p" | "pin") bash "$BIN_DIR/node/pin.sh" "$@" ;;
       "v" | "validate") bash "$BIN_DIR/node/validate.sh" "$@" ;;
+      # GEN:ROUTER:NODE
       *) throw_unknown_command "$COMMAND $SUBCOMMAND" ;;
     esac
     ;;
@@ -161,6 +182,7 @@ case "$COMMAND" in
 
     case "$SUBCOMMAND" in
       "p" | "pin") bash "$BIN_DIR/package-manager/pin.sh" "$@" ;;
+      # GEN:ROUTER:PM
       *) throw_unknown_command "$COMMAND $SUBCOMMAND" ;;
     esac
     ;;
@@ -180,9 +202,12 @@ case "$COMMAND" in
 
     case "$SUBCOMMAND" in
       "c" | "create") bash "$BIN_DIR/symlink/create.sh" "$@" ;;
+      # GEN:ROUTER:SYMLINK
       *) throw_unknown_command "$COMMAND $SUBCOMMAND" ;;
     esac
     ;;
+
+  # GEN:ROUTER:NEW_COMMAND
 
   "x" | "ex" | "exec" | "execute")
     source "$BIN_DIR/tasks/execute.sh"
@@ -257,6 +282,9 @@ case "$COMMAND" in
           *) throw_unknown_command "$COMMAND $SUBCOMMAND $ACTION" ;;
         esac
         ;;
+
+      # GEN:ROUTER:CLI
+
       *) throw_unknown_command "$COMMAND $SUBCOMMAND" ;;
     esac
     ;;

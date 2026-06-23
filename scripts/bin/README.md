@@ -41,6 +41,7 @@ scripts/bin/
 ├── symlink/
 │   └── create.sh               # ddx symlink create
 │
+<!-- GEN:TREE:NEW_COMMAND -->
 ├── tasks/
 │   ├── execute.sh              # ddx exec — routes to task or subtask
 │   ├── task.sh                 # run_task executor
@@ -98,6 +99,8 @@ Types accept an optional display-name suffix for help rendering (e.g., `string:d
 
 Copies `.env.example` (or a custom source) to `.env` (or a custom destination) across specified workspace directories.
 
+<!-- GEN:BIN_README:ENV -->
+
 ### `deps/install.sh` — `ddx deps install`
 
 Installs workspace dependencies and sets up git hooks. Supports package manager override and silent mode.
@@ -105,6 +108,8 @@ Installs workspace dependencies and sets up git hooks. Supports package manager 
 ### `deps/scan.sh` — `ddx deps scan`
 
 Scans lockfiles for unstable (`0.x.x`) dependencies. Optional flags enable security audit (`--audit`), Dependabot auto-configuration (`--pin-unstable`), and automation state markers (`--meta`).
+
+<!-- GEN:BIN_README:DEPS -->
 
 ### `node/pin.sh` — `ddx node pin`
 
@@ -114,13 +119,21 @@ Pins a Node.js version across the workspace. Requires `--version` and at least o
 
 Reads the required version from `.node-version` and asserts that the active Node.js runtime matches.
 
+<!-- GEN:BIN_README:NODE -->
+
 ### `package-manager/pin.sh` — `ddx pm pin`
 
 Pins a package manager version (yarn/npm/pnpm) across the workspace. Requires `--name`, `--version`, and at least one target flag (`--volta`, `--package-json`, `--dockerfile`, `--docs`).
 
+<!-- GEN:BIN_README:PM -->
+
 ### `symlink/create.sh` — `ddx symlink create`
 
 Creates absolute symbolic links from space-separated `<target> <link>` pairs passed via `--paths`.
+
+<!-- GEN:BIN_README:SYMLINK -->
+
+<!-- GEN:BIN_README:NEW_COMMAND -->
 
 ### `tasks/execute.sh` — `ddx exec`
 
@@ -149,6 +162,20 @@ Node.js module providing custom error classes and validation helpers for environ
 Shell utility functions for validating CLI flag values (e.g., checking required flags are set, validating allowed values). Sourced by command scripts as needed.
 
 ## Adding a New Command
+
+### ⚡ Quick Scaffold (Recommended)
+
+To automatically generate a new command boilerplate and register it within the CLI infrastructure, run the following command from the root repository directory:
+
+```bash
+yarn new:command
+```
+
+Follow the interactive CLI prompts to specify your command name and description. Hygen will automatically scaffold the required scripts.
+
+### 🛠️ Manual Process (Under the Hood)
+
+If you need to create a command manually or understand what the generator does behind the scenes, follow these steps:
 
 1. Create a directory under `scripts/bin/<command>/`.
 2. Add your script(s). Source `core/root.sh`, `core/theme.sh`, and `utils/log.sh` as needed.
