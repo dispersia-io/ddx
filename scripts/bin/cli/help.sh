@@ -22,7 +22,12 @@ print_help() {
   local usage="$3"
   local config="$4"
 
-  echo "$description"
+  if [ -n "$cmd_name" ]; then
+    echo -e "${COLOR_WHITE_BOLD}$cmd_name${COLOR_RESET} - $description"
+  else
+    echo "$description"
+  fi
+
   echo ""
   echo -e "${COLOR_WHITE_BOLD}Usage:${COLOR_RESET}"
   echo -e "  ${COLOR_GRAY}\$${COLOR_ORANGE} $usage${COLOR_RESET}"

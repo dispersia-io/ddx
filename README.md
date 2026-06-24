@@ -36,6 +36,8 @@ Initializes local environment files from distributed examples across the workspa
   ddx env init -f .env.example -t .env
   ```
 
+<!-- GEN:README:ENV -->
+
 ### `ddx deps install`
 
 Installs all workspace dependencies and configures development hooks.
@@ -52,9 +54,12 @@ Scans lockfiles for unstable dependencies and maps structural risks.
 
 - **Usage:** `ddx deps scan [options]`
 - **Example:**
+
   ```bash
   ddx deps scan --pin-unstable
   ```
+
+<!-- GEN:README:DEPS -->
 
 ### `ddx node pin`
 
@@ -79,6 +84,8 @@ Validates the system's active Node.js version against workspace boundaries.
   ddx node validate
   ```
 
+<!-- GEN:README:NODE -->
+
 ### `ddx pm pin`
 
 Locks and synchronizes the specified Package Manager engine version.
@@ -93,6 +100,8 @@ Locks and synchronizes the specified Package Manager engine version.
   ddx pm pin -n yarn -v 4.17.0 --volta --package-json
   ```
 
+<!-- GEN:README:PM -->
+
 ### `ddx symlink create`
 
 Automates atomic generations of absolute filesystem symbolic links.
@@ -104,6 +113,10 @@ Automates atomic generations of absolute filesystem symbolic links.
   ```bash
   ddx symlink create -ps "./foo ./foo_link ./bar ./bar_link"
   ```
+
+<!-- GEN:README:SYMLINK -->
+
+<!-- GEN:README:NEW_COMMAND -->
 
 ---
 

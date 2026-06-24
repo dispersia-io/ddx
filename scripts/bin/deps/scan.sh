@@ -44,7 +44,7 @@ OPTIONS_CONFIG="
 "
 
 intercept_help \
-  --name "deps scan" \
+  --name "ddx deps scan" \
   --description "Scans lockfiles for unstable dependencies" \
   --usage "ddx deps scan [options]" \
   --options "$OPTIONS_CONFIG" \

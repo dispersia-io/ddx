@@ -53,7 +53,7 @@ log() {
   "
 
   intercept_help \
-    --name "log" \
+    --name "ddx log" \
     --description "A universal logging utility for project scripts" \
     --usage "log -m <string> [options]" \
     --options "$OPTIONS_CONFIG" \

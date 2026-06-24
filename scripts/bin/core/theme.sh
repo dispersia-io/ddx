@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2034
 
 # A centralized repository of ANSI color escape codes and unicode icons.
 # Ensures consistent visual output across all shell-based CLI utilities.

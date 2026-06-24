@@ -1,6 +1,6 @@
 {
   "name": "@dispersiajs/ddx",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Internal developer experience (DX) infrastructure and automation toolset for Dispersia projects",
   "license": "MIT",
   "author": "Oleg Putseiko <oleg.putseiko@gmail.com> (https://github.com/oleg-putseiko)",
@@ -28,22 +28,37 @@
   "scripts": {
     "scripts:perms": "find ./scripts -type f -name \"*.sh\" -exec chmod +x {} +",
     "scripts:perms:track": "find ./scripts -type f -name \"*.sh\" -exec git update-index --chmod=+x {} +",
+    "lint:js": "eslint ./scripts -c ./eslint.config.mjs",
+    "lint:sh": "find ./scripts -type f -name \"*.sh\" -exec shellcheck {} +",
+    "lint": "yarn lint:js && yarn lint:sh",
+    "lint:fix": "yarn lint:js --fix && yarn format:fix",
+    "lint:strict": "yarn lint:js --max-warnings=0 && yarn lint:sh && yarn format",
+    "format": "prettier -c .",
+    "format:fix": "prettier -w .",
     "cleanup": "bash ./scripts/internal/cleanup.sh",
     "setup": "bash ./scripts/internal/setup.sh",
     "audit": "bash ./scripts/bin/deps/scan.sh --audit",
     "audit:fix": "bash ./scripts/bin/deps/scan.sh --pin-unstable",
-    "pin": "bash ./scripts/bin/package-manager/pin.sh --name yarn --package-json --volta --docs -v"
+    "pin": "bash ./scripts/bin/package-manager/pin.sh --name yarn --package-json --volta --docs -v",
+    "new:command": "hygen cli command"
   },
   "dependencies": {
     "yaml": "^2.9.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^21.0.2",
-    "@commitlint/config-conventional": "^21.0.2",
+    "@commitlint/cli": "^21.1.0",
+    "@commitlint/config-conventional": "^21.1.0",
+    "@types/node": "^24.13.2",
+    "eslint": "^9.39.4",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-config-woofmeow": "^3.0.0",
+    "globals": "^17.7.0",
     "husky": "^9.1.7",
-    "lint-staged": "^17.0.7",
+    "hygen": "^6.2.11",
+    "lint-staged": "^17.0.8",
     "prettier": "^3.8.4",
-    "prettier-plugin-sh": "^0.18.1"
+    "prettier-plugin-sh": "^0.18.1",
+    "shellcheck": "^4.1.0"
   },
   "engines": {
     "node": "^20.9.0 || >=21.1.0"

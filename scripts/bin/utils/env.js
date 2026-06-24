@@ -1,3 +1,5 @@
+/* eslint-disable max-classes-per-file */
+
 /**
  * Provides custom error classes and validation utilities
  * for environment variables and semantic versioning.
@@ -12,7 +14,7 @@ class EnvironmentError extends Error {
 
 class SemVerError extends Error {
   constructor(version) {
-    super(`Invalid SemVer format: "${VERSION}"`);
+    super(`Invalid SemVer format: "${version}"`);
     this.name = 'SemVerError';
   }
 }

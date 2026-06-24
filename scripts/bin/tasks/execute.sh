@@ -3,14 +3,14 @@
 # Acts as a central router to unify command execution between tasks and granular subtasks.
 #
 # Subcommands:
-#   task       : Dispatches the command to the 'run_task' executor
-#   subtask    : Dispatches the command to the 'run_subtask' executor
+#   task (t)       : Dispatches the command to the 'run_task' executor
+#   subtask (s)    : Dispatches the command to the 'run_subtask' executor
 #
 # Usage:
-#   ddx exec <subcommand> [options]
+#   ddx exec [task|subtask] [options]
 #
 # Alternative (Direct execution):
-#   ./scripts/bin/tasks/execute.sh <subcommand> [subcommand-options]
+#   ./scripts/bin/tasks/execute.sh [task|subtask] [subcommand-options]
 #
 # Examples:
 #   ddx exec task -n "Push image" -c "docker push"
@@ -29,17 +29,18 @@ source "$TASKS_DIR/subtask.sh"
 
 execute() {
   intercept_help \
-    --name "exec" \
+    --name "ddx exec" \
     --description "Acts as a central router to unify command execution between tasks and granular subtasks" \
-    --usage "ddx exec <subcommand> [options]" \
+    --usage "ddx exec [task|subtask] [options]" \
     -- "$@"
 
   local target="$1"
   shift
 
+  # shellcheck disable=SC2294
   case "$target" in
-    task) run_task "$@" ;;
-    subtask) run_subtask "$@" ;;
+    t | task) run_task "$@" ;;
+    s | subtask) run_subtask "$@" ;;
     *) eval "$target" "$@" ;;
   esac
 }

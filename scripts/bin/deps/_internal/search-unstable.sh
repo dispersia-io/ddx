@@ -43,7 +43,7 @@ if [ -z "$PACKAGE_INFO" ]; then
   exit 0
 fi
 
-TOTAL=$(echo "$PACKAGE_INFO" | grep -v '^$' | wc -l | tr -d ' ')
+TOTAL=$(echo "$PACKAGE_INFO" | grep -vc '^$')
 
 if ! is_enabled "$IS_SILENT"; then
   log -cl -w -m "Found potentially unstable packages: $TOTAL"

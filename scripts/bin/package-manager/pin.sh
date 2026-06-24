@@ -55,7 +55,7 @@ OPTIONS_CONFIG="
 "
 
 intercept_help \
-  --name "pm pin" \
+  --name "ddx pm pin" \
   --description "Updates and pins the Package Manager version across the entire workspace" \
   --usage "ddx pm pin -n <name> -v <semver> [options]" \
   --options "$OPTIONS_CONFIG" \

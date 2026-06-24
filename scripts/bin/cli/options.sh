@@ -47,9 +47,9 @@ parse_options() {
 
   local config="$1"
   local error_action="${2:-exit 1}"
-  local var_name long_opt short_opt requirement type default_value description base_type
+  local var_name long_opt short_opt requirement type default_value _description base_type
 
-  while IFS='|' read -r var_name long_opt short_opt requirement type default_value description; do
+  while IFS='|' read -r var_name long_opt short_opt requirement type default_value _description; do
     var_name="${var_name// /}"
     type="${type// /}"
     [[ -z "$var_name" || "$var_name" == \#* ]] && continue
@@ -75,9 +75,10 @@ parse_options() {
   done <<< "$config"
 
   echo 'while [[ "$#" -gt 0 ]]; do'
+  # shellcheck disable=SC2016
   echo '  case "$1" in'
 
-  while IFS='|' read -r var_name long_opt short_opt requirement type default_value description; do
+  while IFS='|' read -r var_name long_opt short_opt requirement type default_value _description; do
     var_name="${var_name// /}"
     long_opt="${long_opt// /}"
     short_opt="${short_opt// /}"
@@ -119,7 +120,7 @@ parse_options() {
   echo '  esac'
   echo 'done'
 
-  while IFS='|' read -r var_name long_opt short_opt requirement type default_value description; do
+  while IFS='|' read -r var_name long_opt short_opt requirement type default_value _description; do
     var_name="${var_name// /}"
     long_opt="${long_opt// /}"
     short_opt="${short_opt// /}"

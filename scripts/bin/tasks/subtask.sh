@@ -55,7 +55,7 @@ run_subtask() {
   "
 
   intercept_help \
-    --name "exec subtask" \
+    --name "ddx exec subtask" \
     --description "Executes a subtask with formatted output" \
     --usage "ddx exec subtask -c <string> [options]" \
     --options "$OPTIONS_CONFIG" \

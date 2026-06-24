@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-const path = require('path');
-const { spawnSync } = require('child_process');
+const path = require('node:path');
+const { spawnSync } = require('node:child_process');
 
 const cliPath = path.join(__dirname, 'cli.sh');
 

@@ -10,9 +10,7 @@ log -ic "$ICON_PROGRESS" -m "Updating $DEPENDABOT_FILE..." -in -slm "$IS_SILENT"
 PACKAGES_ONLY=$(echo "$PACKAGE_INFO" | awk '{print $1}')
 export PACKAGES_ENV="$PACKAGES_ONLY"
 
-NODE_RESULT=$(DEPENDABOT_FILE="$DEPENDABOT_FILE" IS_SILENT="$IS_SILENT" node "$DEPS_INTERNAL_DIR/update-dependabot.js" 2>&1)
-
-if [ $? -eq 0 ]; then
+if NODE_RESULT=$(DEPENDABOT_FILE="$DEPENDABOT_FILE" IS_SILENT="$IS_SILENT" node "$DEPS_INTERNAL_DIR/update-dependabot.js" 2>&1); then
   if [[ "$NODE_RESULT" == *"UPDATED"* ]]; then
     log -cl -s -m "Package update exceptions written to $DEPENDABOT_FILE" -slm "$IS_SILENT"
     emit_meta "__UPDATED__"

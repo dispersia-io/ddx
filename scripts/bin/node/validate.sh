@@ -34,7 +34,7 @@ OPTIONS_CONFIG="
 "
 
 intercept_help \
-  --name "node validate" \
+  --name "ddx node validate" \
   --description "Validates the active Node.js version against the project's requirements" \
   --usage "ddx node validate [options]" \
   --options "$OPTIONS_CONFIG" \
