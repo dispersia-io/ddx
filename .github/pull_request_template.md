@@ -42,4 +42,5 @@
 - [ ] Tested locally by running the modified `ddx` command against a sample workspace and verifying the terminal output.
 - [ ] Added or updated unit/integration tests in the `tests/` directory.
 - [ ] Verified ASCII/Unicode fallback formatting via the `--no-unicode` and `--no-color` flags.
+- [ ] Verified Shellcheck and ESLint passing on all modified files.
 - [ ] ...
