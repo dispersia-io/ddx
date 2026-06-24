@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2034
 
 # This is an internal script. Do not run it directly.
 # Relies on variables from the parent script: SHOULD_PIN_UNSTABLE, ROOT_DIR, IS_SILENT

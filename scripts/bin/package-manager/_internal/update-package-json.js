@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
 const { EnvironmentError, SemVerError, isSemVer } = require('../../utils/env.js');
 
 const { ROOT_DIR, PM_NAME, PM_VERSION, PM_WORKSPACES: RAW_WORKSPACES } = process.env;
@@ -9,8 +9,8 @@ if (!PM_NAME) throw new EnvironmentError('PM_NAME');
 if (!PM_VERSION) throw new EnvironmentError('PM_VERSION');
 if (!isSemVer(PM_VERSION)) throw new SemVerError(PM_VERSION);
 
-const IGNORED_FOLDERS = ['src', 'dist', 'build', 'node_modules'];
-const WORKSPACES = RAW_WORKSPACES?.trim().split(/[\s,]+/) ?? [];
+const IGNORED_FOLDERS = new Set(['src', 'dist', 'build', 'node_modules']);
+const WORKSPACES = RAW_WORKSPACES?.trim().split(/[\s,]+/u) ?? [];
 
 function updatePackageJson(filePath) {
   if (!fs.existsSync(filePath)) return;
@@ -21,6 +21,7 @@ function updatePackageJson(filePath) {
     json.packageManager = `${PM_NAME}@${PM_VERSION}`;
 
     fs.writeFileSync(filePath, `${JSON.stringify(json, null, 2)}\n`);
+    // eslint-disable-next-line no-empty
   } catch {}
 }
 
@@ -33,7 +34,7 @@ function walk(dirPath) {
       continue;
     }
 
-    if (!IGNORED_FOLDERS.includes(entry.name) && !entry.name.startsWith('.')) {
+    if (!IGNORED_FOLDERS.has(entry.name) && !entry.name.startsWith('.')) {
       walk(path.join(dirPath, entry.name));
     }
   }
