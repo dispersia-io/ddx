@@ -13,4 +13,5 @@ handle_output() {
 }
 
 run_step "Verifying lockfile" "Lockfile is verified" yarn install --immutable --immutable-cache
+run_step "Auditing unstable packages" "" yarn audit:fix --silent --meta
 run_step "Formatting staged files" "Staged files are formatted" yarn lint-staged
