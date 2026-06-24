@@ -3,13 +3,14 @@
  * Relies on variables from the parent script: DEPENDABOT_FILE, PACKAGES_ENV, IS_SILENT
  */
 
-const fs = require('fs');
+const fs = require('node:fs');
 const yaml = require('yaml');
 const { EnvironmentError } = require('../../utils/env.js');
 
+let isSilent = false;
+
 try {
-  const yamlPath = process.env.DEPENDABOT_FILE;
-  const isSilent = (() => {
+  isSilent = (() => {
     const value = process.env.IS_SILENT ?? '';
 
     if (/^(1|true)$/iu.test(value)) return true;
@@ -17,13 +18,15 @@ try {
     throw new Error(`Unrecognized boolean-like value '${value}'`);
   })();
 
+  const yamlPath = process.env.DEPENDABOT_FILE;
+
   if (!yamlPath) throw new EnvironmentError('DEPENDABOT_FILE');
 
   const yamlContent = fs.readFileSync(yamlPath, 'utf8');
   const yamlDoc = yamlContent.trim() ? yaml.parseDocument(yamlContent) : new yaml.Document();
 
   const unstablePackagesEnv = process.env.PACKAGES_ENV ?? '';
-  const unstablePackages = [...new Set(unstablePackagesEnv.split(/\s+/).filter(Boolean))];
+  const unstablePackages = [...new Set(unstablePackagesEnv.split(/\s+/u).filter(Boolean))];
 
   let isChanged = false;
 
@@ -105,9 +108,9 @@ try {
 
   ignore('*', 'major');
 
-  unstablePackages.forEach((name) => {
+  for (const name of unstablePackages) {
     ignore(name, 'minor');
-  });
+  }
 
   if (isChanged) {
     fs.writeFileSync(yamlPath, yamlDoc.toString());
