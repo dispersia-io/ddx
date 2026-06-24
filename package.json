@@ -60,6 +60,9 @@
     "prettier-plugin-sh": "^0.18.1",
     "shellcheck": "^4.1.0"
   },
+  "resolutions": {
+    "front-matter@npm:4.0.2/js-yaml": "^4.2.0"
+  },
   "engines": {
     "node": "^20.9.0 || >=21.1.0"
   },
