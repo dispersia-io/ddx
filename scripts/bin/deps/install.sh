@@ -37,7 +37,7 @@ OPTIONS_CONFIG="
 "
 
 intercept_help \
-  --name "deps install" \
+  --name "ddx deps install" \
   --description "Installs all dependencies and sets up git hooks" \
   --usage "ddx deps install [options]" \
   --options "$OPTIONS_CONFIG" \

@@ -55,7 +55,7 @@ OPTIONS_CONFIG="
 "
 
 intercept_help \
-  --name "node pin" \
+  --name "ddx node pin" \
   --description "Updates and pins the Node.js version across the entire workspace" \
   --usage "ddx node pin -v <semver> [options]" \
   --options "$OPTIONS_CONFIG" \

@@ -29,7 +29,7 @@ source "$TASKS_DIR/subtask.sh"
 
 execute() {
   intercept_help \
-    --name "exec" \
+    --name "ddx exec" \
     --description "Acts as a central router to unify command execution between tasks and granular subtasks" \
     --usage "ddx exec [task|subtask] [options]" \
     -- "$@"
@@ -37,6 +37,7 @@ execute() {
   local target="$1"
   shift
 
+  # shellcheck disable=SC2294
   case "$target" in
     t | task) run_task "$@" ;;
     s | subtask) run_subtask "$@" ;;

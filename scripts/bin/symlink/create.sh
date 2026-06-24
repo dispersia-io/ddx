@@ -33,7 +33,7 @@ OPTIONS_CONFIG="
 "
 
 intercept_help \
-  --name "symlink create" \
+  --name "ddx symlink create" \
   --description "Creates absolute symbolic links from provided path pairs" \
   --usage "ddx symlink create -ps \"<target1> <link1> [<target2> <link2> ...]\" [options]" \
   --options "$OPTIONS_CONFIG" \
@@ -67,9 +67,8 @@ for ((i = 0; i < ${#PATH_ARR[@]}; i += 2)); do
   ABS_LINK="$(resolve_path "$RAW_LINK")"
 
   rm -f "$ABS_LINK"
-  ln -s "$ABS_TARGET" "$ABS_LINK"
 
-  if [ $? -eq 0 ]; then
+  if ln -s "$ABS_TARGET" "$ABS_LINK"; then
     log -cl -s -ic "$ICON_LINK" -m "Symlink created: $RAW_TARGET -> $RAW_LINK" -ll "$LOG_LEVEL" -slm "$IS_SILENT"
   else
     log -cl -e -ic "$ICON_LINK" -m "Failed to create symlink: $RAW_TARGET -> $RAW_LINK" -ll "$LOG_LEVEL" -slm "$IS_SILENT"

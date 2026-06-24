@@ -34,7 +34,7 @@ OPTIONS_CONFIG="
 "
 
 intercept_help \
-  --name "<%= command %> <%= subcommand %>" \
+  --name "ddx <%= command %> <%= subcommand %>" \
   --description "<%= description %>" \
   --usage "ddx <%= command %> <%= subcommand %> -r <val> [options]" \
   --options "$OPTIONS_CONFIG" \
