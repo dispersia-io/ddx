@@ -94,7 +94,7 @@ PIN_CMD="execute subtask \\
   --silent-mode \"${IS_SILENT}\""
 
 if is_truthy "$SHOULD_PIN_VOLTA"; then
-  VOLTA_PIN_CMD="cd \"${ROOT_DIR}\" && volta pin ${PM_NAME}@${PM_VERSION}"
+  VOLTA_PIN_CMD="cd \"${ROOT_DIR}\" && volta pin ${PM_NAME}@${PM_VERSION} && node \"$PM_INTERNAL_DIR/update-volta.js\""
 
   PIN_CMD="$PIN_CMD && \\
     execute subtask \\

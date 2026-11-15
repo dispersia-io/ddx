@@ -88,7 +88,7 @@ PIN_CMD="execute subtask \\
   --silent-mode \"${IS_SILENT}\""
 
 if is_truthy "$SHOULD_PIN_VOLTA"; then
-  VOLTA_PIN_CMD="cd \"${ROOT_DIR}\" && volta pin node@${NODE_VERSION}"
+  VOLTA_PIN_CMD="cd \"${ROOT_DIR}\" && volta pin node@${NODE_VERSION} && node \"$NODE_INTERNAL_DIR/update-volta.js\""
 
   PIN_CMD="$PIN_CMD && \\
     execute subtask \\
@@ -121,6 +121,8 @@ if is_truthy "$SHOULD_PIN_ENGINE"; then
       --template \"pin\" \\
       --cmd \"${UPDATE_PKG_JSON_CMD}\" \\
       --silent-mode \"${IS_SILENT}\""
+
+  source "$BIN_DIR/deps/_internal/detect-package-manager.sh"
 
   INSTALL_CMD="cd \"${ROOT_DIR}\" && ${PACKAGE_MANAGER} install"
 
