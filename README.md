@@ -67,11 +67,12 @@ Updates and pins the target Node.js version across your project layers.
 
 - **Required Options:**
   - `-v, --version <semver>` : Strict semantic version target (e.g., `24.14.1`).
-  - _Target Flags (At least one required):_ `--volta`, `--version-file`, `--engine`, `--env`, `--docs`.
+  - _Target Flags (At least one required):_ `--volta`, `--version-file`, `--engine`, `--env`, `--dockerfile`, `--docs`.
 - **Usage:** `ddx node pin -v <semver> <target-flag> [options]`
 - **Example:**
   ```bash
   ddx node pin -v 24.14.1 --volta --engine
+  ddx node pin -v 24.14.1 -w "apps" --dockerfile
   ```
 
 ### `ddx node validate`
