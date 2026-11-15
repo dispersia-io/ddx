@@ -122,6 +122,8 @@ if is_truthy "$SHOULD_PIN_ENGINE"; then
       --cmd \"${UPDATE_PKG_JSON_CMD}\" \\
       --silent-mode \"${IS_SILENT}\""
 
+  source "$BIN_DIR/deps/_internal/detect-package-manager.sh"
+
   INSTALL_CMD="cd \"${ROOT_DIR}\" && ${PACKAGE_MANAGER} install"
 
   PIN_CMD="$PIN_CMD && \\
