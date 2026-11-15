@@ -113,7 +113,7 @@ Scans lockfiles for unstable (`0.x.x`) dependencies. Optional flags enable secur
 
 ### `node/pin.sh` — `ddx node pin`
 
-Pins a Node.js version across the workspace. Requires `--version` and at least one target flag (`--volta`, `--version-file`, `--engine`, `--env`, `--docs`).
+Pins a Node.js version across the workspace. Requires `--version` and at least one target flag (`--volta`, `--version-file`, `--engine`, `--env`, `--dockerfile`, `--docs`). With `--dockerfile`, resolves the registry digest for `node:<version><variant>` (via `docker buildx imagetools inspect`, with a Hub registry API fallback) and rewrites `FROM node:…` lines to digest-pinned form.
 
 ### `node/validate.sh` — `ddx node validate`
 
