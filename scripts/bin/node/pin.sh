@@ -16,6 +16,7 @@
 #     --version-file             : Update the root .node-version file
 #     --engine                   : Update 'engines.node' in package.json files
 #     --env                      : Update NODE_VERSION in environment files
+#     --dockerfile               : Update node base image digests in Dockerfiles
 #     --docs                     : Update dynamic version markers in Markdown documents
 #
 # Usage:
@@ -27,6 +28,7 @@
 # Examples:
 #   ddx node pin -v 24.14.1 --volta --engine
 #   ddx node pin -v 24.14.1 -w "apps packages" --env --docs
+#   ddx node pin -v 24.14.1 -w "apps" --dockerfile
 
 NODE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 NODE_INTERNAL_DIR="$NODE_DIR/_internal"
@@ -50,6 +52,7 @@ OPTIONS_CONFIG="
   SHOULD_PIN_VERSION_FILE | --version-file |     | optional | flag          | | Update the root .node-version file
   SHOULD_PIN_ENGINE       | --engine       |     | optional | flag          | | Update 'engines.node' in package.json files
   SHOULD_PIN_ENV          | --env          |     | optional | flag          | | Update NODE_VERSION in environment files
+  SHOULD_PIN_DOCKERFILE   | --dockerfile   |     | optional | flag          | | Update node base image digests in Dockerfiles
   SHOULD_PIN_DOCS         | --docs         |     | optional | flag          | | Update version markers in documentation
   IS_SILENT               | --silent       | -sl | optional | flag          | | Suppress standard output logs
 "
@@ -68,8 +71,8 @@ if [[ ! "$NODE_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
   exit 1
 fi
 
-if is_falsy "$SHOULD_PIN_VOLTA" && is_falsy "$SHOULD_PIN_VERSION_FILE" && is_falsy "$SHOULD_PIN_ENGINE" && is_falsy "$SHOULD_PIN_ENV" && is_falsy "$SHOULD_PIN_DOCS"; then
-  log -e -c "gray" -m "Error: At least one target flag must be specified: --volta, --version-file, --engine, --env, or --docs" -slm "$IS_SILENT"
+if is_falsy "$SHOULD_PIN_VOLTA" && is_falsy "$SHOULD_PIN_VERSION_FILE" && is_falsy "$SHOULD_PIN_ENGINE" && is_falsy "$SHOULD_PIN_ENV" && is_falsy "$SHOULD_PIN_DOCKERFILE" && is_falsy "$SHOULD_PIN_DOCS"; then
+  log -e -c "gray" -m "Error: At least one target flag must be specified: --volta, --version-file, --engine, --env, --dockerfile, or --docs" -slm "$IS_SILENT"
   exit 1
 fi
 
@@ -139,6 +142,18 @@ if is_truthy "$SHOULD_PIN_ENV"; then
       --subject \"Environment files\" \\
       --template \"pin\" \\
       --cmd \"${UPDATE_ENV_CMD}\" \\
+      --silent-mode \"${IS_SILENT}\""
+fi
+
+if is_truthy "$SHOULD_PIN_DOCKERFILE"; then
+  UPDATE_DOCKERFILE_CMD="node \"$NODE_INTERNAL_DIR/update-dockerfile.js\""
+
+  PIN_CMD="$PIN_CMD && \\
+    execute subtask \\
+      --icon \"${ICON_DOCKER}\" \\
+      --subject \"Dockerfile files\" \\
+      --template \"pin\" \\
+      --cmd \"${UPDATE_DOCKERFILE_CMD}\" \\
       --silent-mode \"${IS_SILENT}\""
 fi
 
